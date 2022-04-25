@@ -3,121 +3,87 @@ import Layout from "../../components/layout";
 import { AiFillFolderOpen, AiFillCar } from "react-icons/ai";
 import { HiDocumentReport } from "react-icons/hi";
 import Linechart from "../../components/chart";
-import Searchbar from "../../components/searchbar";
-import { Table } from "react-bootstrap";
+import Searchbar from "../../components/_update/inputs/searchbar";
+import { Placeholder, Table } from "react-bootstrap";
 import RightIcons from "../../components/rightIcons";
 import Dropdown from "../../components/dropdown";
-import Textbox from "../../components/textbox";
 import Textarea from "../../components/textarea";
-import TagInput from "../../components/taginput";
+import Textbox from "../../components/_update/inputs/textbox";
+
+import TagInput from "../../components/_update/inputs/taginput";
 import React from "react";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 //@ts-ignore
 import Stepper from "react-stepper-horizontal";
-import Taginput2 from "../../components/taginput2";
-const MenuItems1 = [
-  { title: "Category 1", onClick: () => alert() },
-  { title: "Category 2", onClick: () => alert() },
-  { title: "Category 2", onClick: () => alert() },
-  { title: "Category 3", onClick: () => alert() },
-];
+import { Form, Formik } from "formik";
+import {
+  DisplayingErrorMessagesItemSchema,
+  DisplayingErrorMessagesServiceSchema,
+} from "../../utiles/ErrorSchema";
+import { useDispatch, useSelector } from "react-redux";
+import { IReduxStore } from "../../interfaces/data/reduxStore";
+import ImageUpload from "../../components/_update/forms/imageUpload";
+import {
+  ICategory,
+  IFAQQuestion,
+  IFAQService,
+  IItem,
+  IService,
+  IServiceItemService,
+} from "../../interfaces/data/objects";
+import PricesItems from "../../components/_update/ItemsComponents/PricesItems";
+import DetailsBox from "../../components/_update/ItemsComponents/DetailsBox";
+import ServiceIncludes from "../../components/_update/inputs/serviceIncludes";
+import {
+  changeKeysToUpper,
+  _cstFaqQuestion,
+  _cstServicesInclude,
+  _csttags,
+} from "../../utiles/constants";
+import { AddItem } from "../../functions/Items";
+import { useLocation, useParams } from "react-router-dom";
+import { GetServices } from "../../functions/Services";
+import { GetCategory } from "../../functions/Categories";
 
 function App() {
-  const [tags, settags] = React.useState([]);
+  const [tags, settags] = React.useState([0]);
   const [_active, _setactive] = React.useState(0);
-  const [suggestions, setsuggestions] = React.useState([
-    { id: "Cleaning", text: "Cleaning" },
-    { id: "Maintaining", text: "Maintaining" },
-    { id: "Plumbring", text: "Plumbring" },
-    { id: "Serive", text: "Serive" },
-  ]);
-
-  const handleDelete = (i: number) => {
-    settags(tags.filter((tag, index) => index !== i));
-  };
-
-  const handleAddition = (tag: string) => {
+  const [_Image, _setImage] = React.useState<any>();
+  const dispatch = useDispatch();
+  const user = useSelector((x: IReduxStore) => x.User);
+  const services = useSelector((x: IReduxStore) => x.Services);
+  const categories = useSelector((x: IReduxStore) => x.Categories);
+  const [_submitFinish, _setsubmitFinish] = React.useState(false);
+  const itemsRef = React.useRef([]);
+  const [_updateState, _setUpdateState] = React.useState<IItem>();
+  const [buttonName,setbuttonName]=React.useState("Next");
+  const parms = useLocation();
+  React.useEffect(() => {
+    itemsRef.current = itemsRef.current.slice(0, _cstFaqQuestion.length);
+  }, []);
+  React.useEffect(() => {
+    
+  }, [_active]);
+  React.useEffect(() => {
     //@ts-ignore
-    settags([tag, ...tags]);
-  };
-  const GetForm = (form: any) => {
-    switch (form) {
-      case 0: {
-        return (
-          <div className="d-flex flex-wrap align-items-center">
-            <div className="mt-4 kjfas-ijdsare">
-              <Dropdown label="Select Service" items={MenuItems1} title="Service" />
-            </div>
-            <div className="mt-4 kjfas-ijdsare">
-              <Dropdown label="Category" items={MenuItems1} title="Category" />
-            </div>
-            <div className="mt-1 kjfas-ijdsare">
-              <Textbox label="Title" />
-            </div>
-            
-            <div className="mt-1 kjfas-ijdsare">
-              <div className="cst-textbox brd-none d-flex flex-column  ">
-                <p> Upload Background Image</p>
-              </div>
-              <div className="d-flex justify-content-center align-items-center">
-                <img
-                  className="saidasd-sd"
-                  src="https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
-                />
-              </div>
-            </div>
-            <div className="mt-1 kjfas-ijdsare">
-              <Textarea label="Description" />
-            </div>
-          </div>
-        );
-      }
-      case 1: {
-        return (
-          <div className="mt-1">
-            <div className="cst-textbox brd-none d-flex  justify-content-between align-items-center ">
-              <p>Add Service Item with Price</p>
-              <button
-                className="btn sakdhsad-dsad"
-                onClick={() => {
-                  handleAddition("value");
-                }}
-              >
-                <BsFillPlusCircleFill />
-              </button>
-            </div>
-            <div className="d-flex flex-column">
-              <TagInput title="" />
-              {tags.map((x) => (
-                <TagInput title="" />
-              ))}
-            </div>
-          </div>
-        );
-      }
-      case 2: {
-        return (
-          <>
-            <div className="my-2 jasf-sadwqe">
-              <p>What's included with this service?</p>
-              <Taginput2 title="Service included" />
-            </div>
-            <div className="my-2 jasf-sadwqe">
-              <Textarea label="What materials will the pro bring if the cleaning service is booked with materials?" />
-              <Textarea label="How long does the service take?" />
-              <Textarea label="What should I do if I want to increase the scope of my service ?" />
-              <Textarea label="I have children and/or pets, is it safe?" />
-              <Textarea label="Are the service providers’ Dubai Municipality approved? What chemical do you use?" />
-              <Textarea label="Any important information that the provider needs to know?" />
-            </div>
-          </>
-        );
-      }
-      default: {
-        return <></>;
-      }
+    if (parms?.state?.data) {
+      //@ts-ignore
+      _setUpdateState(parms?.state?.data);
     }
-  };
+  }, [parms]);
+
+  React.useEffect(()=>{
+    _setactive(0)
+  },[])
+  React.useEffect(() => {
+        //@ts-ignore
+
+    dispatch(GetServices());
+            //@ts-ignore
+
+     dispatch(GetCategory());
+  }, []);
+
   return (
     <Layout title="">
       <div className="main-div">
@@ -150,85 +116,252 @@ function App() {
                 className="sdsdsds"
               />
             </div>
-            {GetForm(_active)}
-            <div className="d-flex justify-content-end">
-              {_active > 0 ? (
-                <button
-                  className="btn sakdhsad-dsad mx-3"
-                  onClick={() => {
-                    _setactive(_active - 1);
-                  }}
-                >
-                  Previous
-                </button>
-              ) : (
-                <></>
-              )}
-              {
-                _active == 2 ? <button
-                className="btn sakdhsad-dsad mx-3"
-                onClick={() => {
-                  if (_active < 2) {
-                    _setactive(_active + 1);
+            <Formik
+              initialValues={{
+                id: _updateState?.id || undefined,
+                serviceId:_updateState?.serviceId || undefined,
+                categoryId:_updateState?.categoryId ||  undefined,
+                title: _updateState?.title || "",
+                image: _updateState?.image || "",
+                description:  _updateState?.description || "",
+                serviceItemServices:_updateState?.serviceItemServices || _csttags,
+                fAQServices:_updateState?.fAQServices || _cstServicesInclude,
+                fAQQuestions:_updateState?.fAQQuestions || _cstFaqQuestion,
+              }}
+              enableReinitialize={true}
+              validationSchema={DisplayingErrorMessagesItemSchema}
+              onSubmit={async (values, { setSubmitting }) => {
+                let formData = new FormData();
+                formData.append("title", values.title);
+                formData.append("description", values.description);
+                formData.append("uploadImage", _Image?.file || values.image);
+                //@ts-ignore
+                formData.append("recordUserId", user.id);
+                //@ts-ignore
+
+                formData.append("serviceId", values.serviceId);
+                //@ts-ignore
+
+                formData.append("categoryId", values.categoryId);
+                formData.append(
+                  "fAQServices",
+                  JSON.stringify(changeKeysToUpper(values.fAQServices))
+                );
+
+                formData.append(
+                  "fAQQuestions",
+                  JSON.stringify(changeKeysToUpper(values.fAQQuestions))
+                );
+
+                formData.append(
+                  "serviceItemServices",
+                  JSON.stringify(changeKeysToUpper(values.serviceItemServices))
+                );
+                console.log(values);
+                //@ts-ignore
+                dispatch(AddItem(formData));
+              }}
+            >
+              {({
+                errors,
+                touched,
+                getFieldProps,
+                handleSubmit,
+                setFieldValue,
+                setTouched,
+                values,
+              }) => {
+                const getImageFileObject = (Image: any) => {
+                  _setImage(Image);
+                  setFieldValue("image", Image?.file?.name);
+                };
+                const runAfterImageDelete = (Image: any) => {
+                  _setImage(undefined);
+                  setFieldValue("image", undefined);
+                };
+                const handleAdditionFaqServiceInclude = (
+                  tagFaqs: IFAQService
+                ) => {
+                  setFieldValue("fAQServices", [
+                    ...values.fAQServices,
+                    {
+                      id: Date.now(),
+                      serviceTitle: tagFaqs.serviceTitle,
+                    },
+                  ]);
+                };
+                const handleDeleteFaqService = (i: number) => {
+                  setFieldValue(
+                    "fAQServices",
+                    values.fAQServices.filter((tag, index) => index !== i)
+                  );
+                };
+                const GetForm = (form: any) => {
+                  switch (form) {
+                    case 0: {
+                      return (
+                        <DetailsBox
+                          services={services}
+                          values={values}
+                          setFieldValue={setFieldValue}
+                          categories={categories}
+                          getFieldProps={getFieldProps}
+                          _Image={_Image}
+                          touched={touched}
+                          errors={errors}
+                          getImageFileObject={getImageFileObject}
+                          runAfterImageDelete={runAfterImageDelete}
+                        />
+                      );
+                    }
+                    case 1: {
+                      return (
+                        <PricesItems
+                          tags={values.serviceItemServices}
+                          setTags={(valuesD: IServiceItemService[]) => {
+                            setFieldValue("serviceItemServices", valuesD);
+                          }}
+                        />
+                      );
+                    }
+                    case 2: {
+                      return (
+                        <>
+                          <div className="my-2 jasf-sadwqe">
+                            <p>What's included with this service?</p>
+                            <div className={`t-parent`}>
+                              <p>Service included</p>
+                              <div className="d-flex flex-wrap">
+                                {values.fAQServices.map((x, i) => (
+                                  <div className="ReactTags__selected">
+                                    <span
+                                      className="tag-wrapper ReactTags__tag"
+                                      style={{ opacity: 1, cursor: "move" }}
+                                      draggable="true"
+                                    >
+                                      {x.serviceTitle}
+                                      <button
+                                        className="ReactTags__remove"
+                                        type="button"
+                                        aria-label="Tag at index 0 with value ads focussed. Press backspace to remove"
+                                        onClick={() =>
+                                          handleDeleteFaqService(i)
+                                        }
+                                      >
+                                        ×
+                                      </button>
+                                    </span>
+                                    <div className="ReactTags__tagInput"></div>
+                                  </div>
+                                ))}
+                              </div>
+                              <ServiceIncludes
+                                handleAddition={handleAdditionFaqServiceInclude}
+                              />
+                            </div>
+                          </div>
+                          <div className="my-2 jasf-sadwqe">
+                            {values.fAQQuestions.map((x, i) => (
+                              <div className="field-box label-bar-1  w-100 ">
+                                <div>
+                                  <h6>{x.serviceFAQQuestion}</h6>
+                                  <textarea
+                                    rows={8}
+                                    //@ts-ignore
+                                    ref={(el) => (itemsRef.current[i] = el)}
+                                    placeholder="Type Here"
+                                    onChange={(e) => {
+                                      let index = values.fAQQuestions.findIndex(
+                                        (x: IFAQQuestion) =>
+                                          x?.id == values.fAQQuestions[i].id
+                                      );
+                                      if (index > 0) {
+                                        let oldValues = [
+                                          ...values.fAQQuestions,
+                                        ];
+                                        oldValues[index] = {
+                                          ...x,
+                                          serviceFAQAnswer: e.target.value,
+                                        };
+                                        setFieldValue("fAQQuestions", [
+                                          ...oldValues,
+                                        ]);
+                                      }
+                                    }}
+                                  ></textarea>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      );
+                    }
+                    default: {
+                      return <></>;
+                    }
                   }
-                }}
-              >
-                {_active < 2 ? "" : "Preivew Before Upload"}
-              </button>:<></>
-              }
-              <button
-                className="btn sakdhsad-dsad"
-                onClick={() => {
-                  if (_active < 2) {
-                    _setactive(_active + 1);
-                  }
-                }}
-              >
-                {_active < 2 ? "Next" : "Finish and Upload"}
-              </button>
-              
-             
-            </div>
+                };
+                return (
+                  <Form className="">
+                    <>
+                      {GetForm(_active)}
+                      <div className="d-flex justify-content-end">
+                        {_active > 0 ? (
+                          <button
+                            className="btn sakdhsad-dsad mx-3"
+                            type="button"
+                            onClick={() => {
+                              _setactive(_active - 1);
+                            }}
+                          >
+                            Previous
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                        {
+                          /*
+                          _active == 2 ? (
+                          <button
+                            className="btn sakdhsad-dsad mx-3"
+                            type="button"
+                            onClick={() => {
+                              if (_active < 2) {
+                                _setactive(_active + 1);
+                              }
+                            }}
+                          >
+                            {_active < 2 ? "" : "Preivew Before Upload"}
+                          </button>
+                        ) : (
+                          <></>
+                        
+                        )
+                          */
+                        }
+                        <button
+                          className="btn sakdhsad-dsad"
+                          type={_active>=2  ? "submit" : "button"}
+                          onClick={(e) => {
+                            if (_active < 2) {
+                              e.preventDefault();
+
+                              _setactive(_active + 1);
+                              setTimeout(() => {
+                                alert(_active + 1)
+                              }, 1500);
+                            }
+                          }}
+                        >
+                          {_active < 2 ? "Next" : "Finish and Upload"}
+                        </button>
+                      </div>
+                    </>
+                  </Form>
+                );
+              }}
+            </Formik>
           </div>
-          {/* <div className="box-shadow p-4 mt-4">
-            <div className="d-flex align-items-center justify-content-between">
-              <h5 className="hd-5">Services</h5>
-              <Searchbar isBorder={true} />
-            </div>
-            <Table responsive borderless className="table-custom">
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Title</th>
-                  <th>Text</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.from({ length: 5 }, (v, i) => (
-                  <tr key={i}>
-                    <td>Data {i}</td>
-                    <td>Data {i}</td>
-                    <td>Data {i}</td>
-                    <th>
-                      <button className="btn">Edit</button>
-                    </th>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-            <div className="d-flex justify-content-end pagination-container">
-              <button className="btn cst-none">Previous</button>
-              <div className="d-flex pagination-number-container">
-                <button className="btn">1</button>
-                <button className="btn active">2</button>
-                <button className="btn">3</button>
-                <button className="btn">4</button>
-                <button className="btn mag-18">5</button>
-              </div>
-              <button className="btn cst-none">Next</button>
-            </div>
-          </div> */}
         </div>
       </div>
     </Layout>

@@ -21,15 +21,17 @@ import { HiDocumentReport, HiTemplate } from "react-icons/hi";
 import { useHistory } from "react-router-dom";
 import { GrBook, GrList } from "react-icons/gr";
 import Switch from "react-switch";
-import { useChangeTheme } from "../theme/hook";
-import { ThemeContext } from "../App";
+import { useChangeTheme } from "../../../theme/hook";
+import { ThemeContext } from "../../../App";
 import { BiUserCircle } from "react-icons/bi";
 import { RiListCheck2 } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { LogOutAction } from "../../../redux/actionMethodes/user";
 
 export default ({ collapsed }: { collapsed: boolean }) => {
   const history = useHistory();
-
+const dispatch=useDispatch();
   return (
     <ThemeContext.Consumer>
       {({ theme, toggleTheme }) => (
@@ -47,7 +49,7 @@ export default ({ collapsed }: { collapsed: boolean }) => {
           <SidebarContent>
             <Menu iconShape="circle">
               <MenuItem
-                onClick={() => history.push("/home")}
+                onClick={() => history.push("/")}
                 icon={<MdSpaceDashboard color="#4a4a4a" fontSize={20} />}
               >
                 Dashboard
@@ -131,7 +133,10 @@ export default ({ collapsed }: { collapsed: boolean }) => {
           </SidebarContent>
 
           <SidebarFooter style={{ textAlign: "center" }}>
-            <button className="btn w-100 btn-main">Log out</button>
+            <button className="btn w-100 btn-main" onClick={()=>{
+              dispatch(LogOutAction())
+              history.push('/')
+            }}>Log out</button>
             {/* <button className="btn w-100 btn-main-light"></button> */}
           </SidebarFooter>
         </ProSidebar>

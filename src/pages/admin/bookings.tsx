@@ -1,27 +1,104 @@
- import React from 'react';
- import Layout from "../../components/layout";
- 
-import BookingCard from "../../components/BookingCard";
-import { RiLayoutGridFill, RiListCheck2 } from 'react-icons/ri';
-import { Table } from 'react-bootstrap';
-import Searchbar from '../../components/searchbar';
-const MenuItems1 = [
-  { title: "Category 1", onClick: () => alert() },
-  { title: "Category 2", onClick: () => alert() },
-  { title: "Category 2", onClick: () => alert() },
-  { title: "Category 3", onClick: () => alert() },
-];
+import React from "react";
+import Layout from "../../components/layout";
+
+import BookingCard from "../../components/_update/cards/BookingCard";
+import { RiLayoutGridFill, RiListCheck2 } from "react-icons/ri";
+import { Table } from "react-bootstrap";
+import Searchbar from "../../components/_update/inputs/searchbar";
+import { IBooking } from "../../interfaces/data/objects";
+import { useDispatch, useSelector } from "react-redux";
+import { DeleteBookings, GetBookings } from "../../functions/Booking";
+import { IReduxStore } from "../../interfaces/data/reduxStore";
+import { bookingStatus, ItemStatus } from "../../utiles/constants";
+import moment from "moment";
+import Modal from "../../components/_update/modal";
 
 function App() {
   const [view, setView] = React.useState(0);
+  const dispatch = useDispatch();
+  const bookings = useSelector((x: IReduxStore) => x.Bookings);
+  const [_Bookings, _setBookings] = React.useState<IBooking[]>();
+  const [_currentStatus, _setcurrentStatus] = React.useState("");
+  const [_show, _setshow] = React.useState(false);
+
+  const [_currentService, _setcurrentService] = React.useState<
+    IBooking | undefined
+  >();
+  React.useEffect(() => {
+    //@ts-ignore
+    dispatch(GetBookings());
+  }, []);
+  const Delete = (Id: number | undefined) => {
+    let obj = bookings.find((x) => x.id == Id);
+    //@ts-ignore
+    if (obj != undefined) {
+      _setcurrentService(obj);
+      _setshow(true);
+    }
+  };
+  const getItems = () => {
+    switch (_currentStatus) {
+      case bookingStatus.completed: {
+        return bookings.filter(
+          (x) => x.bookingStatus == bookingStatus.completed
+        );
+      }
+      case bookingStatus.pending: {
+        return bookings.filter((x) => x.bookingStatus == bookingStatus.pending);
+      }
+      case bookingStatus.rejected: {
+        return bookings.filter(
+          (x) => x.bookingStatus == bookingStatus.rejected
+        );
+      }
+      default: {
+        return bookings;
+      }
+    }
+  };
 
   return (
     <Layout title="">
-        <div className="hdsf0s-sadmsa mt-3">
-               
-              <h3>Bookings</h3>
-            </div>
-            <div className='d-flex justify-content-end'>
+      <div className="hdsf0s-sadmsa mt-3">
+        <h3>Bookings</h3>
+      </div>
+
+      <div className="umpire-1-cst d-flex align-items-center justify-content-between">
+        <div className="maxima">
+          <button
+            className="upload-1 sdisad-dsdactive"
+            onClick={() => {
+              _setcurrentStatus("");
+            }}
+          >
+            All
+          </button>
+          <button
+            className="upload-1"
+            onClick={() => {
+              _setcurrentStatus(bookingStatus.completed);
+            }}
+          >
+            Completed
+          </button>
+          <button
+            className="upload-1"
+            onClick={() => {
+              _setcurrentStatus(bookingStatus.pending);
+            }}
+          >
+            Pending
+          </button>
+          <button
+            className="upload-1"
+            onClick={() => {
+              _setcurrentStatus(bookingStatus.rejected);
+            }}
+          >
+            Rejected
+          </button>
+        </div>
+        <div>
           <button
             className="btn"
             onClick={() => {
@@ -39,41 +116,41 @@ function App() {
             <RiListCheck2 size={25} />
           </button>
         </div>
-        {view == 1 ? (
+      </div>
+      {view == 1 ? (
         <div className="box-shadow p-4 mt-4 jhfadjsf-andsd w-100 justify-content-between d-flex flex-column">
           <div>
             <div className="d-flex align-items-center justify-content-between">
               <h5 className="hd-5">Booking List</h5>
               <Searchbar isBorder={true} />
             </div>
+
             <Table responsive borderless className="table-custom">
               <thead>
                 <tr>
-                  <th>Service</th>
-                  <th>Category</th>
-                  <th>Service Item</th>
-                  <th>Service By</th>
-                  <th>Booking Date / Time</th>
+                  <th>Title</th>
+                  <th>Booking By</th>
+                  <th>Booking Date</th>
                   <th>Booking Status</th>
-                  
                   <th className="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {Array.from({ length: 5 }, (v, i) => (
+                {getItems().map((x, i) => (
                   <tr key={i}>
-                    <td>Data {i}</td>
-                    <td>Data {i}</td>
-                    <td className="mncais-ads">Data {i}</td>
-                    <td className="mncais-ads">Data {i}</td>
-                    <td className="mncais-ads">Data {i}</td>
+                    <td>{x.serviceItem?.title}</td>
+                    <td>{x.user?.fullName}</td>
+                    <td>
+                      {moment(x?.bookingDateTime).format(
+                        "yyyy-MM-DD  hh:mm:ss"
+                      )}
+                    </td>
+                    <td>{x.bookingStatus}</td>
 
-                    <td className="mncais-ads">Data {i}</td>
-
-                    <th className="d-flex   manasjd-ajwe">
-                      <button className="btn btn-info">Edit</button>
-                      <button className="btn btn-warning">Delete</button>
-                    </th>
+                    <td>
+                      {/* <button className="btn btn-info">Edit</button> */}
+                      <button className="btn btn-warning" onClick={()=>Delete(x.id)}>Delete</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -93,12 +170,37 @@ function App() {
         </div>
       ) : (
         <div className="complete-web-1">
-                  <BookingCard />
-                  <BookingCard />
-                  
-                </div>
+          {getItems().map((x) => (
+            <BookingCard booking={x} />
+          ))}
+        </div>
       )}
-           
+
+      <Modal title="Confirm" show={_show} setShow={_setshow}>
+        <>
+          <p>
+            Are You sure you wan't to delete this service !note this action will
+            not be revoked
+          </p>
+          <div className="d-flex flex-row justify-content-end">
+            <button onClick={() => _setshow(false)} className="btn btn-info">
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                if (_currentService) {
+                  _setshow(false);
+                  //@ts-ignore
+                  dispatch(DeleteBookings(_currentService));
+                }
+              }}
+              className="btn btn-danger mx-2"
+            >
+              Confirm
+            </button>
+          </div>
+        </>
+      </Modal>
     </Layout>
   );
 }

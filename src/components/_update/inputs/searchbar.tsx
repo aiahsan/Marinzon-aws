@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from '../svgIcons/svgIcons'
+import Icon from '../../../svgIcons/svgIcons'
 const Comp = ({ isBorder }:{isBorder?:Boolean}) => {
     return <div className={`searchbar-head ${isBorder ? "brd" : ""}`}>
 

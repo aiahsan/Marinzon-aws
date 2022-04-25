@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaHeart, FaBars } from 'react-icons/fa';
-import SideBar from './sideBar'
-import Searchbar from './searchbar'
+import SideBar from './_update/menu/sideBar'
+import Searchbar from './_update/inputs/searchbar'
 import {ThemeContext} from '../App';
  
 // collapsed,

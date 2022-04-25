@@ -1,4 +1,5 @@
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, HashRouter as Router, Route, Switch } from "react-router-dom";
 import Dashboard from "../pages/admin/dashboard";
 import Services from "../pages/admin/services";
 import Category from "../pages/admin/category";
@@ -12,15 +13,32 @@ import Profile from "../pages/admin/profile";
 
 import Login from "../pages/login";
 import PageNotFound from "../pages/404";
+import { useDispatch, useSelector } from "react-redux";
+import { IReduxStore } from "../interfaces/data/reduxStore";
+import Loader from "../components/_update/loader";
+import Toast from "../components/_update/toast";
+import { messageAction } from '../redux/actionMethodes/message';
 function Routes() {
+
+  const User = useSelector((x: IReduxStore) => x.User);
+  const Loading = useSelector((x: IReduxStore) => x.Loading);
+  const Message = useSelector((x: IReduxStore) => x.Message);
+  const dispatch=useDispatch();
+  React.useEffect(()=>{
+    if(Message!=null)
+    {
+      setTimeout(() => {
+        dispatch(messageAction());
+      }, 3000);
+    }
+  },[Message])
   return (
-    <>
+    <BrowserRouter>
       <Router>
         <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
-          <Route exact path="/services">
+       
+          {User !== null ? <>
+            <Route exact path="/services">
             <Services />
           </Route>
           <Route exact path="/category">
@@ -48,16 +66,24 @@ function Routes() {
           <Route exact path="/bookings">
             <Bookings />
           </Route>
-          <Route exact path="/home">
+          <Route exact path="/">
             <Dashboard />
           </Route>
-
+          </>:<>
+          <Route exact path="/">
+          <Login />
+          </Route>
+          </>}
           <Route>
             <PageNotFound />
           </Route>
         </Switch>
       </Router>
-    </>
+
+        {Loading === true ? <Loader /> : <></>}
+       
+       {Message != null ? <Toast message={Message} /> : <></>}
+    </BrowserRouter>
   );
 }
 

@@ -1,20 +1,56 @@
-import ServiceCard from "../../components/ServiceCard";
+import React from 'react';
+import ServiceCard from "../../components/_update/cards/ServiceCard";
 import Layout from "../../components/layout";
-import ProductCard from "../../components/ProductCard";
-import TagInput from "../../components/taginput";
+import ProductCard from "../../components/_update/cards/ProductCard";
+import TagInput from "../../components/_update/inputs/taginput";
 import Dropdown from "../../components/dropdown";
 import Textbox from "../../components/textbox";
 import Textarea from "../../components/textarea";
-import Searchbar from "../../components/searchbar";
+import Searchbar from "../../components/_update/inputs/searchbar";
 import { Table } from "react-bootstrap";
-const MenuItems1 = [
-  { title: "Category 1", onClick: () => alert() },
-  { title: "Category 2", onClick: () => alert() },
-  { title: "Category 2", onClick: () => alert() },
-  { title: "Category 3", onClick: () => alert() },
-];
+import { useDispatch } from "react-redux/es/hooks/useDispatch";
+import { useSelector } from "react-redux";
+import { IReduxStore } from "../../interfaces/data/reduxStore";
+import { ICategory, IService } from '../../interfaces/data/objects';
+import { DeleteServices, GetServices } from "../../functions/Services";
+import { DeleteCategory, GetCategory } from "../../functions/Categories";
+import Modal from '../../components/_update/modal';
+import CategoryForm from '../../components/_update/forms/categoryForm';
+
 
 function App() {
+
+  const dispatch = useDispatch();
+  const categoreis = useSelector((x: IReduxStore) => x.Categories);
+  const services = useSelector((x: IReduxStore) => x.Services);
+  const [_show, _setshow] = React.useState(false);
+  const [_currentService, _setcurrentService] = React.useState<
+    ICategory | undefined
+  >();
+  const [_IsEdit, _setIsEdit] = React.useState(false);
+
+  React.useEffect(() => {
+    //@ts-ignore
+    dispatch(GetServices());
+    //@ts-ignore
+    dispatch(GetCategory());
+  }, []);
+
+  const Update = (Id: number | undefined) => {
+    let obj = categoreis.find((x) => x.id == Id);
+    //@ts-ignore
+    if (obj != undefined) {
+      _setcurrentService(obj);
+    }
+  };
+  const Delete = (Id: number | undefined) => {
+    let obj = categoreis.find((x) => x.id == Id);
+    //@ts-ignore
+    if (obj != undefined) {
+      _setcurrentService(obj);
+      _setshow(true);
+    }
+  };
   return (
     <Layout title=" ">
       <div className="main-div">
@@ -28,23 +64,8 @@ function App() {
           <h5 className="hd-5">Add New Category</h5>
 
           <div className="mt-4">
-            <div className="mt-1 kjfas-ijdsare">
-              <Dropdown
-                label="Select Service"
-                items={MenuItems1}
-                title="Service"
-              />
-            </div>
-            <div className="mt-1 kjfas-ijdsare">
-              <Textbox label="Title" />
-            </div>
-            <div className="mt-1 kjfas-ijdsare">
-              <Textarea label="Description" />
-            </div>
-
-            <div className="d-flex justify-content-end my-4">
-              <button className="btn sakdhsad-dsad">Add New Service</button>
-            </div>
+            
+          <CategoryForm PostData={() => {}} data={_currentService}/>
           </div>
         </div>
         <div className="box-shadow p-4 mt-4 jhfadjsf-andsd w-100 justify-content-between d-flex flex-column">
@@ -63,17 +84,27 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {Array.from({ length: 5 }, (v, i) => (
-                  <tr key={i}>
-                    <td>Data {i}</td>
-                    <td>Data {i}</td>
-                    <td className="mncais-ads">Data {i}</td>
+                {
+                  categoreis.map((x:ICategory,i)=><tr key={i}>
+                    <td>{x?.service?.title}</td>
+                    <td>{x.title}</td>
+                    <td className="mncais-ads">{x.description}</td>
                     <th className="d-flex   manasjd-ajwe">
-                      <button className="btn btn-info">Edit</button>
-                      <button className="btn btn-warning">Delete</button>
+                    <button
+                        className="btn btn-info"
+                        onClick={() => Update(x?.id)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-warning"
+                        onClick={() => Delete(x?.id)}
+                      >
+                        Delete
+                      </button>
                     </th>
-                  </tr>
-                ))}
+                  </tr>)
+                }
               </tbody>
             </Table>
           </div>
@@ -90,6 +121,29 @@ function App() {
           </div>
         </div>
       </div>
+      <Modal title="Confirm" show={_show} setShow={_setshow}>
+        <>
+          <p>Are You sure you wan't to delete this service !note this action will not be revoked</p>
+          <div className="d-flex flex-row justify-content-end">
+            <button onClick={() => _setshow(false)} className="btn btn-info">
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                if (_currentService) {
+                  
+                  _setshow(false);
+                  //@ts-ignore
+                  dispatch(DeleteCategory(_currentService))
+                }
+              }}
+              className="btn btn-danger mx-2"
+            >
+              Confirm
+            </button>
+          </div>
+        </>
+      </Modal>
     </Layout>
   );
 }

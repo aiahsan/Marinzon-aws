@@ -1,20 +1,67 @@
 import React from "react";
 import Layout from "../../components/layout";
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "../../components/_update/cards/ProductCard";
 import { RiLayoutGridFill, RiListCheck2 } from "react-icons/ri";
-import TagInput from "../../components/taginput";
-import Searchbar from "../../components/searchbar";
+ import Searchbar from "../../components/_update/inputs/searchbar";
 import { Table } from "react-bootstrap";
-const MenuItems1 = [
-  { title: "Category 1", onClick: () => alert() },
-  { title: "Category 2", onClick: () => alert() },
-  { title: "Category 2", onClick: () => alert() },
-  { title: "Category 3", onClick: () => alert() },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { IReduxStore } from "../../interfaces/data/reduxStore";
+import { DeleteItem, GetItems } from "../../functions/Items";
+import { IItem, IServiceItemService } from "../../interfaces/data/objects";
+import { ItemStatus } from "../../utiles/constants";
+ import {useHistory} from 'react-router-dom'
+import Modal from "../../components/_update/modal";
 
 function App() {
   const [view, setView] = React.useState(0);
+  const Items=useSelector((x:IReduxStore)=>x.ServiceItem);
+  const [_currentItems,_setcurrentItems]=React.useState<IItem[]>([]);
+  const [_show, _setshow] = React.useState(false);
+  const [_currentService, _setcurrentService] = React.useState<
+  IItem | undefined
+>();
+  const [_currentStatus,_setcurrentStatus]=React.useState('');
+  const history=useHistory();
+  const dispatch=useDispatch();
+  React.useEffect(()=>{
+    //@ts-ignore
+    dispatch(GetItems());
+  },[])
 
+  React.useEffect(()=>{
+    if(Items.length>0)
+    {
+      _setcurrentItems(Items);
+     }
+  },[Items])
+
+  const getItems=()=>{
+    switch(_currentStatus)
+    {
+      case ItemStatus.approved:{
+        return _currentItems.filter(x=>x.serviceStatus==ItemStatus.approved)
+        
+      }
+      case ItemStatus.pending:{
+        return _currentItems.filter(x=>x.serviceStatus==ItemStatus.pending)
+      }
+      case ItemStatus.rejected:{
+        return _currentItems.filter(x=>x.serviceStatus==ItemStatus.rejected)
+      }
+      default :{
+        return  _currentItems
+      }
+
+    }
+  }
+  const Delete = (Id: number | undefined) => {
+    let obj = Items.find((x) => x.id == Id);
+    //@ts-ignore
+    if (obj != undefined) {
+      _setcurrentService(obj);
+      _setshow(true);
+    }
+  };
   return (
     <Layout title=" ">
       <div className="main-div">
@@ -24,9 +71,18 @@ function App() {
       </div>
       <div className="umpire-1-cst d-flex align-items-center justify-content-between">
         <div className="maxima">
-          <button className="upload-1 sdisad-dsdactive">All</button>
-          <button className="upload-1">Approved</button>
-          <button className="upload-1">Pending</button>
+          <button className="upload-1 sdisad-dsdactive" onClick={()=>{
+            _setcurrentStatus('');
+          }}>All</button>
+          <button className="upload-1" onClick={()=>{
+            _setcurrentStatus(ItemStatus.approved);
+          }}>Approved</button>
+          <button className="upload-1" onClick={()=>{
+            _setcurrentStatus(ItemStatus.pending);
+          }}>Pending</button>
+          <button className="upload-1" onClick={()=>{
+            _setcurrentStatus(ItemStatus.rejected);
+          }}>Rejected</button>
         </div>
         <div>
           <button
@@ -62,33 +118,50 @@ function App() {
                   <th>Category</th>
                   <th>Title</th>
                   <th>Description</th>
-                  <th>Services Include</th>
-                  <th>FAQ</th>
-                  <th>Price</th>
+                  <th>Total Services</th>
+                  <th>Total Services Included</th>
+                  <th>Starting Price</th>
                   <th className="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {Array.from({ length: 5 }, (v, i) => (
-                  <tr key={i}>
-                    <td>Data {i}</td>
-                    <td>Data {i}</td>
-                    <td className="mncais-ads">Data {i}</td>
-                    <td className="mncais-ads">Data {i}</td>
-                    <td className="mncais-ads">
-                      <button className="btn sakdhsad-dsad">View / Edit FAQ</button>
-                    </td>
-                    <td className="mncais-ads">
-                      <button className="btn sakdhsad-dsad">
-                        View / Edit Price
-                      </button>
-                    </td>
-                    <th className="d-flex   manasjd-ajwe">
-                      <button className="btn btn-info">Edit</button>
-                      <button className="btn btn-warning">Delete</button>
-                    </th>
-                  </tr>
-                ))}
+                {
+                  getItems().map((x:IItem,i)=><tr key={i}>
+                  <td>{x.service?.title}</td>
+                  <td>{x.category?.title}</td>
+                  <td className="mncais-ads">{x.title}</td>
+                  <td className="mncais-ads">{x.description}</td>
+                  <td className="mncais-ads">
+                    { 
+                 //@ts-ignore
+                 x.serviceItemServices?.length
+                 }
+                  </td>
+                  <td className="mncais-ads">
+                   { 
+                   //@ts-ignore
+                   x.faqServices?.length
+                   }
+                  </td>
+                  <td className="mncais-ads">
+                  {
+                           //@ts-ignore
+                    Math.min.apply(Math, x.serviceItemServices?.map(y=>y.serviceItemServicePrices?.map(c=>c.serviceItemServiceValue)).flatMap((j)=>[...j]))
+                      }
+                  </td>
+                  <th className="d-flex   manasjd-ajwe">
+                    {/* <button className="btn btn-info" onClick={()=>  history.push({
+           pathname: '/item',
+            state: { data: x }
+       })}>Edit / View</button> */}
+<button
+                        className="btn btn-warning"
+                        onClick={() => Delete(x?.id)}
+                      >
+                        Delete
+                      </button>                  </th>
+                </tr>)
+                }
               </tbody>
             </Table>
           </div>
@@ -105,8 +178,32 @@ function App() {
           </div>
         </div>
       ) : (
-        <ProductCard />
+        <ProductCard  items={getItems}/>
       )}
+ <Modal title="Confirm" show={_show} setShow={_setshow}>
+        <>
+          <p>Are You sure you wan't to delete this service !note this action will not be revoked</p>
+          <div className="d-flex flex-row justify-content-end">
+            <button onClick={() => _setshow(false)} className="btn btn-info">
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                if (_currentService) {
+                  
+                  _setshow(false);
+                  ///@ts-ignore
+                   dispatch(DeleteItem(_currentService))
+                }
+              }}
+              className="btn btn-danger mx-2"
+            >
+              Confirm
+            </button>
+          </div>
+        </>
+      </Modal>
+      
     </Layout>
   );
 }

@@ -1,10 +1,10 @@
 import React from "react";
 import Layout from "../../components/layout";
-import Searchbar from "../../components/searchbar";
+import Searchbar from "../../components/_update/inputs/searchbar";
 import { Table } from "react-bootstrap";
 import { FaStar } from "react-icons/fa";
 import { RiLayoutGridFill, RiListCheck2 } from "react-icons/ri";
-import ReviewCard from "../../components/reviewCard";
+import ReviewCard from "../../components/_update/cards/reviewCard";
 import ReportCard from "../../components/reportCard";
 const MenuItems1 = [
   { title: "Category 1", onClick: () => alert() },
