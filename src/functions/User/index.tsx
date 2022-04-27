@@ -174,17 +174,21 @@ export function LoginUser(dataP:ILogin,history?:any) {
 
          const decoded: any = jwt_decode(data?.data);
            const dataToPush={ ...decoded,Roles:JSON.parse(decoded?.roles)?.map((x:any)=>{
-            if(x?.roleId==UserRoles.Admin)
+            if(x?.RoleId==UserRoles.Admin)
             {
               return "Admin"
             }
-            else if(x?.roleId==UserRoles.Support)
+            else if(x?.RoleId==UserRoles.Support)
             {
               return "Support"
             }
-            else if(x?.roleId==UserRoles.User)
+            else if(x?.RoleId==UserRoles.User)
             {
               return "User"
+            }
+            else if(x?.RoleId==UserRoles.Vendor)
+            {
+              return "Vendor"
             }
             else
             {
@@ -192,11 +196,27 @@ export function LoginUser(dataP:ILogin,history?:any) {
   
             }
            })};
-           dispatch(LoginAction({...dataToPush, token: data?.data }));
-           if( history)
+            
+           if(dataToPush?.Roles?.includes("Admin") ||dataToPush?.Roles?.includes("Vendor"))
            {
-            history.push("/");
+            dispatch(LoginAction({...dataToPush, token: data?.data,isAdmin:dataToPush?.Roles?.includes("Admin") }));
+            if( history)
+            {
+             history.push("/");
+            }
            }
+           else
+           {
+            dispatch(loadingAction(false));
+            dispatch(
+              messageAction({
+                type: 3,
+                message: "Un-Authorized",
+              })
+            );
+           }
+          
+           
       } else {
         dispatch(loadingAction(false));
         dispatch(

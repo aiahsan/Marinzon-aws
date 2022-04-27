@@ -12,8 +12,10 @@ export function GetBookings() {
     (async () => {
       try {
         dispatch(loadingAction(true));
+        const isAdimn=getState()?.User?.isAdmin;
+
          const { status, data }: any = await repository
-          .GetBookings(getState().User?.token || "")
+          .GetBookings(getState().User?.token || "",isAdimn==false?getState().User?.id:undefined)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
           dispatch(loadingAction(false));

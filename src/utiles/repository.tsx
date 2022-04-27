@@ -8,7 +8,7 @@ const register = async (data: ILogin) => {
 };
 
 const GetServices = async (token: string) => {
-  return await api.get("/Service",undefined,{
+  return await api.get("/Service", undefined,{
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -49,8 +49,8 @@ const DeleteCategory = async (token: string,data:ICategory) => {
   });
 };
 
-const GetServiceItem = async (token: string) => {
-  return await api.get("/ServiceItem",undefined,{
+const GetServiceItem = async (token: string,userId?:string) => {
+   return await api.get("/ServiceItem"+(userId!=undefined?`?userId=${userId}`:""),undefined,{
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -70,8 +70,8 @@ const DeleteServiceItem = async (token: string,data:IItem) => {
   });
 };
 
-const GetBookings = async (token: string) => {
-  return await api.get("/Booking",undefined,{
+const GetBookings = async (token: string,userId?:string) => {
+  return await api.get("/Booking"+(userId!=undefined?`?userId=${userId}`:""),undefined,{
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -95,8 +95,8 @@ const DeleteBookings = async (token: string,data:IBooking) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 }
-const GetBookingReviews = async (token: string) => {
-  return await api.get("/BookingReview",undefined,{
+const GetBookingReviews = async (token: string,userId?:string) => {
+  return await api.get("/BookingReview"+(userId!=undefined?`?userId=${userId}`:""),undefined,{
     headers: { Authorization: `Bearer ${token}` },
   });
 };

@@ -12,8 +12,9 @@ export function GetItems() {
     (async () => {
       try {
         dispatch(loadingAction(true));
-         const { status, data }: any = await repository
-          .GetServiceItem(getState().User?.token || "")
+        const isAdimn=getState()?.User?.isAdmin;
+          const { status, data }: any = await repository
+          .GetServiceItem(getState().User?.token || "",isAdimn==false?getState().User?.id:undefined)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
           dispatch(loadingAction(false));

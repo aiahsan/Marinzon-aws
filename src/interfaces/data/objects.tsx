@@ -7,7 +7,8 @@ export interface ILogin {
   id?: number | undefined;
   image?:string
   mobileNumberEmail?:string
-  recordUserId?:number | string |undefined
+  recordUserId?:number | string |undefined,
+  isAdmin?:boolean
 }
 
 export interface ICategory extends IBase {

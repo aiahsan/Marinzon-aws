@@ -2,8 +2,7 @@ import DashboardCard from "../../components/dashboard/dashboardCard";
 import Layout from "../../components/layout";
 import { AiFillFolderOpen, AiFillCar } from "react-icons/ai";
 import { HiDocumentReport } from "react-icons/hi";
-import Linechart from "../../components/chart";
-import Searchbar from "../../components/_update/inputs/searchbar";
+ import Searchbar from "../../components/_update/inputs/searchbar";
 import { Placeholder, Table } from "react-bootstrap";
 import RightIcons from "../../components/rightIcons";
 import Dropdown from "../../components/dropdown";
@@ -348,8 +347,7 @@ function App() {
 
                               _setactive(_active + 1);
                               setTimeout(() => {
-                                alert(_active + 1)
-                              }, 1500);
+                               }, 1500);
                             }
                           }}
                         >

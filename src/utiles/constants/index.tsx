@@ -10,6 +10,7 @@ export const UserRoles=
     Admin :1,
     Support :2,
     User: 3,
+    Vendor:4
 }
 export const ItemStatus={
   pending: "Pending",

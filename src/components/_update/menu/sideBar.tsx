@@ -26,11 +26,13 @@ import { ThemeContext } from "../../../App";
 import { BiUserCircle } from "react-icons/bi";
 import { RiListCheck2 } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LogOutAction } from "../../../redux/actionMethodes/user";
+import { IReduxStore } from "../../../interfaces/data/reduxStore";
 
 export default ({ collapsed }: { collapsed: boolean }) => {
   const history = useHistory();
+  const user=useSelector((x:IReduxStore)=>x.User);
 const dispatch=useDispatch();
   return (
     <ThemeContext.Consumer>
@@ -54,19 +56,25 @@ const dispatch=useDispatch();
               >
                 Dashboard
               </MenuItem>
-              <MenuItem
+             
+            {
+              user?.isAdmin&&user.isAdmin==true? <>
+               <MenuItem
                 onClick={() => history.push("/services")}
                 icon={<MdHomeRepairService color="#4a4a4a" fontSize={20} />}
               >
                 Services
               </MenuItem>
-
-              <MenuItem
-                onClick={() => history.push("/category")}
-                icon={<MdFeaturedPlayList color="#4a4a4a" fontSize={20} />}
-              >
-                Categories
-              </MenuItem>
+               <MenuItem
+              onClick={() => history.push("/category")}
+              icon={<MdFeaturedPlayList color="#4a4a4a" fontSize={20} />}
+            >
+              Categories
+            </MenuItem>
+            </> 
+            :<></>
+            }
+           
 
               <MenuItem
                 onClick={() => history.push("/item")}
@@ -80,12 +88,15 @@ const dispatch=useDispatch();
               >
                 My Services
               </MenuItem>
-              <MenuItem
-                onClick={() => history.push("/users")}
-                icon={<FaUsers color="#4a4a4a" fontSize={20} />}
-              >
-                Users
-              </MenuItem>
+              {
+              user?.isAdmin&&user.isAdmin==true?   <MenuItem
+              onClick={() => history.push("/users")}
+              icon={<FaUsers color="#4a4a4a" fontSize={20} />}
+            >
+              Users
+            </MenuItem>:<></>
+            }
+              
 
               <MenuItem
                 onClick={() => history.push("/bookings")}
@@ -105,12 +116,15 @@ const dispatch=useDispatch();
               >
                 Reviews
               </MenuItem>
-              <MenuItem
-                onClick={() => history.push("/reports")}
-                icon={<HiTemplate color="#4a4a4a" fontSize={20} />}
-              >
-                Reports
-              </MenuItem>
+              {
+              user?.isAdmin&&user.isAdmin==true?    <MenuItem
+              onClick={() => history.push("/reports")}
+              icon={<HiTemplate color="#4a4a4a" fontSize={20} />}
+            >
+              Reports
+            </MenuItem>:<></>
+            }
+             
 {/* 
               <MenuItem
                 icon={

@@ -1,10 +1,12 @@
 import moment from 'moment';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UpdateBookingReviewsStatus } from '../../../functions/BookingReview';
 import { IBookingReview } from '../../../interfaces/data/objects';
+import { IReduxStore } from '../../../interfaces/data/reduxStore';
 import { ImageUrl } from '../../../utiles/baseUrl';
 export default ({data}:{data:IBookingReview})=>{
+  const user=useSelector((x:IReduxStore)=>x.User)
   const dispatch=useDispatch();
     return <> <div className="reviews-section">
     <div className="first-rev-sec">
@@ -31,23 +33,25 @@ export default ({data}:{data:IBookingReview})=>{
            <h6>Review Status {
           data?.isVerifed===true?"Approved":"Rejected" 
           }</h6>
-          <div className='d-flex justify-content-between mt-2' >
-            <button className='btn btn-danger kjdsfad-aweinmsa' onClick={()=>{
-              //@ts-ignore
-              dispatch(UpdateBookingReviewsStatus({...data,isVerifed:false}))
-            }}>
-            Reject
-            </button>
-             
-            <button className='btn btn-info kjdsfad-aweinmsa' onClick={()=>{
-                            //@ts-ignore
-
-               dispatch(UpdateBookingReviewsStatus({...data,isVerifed:true}))
-            }}>
-            Approve
-            </button>
-          
-      </div>
+            {
+              user?.isAdmin&&user.isAdmin==true?<div className='d-flex justify-content-between mt-2' >
+              <button className='btn btn-danger kjdsfad-aweinmsa' onClick={()=>{
+                //@ts-ignore
+                dispatch(UpdateBookingReviewsStatus({...data,isVerifed:false}))
+              }}>
+              Reject
+              </button>
+               
+              <button className='btn btn-info kjdsfad-aweinmsa' onClick={()=>{
+                              //@ts-ignore
+  
+                 dispatch(UpdateBookingReviewsStatus({...data,isVerifed:true}))
+              }}>
+              Approve
+              </button>
+            
+        </div>:<></>
+            }
       </div>
       
     </div>
