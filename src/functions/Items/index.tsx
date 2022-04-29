@@ -170,3 +170,86 @@ export function DeleteItem(dataP:IItem) {
     })();
   };
 }
+
+
+export function GetItemsByServiceID(serviceId:number) {
+  return function (dispatch: any, getState: any): any {
+    (async () => {
+      try {
+        dispatch(loadingAction(true));
+        const isAdimn=getState()?.User?.isAdmin;
+          const { status, data }: any = await repository
+          .GetServiceItemByServiceId(getState().User?.token || "",isAdimn==false?getState().User?.id:undefined,serviceId)
+          .then((x) => x);
+        if (status == 200 && data?.success == true) {
+          dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 1,
+              message: data?.message,
+            })
+          );
+            dispatch(setItemAM(data?.data));
+         } else {
+          dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 3,
+              message:
+                data?.message || "Something wen't wrong contact support",
+            })
+          );
+        }
+      } catch (e) {
+        dispatch(loadingAction(false));
+        dispatch(
+          messageAction({
+            type: 3,
+            message: e as string,
+          })
+        );
+      }
+    })();
+  };
+}
+
+export function GetItemsByCategoryID(categoryId:number) {
+  return function (dispatch: any, getState: any): any {
+    (async () => {
+      try {
+        dispatch(loadingAction(true));
+        const isAdimn=getState()?.User?.isAdmin;
+          const { status, data }: any = await repository
+          .GetServiceItemByCategoryId(getState().User?.token || "",isAdimn==false?getState().User?.id:undefined,categoryId)
+          .then((x) => x);
+        if (status == 200 && data?.success == true) {
+          dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 1,
+              message: data?.message,
+            })
+          );
+            dispatch(setItemAM(data?.data));
+         } else {
+          dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 3,
+              message:
+                data?.message || "Something wen't wrong contact support",
+            })
+          );
+        }
+      } catch (e) {
+        dispatch(loadingAction(false));
+        dispatch(
+          messageAction({
+            type: 3,
+            message: e as string,
+          })
+        );
+      }
+    })();
+  };
+}

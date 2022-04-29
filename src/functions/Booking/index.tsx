@@ -2,6 +2,7 @@ import { AnyAction, Dispatch } from "redux";
 import { IService, IReturnData, IBooking } from "../../interfaces/data/objects";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
 import { addBookingAM, deleteBookingAM, setBookingAM, updateBookingAM } from "../../redux/actionMethodes/Booking";
+import { deleteCurrentBookingAM } from "../../redux/actionMethodes/Currentbooking";
 import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
 import { addServicesAM, deleteServiceAM, setServicesAM, updateServiceAM } from "../../redux/actionMethodes/Services";
@@ -48,7 +49,7 @@ export function GetBookings() {
     })();
   };
 }
-export function AddBookings(dataP:any) {
+export function AddBookings(dataP:any,router?:any) {
    return function (dispatch: any, getState: any): any {
     (async () => {
       try {
@@ -66,6 +67,8 @@ export function AddBookings(dataP:any) {
             })
           );
             dispatch(addBookingAM(data?.data));
+            dispatch(deleteCurrentBookingAM());
+            router.push("/")
         } else {
           dispatch(loadingAction(false));
           dispatch(
@@ -77,7 +80,7 @@ export function AddBookings(dataP:any) {
           );
         }
       } catch (e) {
-        dispatch(loadingAction(false));
+         dispatch(loadingAction(false));
         dispatch(
           messageAction({
             type: 3,

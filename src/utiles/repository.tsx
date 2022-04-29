@@ -3,6 +3,7 @@ import { api } from "./baseUrl";
 const login = async (data: ILogin) => {
   return await api.post("/user/login", data);
 };
+
 const register = async (data: ILogin) => {
   return await api.post("/user/register", data);
 };
@@ -53,6 +54,16 @@ const GetServiceItem = async (token: string,userId?:string) => {
    return await api.get("/ServiceItem"+(userId!=undefined?`?userId=${userId}`:""),undefined,{
     headers: { Authorization: `Bearer ${token}` },
   });
+};
+const GetServiceItemByCategoryId = async (token: string,userId?:string,categoryId?:number) => {
+  return await api.get("/ServiceItem/getbycategoryId?"+(userId!=undefined?`userId=${userId}`:""+(`categoryId=${categoryId}`)),undefined,{
+   headers: { Authorization: `Bearer ${token}` },
+ });
+};
+const GetServiceItemByServiceId = async (token: string,userId?:string,serviceId?:number) => {
+  return await api.get("/ServiceItem/getbyserviceId?"+(userId!=undefined?`userId=${userId}`:""+(`serviceId=${serviceId}`)),undefined,{
+   headers: { Authorization: `Bearer ${token}` },
+ });
 };
 const PostServiceItem = async (token: string,data:IItem) => {
   return await api.post("/ServiceItem",data,{
@@ -137,6 +148,13 @@ const DeleteUser = async (token: string,data:ILogin) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const GetItemById = async (token: string,itemId?:string) => {
+
+  return await api.get("/ServiceItem/getbyid?itemId="+itemId,undefined,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
 export const repository = {
   login,
   register,
@@ -164,5 +182,8 @@ export const repository = {
   UpdateBookingReviewstatus,
   updateUser,
   GetUsers,
-  DeleteUser
+  DeleteUser,
+  GetServiceItemByCategoryId,
+  GetServiceItemByServiceId,
+  GetItemById
 };

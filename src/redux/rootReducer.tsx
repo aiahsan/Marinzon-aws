@@ -7,6 +7,7 @@ import * as Message  from './reducers/messsage/idnex';
  import * as ServiceItem  from './reducers/Item/idnex';
  import * as Booking  from './reducers/Booking/idnex';
  import * as BookingReview  from './reducers/BookingReview/idnex';
+ import * as CurrentBooking  from './reducers/Currentbooking/idnex';
 import {persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -19,13 +20,14 @@ export const rootReducer = combineReducers({
   ServiceItem:ServiceItem.ItemReducer,
   BookingReviews:BookingReview.BookingReviewReducer,
   Bookings:Booking.BookingReducer,
-  Users:User.UsersReducer
+  Users:User.UsersReducer,
+  CurrentBooking:CurrentBooking.CurrentBookingReducer
  });
 
 const persistConfig={
   key:'root',
   storage,
-  whitelist:['User']
+  whitelist:['User','CurrentBooking']
 }
 
 export default persistReducer(persistConfig,rootReducer )

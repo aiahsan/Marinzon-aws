@@ -1,11 +1,28 @@
-import React from 'react';
-const Comp = ({ label }: { label: string }) => {
-  return <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 ">
-    <p>                   {label}
-    </p>
-    <input placeholder="Type here" type="text" className="cst-textbox-input w-100 mt-2" />
-
-  </div>
-}
-
-export default Comp;
+import React from "react";
+import { Itexbox } from "../interfaces/fields/Itextbox";
+export default function App ({
+  getFieldProps,
+  touched,
+  error,
+  feildName,
+  placeholder,
+  type,
+  label
+}: Itexbox) {
+  return (
+    <div className="field-box w-100 ">
+      <h6>{label}</h6>
+      {
+        type!=="textarea"?<input
+        {...getFieldProps(feildName)}
+        className="form-control mt-2"
+        type={type}
+        placeholder={placeholder}
+      />:<textarea rows={8} {...getFieldProps(feildName)}
+       placeholder={placeholder}></textarea>
+      }
+      
+      {touched && error && <p>{error}</p>}
+    </div>
+  );
+};
