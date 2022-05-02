@@ -4,7 +4,7 @@ export const setBookingAM=(payload:IBooking[])=>{
       return {type:types.SET_Bookings,payload:payload}
 }
 export const addBookingAM=(payload:IBooking)=>{
-      return {type:types.Add_Booking,payload:payload}
+     return {type:types.Add_Booking,payload:payload}
 }
 export const updateBookingAM=(payload:IBooking)=>{
     return {type:types.SET_Booking,payload:payload}

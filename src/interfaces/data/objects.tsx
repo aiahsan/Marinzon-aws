@@ -23,8 +23,6 @@ export interface IService extends IBase {
   title: string;
   description: string;
   image: string;
-  categories?:ICategory[];
-  
 } 
 
 export interface IItem extends IBase {
@@ -72,27 +70,10 @@ export interface IBooking extends IBase {
   id?: number | undefined;
   serviceItemId?: number | string|undefined;
   bookerId?: number | string|undefined;
-  bookingDateTime ?: Date | number;
-  BookingTime ?: string;
-  bookingInstructions ?: string;
+  bookingDateTime ?: Date;
   bookingStatus?: string|undefined;
   serviceItem?: IItem
   user?:ILogin;
-  bookingReviews?:[]
-  bookingItems?:any,
-  title?:string
-  bookingTime?:string
-  bookingItemsstring?:string
-
-}
-
-export interface IBookingItems extends IBase {
-  id?: number | undefined;
-  bookingId?: number | string| undefined;
-  serviceItemServiceId?: number | string| undefined;
-  serviceItemServicePriceId?: number | string| undefined;
-  price?: number | string| undefined;
-
 }
 
 export interface IBookingReview extends IBase {
@@ -117,15 +98,11 @@ export interface IBase {
   uploadImage?: string;
 }
 
-
- 
-
 export interface IReturnData {
   data: any;
   success: string;
   message: string;
 }
-
 
 export interface ItechStacks {
   label: string;

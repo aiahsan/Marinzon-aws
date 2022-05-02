@@ -44,14 +44,5 @@ SET_Users: "SET_Users",
 SET_User: "SET_User",
 Delete_User: "Delete_User",
 
-language:'change_language',
-
-
-
-Add_CurrentBooking: "Add_CurrentBooking",
-SET_CurrentBooking: "SET_CurrentBooking",
-Delete_CurrentBooking: "Delete_CurrentBooking",
-
-
 
 };

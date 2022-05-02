@@ -9,8 +9,7 @@ export interface IReduxStore {
    ServiceItem:IItem[] | [];
     Bookings:IBooking[] | [];
     BookingReviews:IBookingReview[] | [];
-    CurrentBooking:IBooking | null;
- }
+}
 
 export interface IMessage {
   type: number;

@@ -40,13 +40,3 @@ export const UsersReducer = (
 
   return state;
 };
-
-
-//en-AE
-//ar-AE
-export const language = (state = "en-AE",   action:any) => {
-  if (action.type == types.language) {
-   return action.payload;
- } 
- return state;
-};

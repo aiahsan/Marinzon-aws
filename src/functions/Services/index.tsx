@@ -3,12 +3,7 @@ import { IService, IReturnData } from "../../interfaces/data/objects";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
 import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
-import {
-  addServicesAM,
-  deleteServiceAM,
-  setServicesAM,
-  updateServiceAM,
-} from "../../redux/actionMethodes/Services";
+import { addServicesAM, deleteServiceAM, setServicesAM, updateServiceAM } from "../../redux/actionMethodes/Services";
 import { repository } from "../../utiles/repository";
 
 export function GetServices() {
@@ -16,7 +11,7 @@ export function GetServices() {
     (async () => {
       try {
         dispatch(loadingAction(true));
-        const { status, data }: any = await repository
+         const { status, data }: any = await repository
           .GetServices(getState().User?.token || "")
           .then((x) => x);
         if (status == 200 && data?.success == true) {
@@ -27,13 +22,14 @@ export function GetServices() {
               message: data?.message,
             })
           );
-          dispatch(setServicesAM(data?.data));
+            dispatch(setServicesAM(data?.data));
         } else {
           dispatch(loadingAction(false));
           dispatch(
             messageAction({
               type: 3,
-              message: data?.message || "Something wen't wrong contact support",
+              message:
+                data?.message || "Something wen't wrong contact support",
             })
           );
         }
@@ -49,15 +45,15 @@ export function GetServices() {
     })();
   };
 }
-export function AddServices(dataP: any) {
-  return function (dispatch: any, getState: any): any {
+export function AddServices(dataP:any) {
+   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
         dispatch(loadingAction(true));
-        const { status, data }: any = await repository
-          .PostServices(getState().User?.token || "", dataP)
+         const { status, data }: any = await repository
+          .PostServices(getState().User?.token || "",dataP)
           .then((x) => x);
-        console.log(status, data);
+          console.log(status,data)
         if (status == 200 && data?.success == true) {
           dispatch(loadingAction(false));
           dispatch(
@@ -66,13 +62,14 @@ export function AddServices(dataP: any) {
               message: data?.message,
             })
           );
-          dispatch(addServicesAM(data?.data));
+            dispatch(addServicesAM(data?.data));
         } else {
           dispatch(loadingAction(false));
           dispatch(
             messageAction({
               type: 3,
-              message: data?.message || "Something wen't wrong contact support",
+              message:
+                data?.message || "Something wen't wrong contact support",
             })
           );
         }
@@ -88,15 +85,15 @@ export function AddServices(dataP: any) {
     })();
   };
 }
-export function UpdateServices(dataP: IService) {
+export function UpdateServices(dataP:IService) {
   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
         dispatch(loadingAction(true));
-        const { status, data }: any = await repository
-          .UpdateServices(getState().User?.token || "", dataP)
+         const { status, data }: any = await repository
+          .UpdateServices(getState().User?.token || "",dataP)
           .then((x) => x);
-        console.log(status, data);
+          console.log(status,data)
         if (status == 200 && data?.success == true) {
           dispatch(loadingAction(false));
           dispatch(
@@ -105,13 +102,14 @@ export function UpdateServices(dataP: IService) {
               message: data?.message,
             })
           );
-          dispatch(updateServiceAM(data?.data));
+            dispatch(updateServiceAM(data?.data));
         } else {
           dispatch(loadingAction(false));
           dispatch(
             messageAction({
               type: 3,
-              message: data?.message || "Something wen't wrong contact support",
+              message:
+                data?.message || "Something wen't wrong contact support",
             })
           );
         }
@@ -127,18 +125,18 @@ export function UpdateServices(dataP: IService) {
     })();
   };
 }
-export function DeleteServices(dataP: IService) {
+export function DeleteServices(dataP:IService) {
   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
         dispatch(loadingAction(true));
-        const { status, data }: any = await repository
-          .DeleteServices(getState().User?.token || "", {
+         const { status, data }: any = await repository
+          .DeleteServices(getState().User?.token || "",{
             ...dataP,
-            recordUserId: getState().User?.id,
+            recordUserId:getState().User?.id
           })
           .then((x) => x);
-        console.log(status, data);
+          console.log(status,data)
         if (status == 200 && data?.success == true) {
           dispatch(loadingAction(false));
           dispatch(
@@ -147,13 +145,14 @@ export function DeleteServices(dataP: IService) {
               message: data?.message,
             })
           );
-          dispatch(deleteServiceAM(data?.data));
+            dispatch(deleteServiceAM(data?.data));
         } else {
           dispatch(loadingAction(false));
           dispatch(
             messageAction({
               type: 3,
-              message: data?.message || "Something wen't wrong contact support",
+              message:
+                data?.message || "Something wen't wrong contact support",
             })
           );
         }
@@ -169,6 +168,3 @@ export function DeleteServices(dataP: IService) {
     })();
   };
 }
-
-
- 
