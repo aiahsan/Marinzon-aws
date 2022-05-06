@@ -49,7 +49,7 @@ export function GetItems() {
 }
 export function AddItem(dataP:any) {
    return function (dispatch: any, getState: any): any {
-    (async () => {
+   return (async () => {
       try {
         dispatch(loadingAction(true));
          const { status, data }: any = await repository
@@ -65,6 +65,7 @@ export function AddItem(dataP:any) {
             })
           );
             dispatch(addItemAM(data?.data));
+            return 1;
         } else {
           dispatch(loadingAction(false));
           dispatch(

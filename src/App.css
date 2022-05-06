@@ -1469,3 +1469,7 @@ body .btn-warning {
   .uploader__placeholder{
     border-radius: 50%;
   }
+
+  .cst-dropdown .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle{
+    border: 1px solid!important;
+  }

@@ -9,7 +9,7 @@ import { DisplayingErrorMessagesCategorySchema, DisplayingErrorMessagesServiceSc
 import Dropdown from "../../dropdown";
 import Textbox from "../inputs/textbox";
 import ImageUpload from "./imageUpload";
-export default ({ PostData ,data}: { PostData: (values: ICategory) => void,data?:ICategory }) => {
+export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => void,data?:ICategory,setData:any }) => {
   const [_Image, _setImage] = React.useState<any>();
   const dispatch = useDispatch();
   const user = useSelector((x: IReduxStore) => x.User);
@@ -26,7 +26,7 @@ export default ({ PostData ,data}: { PostData: (values: ICategory) => void,data?
        }}
       enableReinitialize={true}
       validationSchema={DisplayingErrorMessagesCategorySchema}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values, { setSubmitting,resetForm }) => {
         console.log(values)
         let formData = new FormData();
         formData.append("Title", values.title);
@@ -40,12 +40,22 @@ export default ({ PostData ,data}: { PostData: (values: ICategory) => void,data?
             formData.append("Id", values.id);
 
          //@ts-ignore
-        dispatch(UpdateCategory(formData));
+         let value=await  dispatch(UpdateCategory(formData));
+         //@ts-ignore
+          if(value && value==1)
+          {
+             setData(undefined)
+          }
         }
         else
         {
              //@ts-ignore
-        dispatch(AddCategory(formData));
+             let value=await dispatch(AddCategory(formData));
+             //@ts-ignore
+             if(value && value==1)
+             {
+                 resetForm();
+             }
         }
       }}
     >
@@ -56,6 +66,7 @@ export default ({ PostData ,data}: { PostData: (values: ICategory) => void,data?
         handleSubmit,
         setFieldValue,
         setTouched,
+        setFieldTouched,
         values
       }) => {
         const getImageFileObject = (Image: any) => {
@@ -71,15 +82,20 @@ export default ({ PostData ,data}: { PostData: (values: ICategory) => void,data?
              <div className="mb-0 cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
              <div className="">
               <Dropdown
+
                 label="Select Service"
                 items={services.map((x:IService)=>{
                   return {
                     title:x.title,
-                     onClick: () => setFieldValue("serviceId",x?.id)
+                     onClick: () => {
+                      setFieldValue("serviceId",x?.id)
+                      }
                     }
                 })}
                 title={values.serviceId?services.find(y=>y.id==values.serviceId)?.title || "Select Service":"Select Service"}
               />
+                                  {touched.serviceId && errors.serviceId && <p style={{color:'red'}}>{errors.serviceId}</p>}
+
             </div>
             
             </div>
@@ -95,7 +111,7 @@ export default ({ PostData ,data}: { PostData: (values: ICategory) => void,data?
                 placeholder="Input Title"
                 type="input"
               />
-              
+
             </div>
             <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
               <Textbox
@@ -109,10 +125,9 @@ export default ({ PostData ,data}: { PostData: (values: ICategory) => void,data?
               />
             </div>
 
-             
             <div className="d-flex justify-content-end my-4">
               <button className="btn sakdhsad-dsad" type="submit">
-                Add New Service
+               {data?"Update Category":"Add New Category"}
               </button>
             </div>
           </Form>

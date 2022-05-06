@@ -14,7 +14,7 @@ import React from "react";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 //@ts-ignore
 import Stepper from "react-stepper-horizontal";
-import { Form, Formik } from "formik";
+import { Form, Formik, useFormikContext } from "formik";
 import {
   DisplayingErrorMessagesItemSchema,
   DisplayingErrorMessagesServiceSchema,
@@ -43,9 +43,15 @@ import { AddItem } from "../../functions/Items";
 import { useLocation, useParams } from "react-router-dom";
 import { GetServices } from "../../functions/Services";
 import { GetCategory } from "../../functions/Categories";
-
+import { messageAction } from "../../redux/actionMethodes/message";
+let fValues=["serviceId",
+"categoryId",
+"title",
+"image",
+"description"];
 function App() {
   const [tags, settags] = React.useState([0]);
+ 
   const [_active, _setactive] = React.useState(0);
   const [_Image, _setImage] = React.useState<any>();
   const dispatch = useDispatch();
@@ -56,7 +62,7 @@ function App() {
   const itemsRef = React.useRef([]);
   const [_updateState, _setUpdateState] = React.useState<IItem>();
   const [buttonName,setbuttonName]=React.useState("Next");
-  const parms = useLocation();
+   const parms = useLocation();
   React.useEffect(() => {
     itemsRef.current = itemsRef.current.slice(0, _cstFaqQuestion.length);
   }, []);
@@ -66,9 +72,31 @@ function App() {
   React.useEffect(() => {
     //@ts-ignore
     if (parms?.state?.data) {
-      //@ts-ignore
-      _setUpdateState(parms?.state?.data);
-    }
+            //@ts-ignore
+
+      var dataGet=parms?.state?.data;
+            //@ts-ignore
+      dataGet.serviceItemServices=  dataGet.serviceItemServices.map(x=>{
+          return {
+            ...x,
+            isCompleted:true,
+            serviceItemServicePrices:x?.serviceItemServicePrices.map((v:any)=>{
+              return {
+                ...v,
+                ServiceItemServiceTitle:v.serviceItemServiceTitle,
+                ServiceItemServiceValue:v.serviceItemServiceValue
+
+              }
+            })
+          }
+      })
+
+      dataGet.fAQServices=dataGet.faqServices;
+      dataGet.fAQQuestions=dataGet.faqQuestions;
+            //@ts-ignore
+
+      _setUpdateState(dataGet);
+      }
   }, [parms]);
 
   React.useEffect(()=>{
@@ -129,36 +157,73 @@ function App() {
               }}
               enableReinitialize={true}
               validationSchema={DisplayingErrorMessagesItemSchema}
-              onSubmit={async (values, { setSubmitting }) => {
-                let formData = new FormData();
-                formData.append("title", values.title);
-                formData.append("description", values.description);
-                formData.append("uploadImage", _Image?.file || values.image);
-                //@ts-ignore
-                formData.append("recordUserId", user.id);
-                //@ts-ignore
+              onSubmit={async (values, { setSubmitting ,resetForm,setFieldValue}) => {
+                
+               
+                
+                 if(values.fAQServices.length<=0 || values.fAQQuestions.map(x=>x.serviceFAQAnswer.trim()).includes("")==true)
+                 {
+                  
+                  dispatch(messageAction({
+                    type: 3,
+                    message:
+                      "One of the required field is empty or service included list is empty",
+                  }));
+                
+                 }
+                 else
+                 {
+                  let formData = new FormData();
+                  formData.append("title", values.title);
+                  formData.append("description", values.description);
+                  formData.append("uploadImage", _Image?.file || values.image);
+                  //@ts-ignore
+                  formData.append("recordUserId", user.id);
+                  //@ts-ignore
+  
+                  formData.append("serviceId", values.serviceId);
+                  //@ts-ignore
+  
+                  formData.append("categoryId", values.categoryId);
+                  formData.append(
+                    "fAQServices",
+                    JSON.stringify(changeKeysToUpper(values.fAQServices))
+                  );
+  
+                  formData.append(
+                    "fAQQuestions",
+                    JSON.stringify(changeKeysToUpper(values.fAQQuestions))
+                  );
+  
+                  formData.append(
+                    "serviceItemServices",
+                    JSON.stringify(changeKeysToUpper(values.serviceItemServices))
+                  );
+                  console.log(values);
+                  //@ts-ignore
+                 (async ()=>{
+                                     //@ts-ignore
 
-                formData.append("serviceId", values.serviceId);
-                //@ts-ignore
+                  const valueG= await  dispatch(AddItem(formData));
+                  //@ts-ignore
 
-                formData.append("categoryId", values.categoryId);
-                formData.append(
-                  "fAQServices",
-                  JSON.stringify(changeKeysToUpper(values.fAQServices))
-                );
-
-                formData.append(
-                  "fAQQuestions",
-                  JSON.stringify(changeKeysToUpper(values.fAQQuestions))
-                );
-
-                formData.append(
-                  "serviceItemServices",
-                  JSON.stringify(changeKeysToUpper(values.serviceItemServices))
-                );
-                console.log(values);
-                //@ts-ignore
-                dispatch(AddItem(formData));
+                  if(valueG==1)
+                  {
+                    resetForm();
+                    setFieldValue("serviceItemServices",[{
+                      id: Date.now().toString(),
+                      serviceItemServiceTitle: "",
+                      serviceItemServicePrices: [],
+                      isCompleted: false,
+                    }])
+                    setFieldValue("fAQServices",[..._cstServicesInclude])
+                    setFieldValue("fAQQuestions",[..._cstFaqQuestion])
+    
+                    _setactive(0);
+                  }
+                 })()
+                 }
+                 
               }}
             >
               {({
@@ -169,14 +234,22 @@ function App() {
                 setFieldValue,
                 setTouched,
                 values,
-              }) => {
+                isValid,
+                validateForm,setFieldTouched,
+                setFieldError
+                }) => {
                 const getImageFileObject = (Image: any) => {
-                  _setImage(Image);
-                  setFieldValue("image", Image?.file?.name);
+                    if( Image?.file)
+                    {
+                      _setImage(Image);
+                      setFieldValue("image", Image?.file?.name);
+                      
+                    }
+
                 };
                 const runAfterImageDelete = (Image: any) => {
-                  _setImage(undefined);
-                  setFieldValue("image", undefined);
+                   _setImage(undefined);
+                   setFieldValue("image", undefined);
                 };
                 const handleAdditionFaqServiceInclude = (
                   tagFaqs: IFAQService
@@ -210,6 +283,7 @@ function App() {
                           errors={errors}
                           getImageFileObject={getImageFileObject}
                           runAfterImageDelete={runAfterImageDelete}
+                          setFieldTouched={setFieldTouched}
                         />
                       );
                     }
@@ -231,6 +305,7 @@ function App() {
                             <div className={`t-parent`}>
                               <p>Service included</p>
                               <div className="d-flex flex-wrap">
+                                
                                 {values.fAQServices.map((x, i) => (
                                   <div className="ReactTags__selected">
                                     <span
@@ -274,7 +349,7 @@ function App() {
                                         (x: IFAQQuestion) =>
                                           x?.id == values.fAQQuestions[i].id
                                       );
-                                      if (index > 0) {
+                                      if (index > -1) {
                                         let oldValues = [
                                           ...values.fAQQuestions,
                                         ];
@@ -287,6 +362,7 @@ function App() {
                                         ]);
                                       }
                                     }}
+                                    value={x.serviceFAQAnswer}
                                   ></textarea>
                                 </div>
                               </div>
@@ -344,10 +420,51 @@ function App() {
                           onClick={(e) => {
                             if (_active < 2) {
                               e.preventDefault();
-
-                              _setactive(_active + 1);
-                              setTimeout(() => {
-                               }, 1500);
+                              if(_active==0)
+                              {
+                                if(isValid==true)
+                                {
+                                  _setactive(_active + 1);
+                                }
+                                else
+                                {
+                                  
+                                  fValues.map(x=>{
+                                    setFieldTouched(x,true);
+                                  setFieldError(x,"") 
+                                  })
+                                  dispatch( messageAction({
+                                    type: 3,
+                                    message:
+                                      "One of the required field is empty",
+                                  }));
+                                }
+                              }
+                              else if(_active==1)
+                              {
+                             
+                              
+                              
+                                 //@ts-ignore
+                                if(values.serviceItemServices.length>0 && values.serviceItemServices[0]?.serviceItemServicePrices?.length>0 )
+                                {
+                                  _setactive(_active + 1);
+                                }
+                                else
+                                {
+                                  
+                                  
+                                  dispatch( messageAction({
+                                    type: 3,
+                                    message:
+                                      "Please add at least 1 service item",
+                                  }));
+                                }
+                                
+                              }
+                              // 
+                              // setTimeout(() => {
+                              //  }, 1500);
                             }
                           }}
                         >

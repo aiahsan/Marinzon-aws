@@ -49,7 +49,7 @@ export function GetCategory() {
 }
 export function AddCategory(dataP:ICategory) {
   return function (dispatch: any, getState: any): any {
-    (async () => {
+   return (async () => {
       try {
         dispatch(loadingAction(true));
          const { status, data }: any = await repository
@@ -65,6 +65,8 @@ export function AddCategory(dataP:ICategory) {
             })
           );
             dispatch(addCategoryAM(data?.data));
+            return 1;
+
         } else {
           dispatch(loadingAction(false));
           dispatch(
@@ -89,7 +91,7 @@ export function AddCategory(dataP:ICategory) {
 }
 export function UpdateCategory(dataP:ICategory) {
   return function (dispatch: any, getState: any): any {
-    (async () => {
+   return (async () => {
       try {
         dispatch(loadingAction(true));
          const { status, data }: any = await repository
@@ -105,6 +107,7 @@ export function UpdateCategory(dataP:ICategory) {
             })
           );
             dispatch(updateCategoryAM(data?.data));
+            return 1;
         } else {
           dispatch(loadingAction(false));
           dispatch(

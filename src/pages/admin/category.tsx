@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import ServiceCard from "../../components/_update/cards/ServiceCard";
 import Layout from "../../components/layout";
 import ProductCard from "../../components/_update/cards/ProductCard";
@@ -11,18 +11,18 @@ import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import { useSelector } from "react-redux";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
-import { ICategory, IService } from '../../interfaces/data/objects';
+import { ICategory, IService } from "../../interfaces/data/objects";
 import { DeleteServices, GetServices } from "../../functions/Services";
-import { DeleteCategory, GetCategory } from "../../functions/Categories";
-import Modal from '../../components/_update/modal';
-import CategoryForm from '../../components/_update/forms/categoryForm';
-
+import { DeleteCategory, GetCategory, UpdateCategory } from "../../functions/Categories";
+import Modal from "../../components/_update/modal";
+import CategoryForm from "../../components/_update/forms/categoryForm";
 
 function App() {
-
   const dispatch = useDispatch();
   const categoreis = useSelector((x: IReduxStore) => x.Categories);
   const services = useSelector((x: IReduxStore) => x.Services);
+  const user = useSelector((x: IReduxStore) => x.User);
+
   const [_show, _setshow] = React.useState(false);
   const [_currentService, _setcurrentService] = React.useState<
     ICategory | undefined
@@ -64,66 +64,104 @@ function App() {
           <h5 className="hd-5">Add New Category</h5>
 
           <div className="mt-4">
-            
-          <CategoryForm PostData={() => {}} data={_currentService}/>
+            <CategoryForm
+              PostData={() => {}}
+              data={_currentService}
+              setData={_setcurrentService}
+            />
           </div>
         </div>
-        <div className="box-shadow p-4 mt-4 jhfadjsf-andsd w-100 justify-content-between d-flex flex-column">
-          <div>
-            <div className="d-flex align-items-center justify-content-between">
-              <h5 className="hd-5">Categories List</h5>
-              <Searchbar isBorder={true} />
-            </div>
-            <Table responsive borderless className="table-custom">
-              <thead>
-                <tr>
-                  <th>Service</th>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th className="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  categoreis.map((x:ICategory,i)=><tr key={i}>
-                    <td>{x?.service?.title}</td>
-                    <td>{x.title}</td>
-                    <td className="mncais-ads">{x.description}</td>
-                    <th className="d-flex   manasjd-ajwe">
+      </div>
+      <div className="box-shadow p-4 mt-4 jhfadjsf-andsd w-100 justify-content-between d-flex flex-column">
+        <div>
+          <div className="d-flex align-items-center justify-content-between">
+            <h5 className="hd-5">Categories List</h5>
+            <Searchbar isBorder={true} />
+          </div>
+          <Table responsive borderless className="table-custom">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Approved Status</th>
+                <th className="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categoreis.map((x: ICategory, i) => (
+                <tr key={i}>
+                  <td>{x?.service?.title}</td>
+                  <td>{x.title}</td>
+                  <td className="mncais-ads">{x.description}</td>
+                  <td className="mncais-ads">
+                    {x?.isApproved == true ? "Approved" : "Pending"}
+                  </td>
+
+                  <td className="d-flex manasjd-ajwe">
+                    {
+                      user?.isAdmin&&user.isAdmin==true?    <button
+                      className={`btn ${
+                        x?.isApproved==true ? "btn-danger" : "btn-success"
+                      } mx-2`}
+                      onClick={() => {
+                        let formData = new FormData();
+                        formData.append("Title", x.title);
+                        formData.append("description", x.description);
+                        formData.append("serviceId", x.serviceId.toString());
+                        formData.append("isApproved", x.isApproved==true?"false":"true");
+                        //@ts-ignore
+                        formData.append("recordUserId", user.id);
+                        //@ts-ignore
+                        formData.append("Id", x.id);
+                        (async ()=>{
+                        //@ts-ignore
+
+                          let value=await  dispatch(UpdateCategory(formData));
+
+                        })()
+                      }}
+                    >
+                      {x?.isApproved ? "Reject" : "Approved"}
+                    </button>:<></>
+                    }
+                
                     <button
-                        className="btn btn-info"
-                        onClick={() => Update(x?.id)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-warning"
-                        onClick={() => Delete(x?.id)}
-                      >
-                        Delete
-                      </button>
-                    </th>
-                  </tr>)
-                }
-              </tbody>
-            </Table>
+                      className="btn btn-info mx-2"
+                      onClick={() => Update(x?.id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-warning mx-2"
+                      onClick={() => Delete(x?.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+        <div className="d-flex justify-content-end pagination-container">
+          <button className="btn cst-none">Previous</button>
+          <div className="d-flex pagination-number-container">
+            <button className="btn">1</button>
+            <button className="btn active">2</button>
+            <button className="btn">3</button>
+            <button className="btn">4</button>
+            <button className="btn mag-18">5</button>
           </div>
-          <div className="d-flex justify-content-end pagination-container">
-            <button className="btn cst-none">Previous</button>
-            <div className="d-flex pagination-number-container">
-              <button className="btn">1</button>
-              <button className="btn active">2</button>
-              <button className="btn">3</button>
-              <button className="btn">4</button>
-              <button className="btn mag-18">5</button>
-            </div>
-            <button className="btn cst-none">Next</button>
-          </div>
+          <button className="btn cst-none">Next</button>
         </div>
       </div>
       <Modal title="Confirm" show={_show} setShow={_setshow}>
         <>
-          <p>Are You sure you wan't to delete this service !note this action will not be revoked</p>
+          <p>
+            Are You sure you wan't to delete this service !note this action will
+            not be revoked
+          </p>
           <div className="d-flex flex-row justify-content-end">
             <button onClick={() => _setshow(false)} className="btn btn-info">
               Cancel
@@ -131,10 +169,9 @@ function App() {
             <button
               onClick={() => {
                 if (_currentService) {
-                  
                   _setshow(false);
                   //@ts-ignore
-                  dispatch(DeleteCategory(_currentService))
+                  dispatch(DeleteCategory(_currentService));
                 }
               }}
               className="btn btn-danger mx-2"

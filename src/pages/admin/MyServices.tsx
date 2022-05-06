@@ -150,10 +150,10 @@ function App() {
                       }
                   </td>
                   <th className="d-flex   manasjd-ajwe">
-                    {/* <button className="btn btn-info" onClick={()=>  history.push({
+                    <button className="btn btn-info" onClick={()=>  history.push({
            pathname: '/item',
             state: { data: x }
-       })}>Edit / View</button> */}
+       })}>Edit</button>
 <button
                         className="btn btn-warning"
                         onClick={() => Delete(x?.id)}

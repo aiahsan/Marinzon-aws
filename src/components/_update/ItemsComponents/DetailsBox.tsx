@@ -3,7 +3,7 @@ import { ICategory, IService } from '../../../interfaces/data/objects';
 import Dropdown from '../../dropdown';
 import ImageUpload from '../forms/imageUpload';
 import Textbox from '../inputs/textbox';
-export default ({services,values,setFieldValue,categories,getFieldProps,_Image,touched,errors,getImageFileObject,runAfterImageDelete}:{services:IService[],categories:ICategory[],values:any,setFieldValue:any,getFieldProps:any,_Image:any,touched:any,errors:any,getImageFileObject:any,runAfterImageDelete:any})=>{
+export default ({services,values,setFieldValue,categories,getFieldProps,setFieldTouched,_Image,touched,errors,getImageFileObject,runAfterImageDelete}:{services:IService[],categories:ICategory[],values:any,setFieldValue:any,getFieldProps:any,_Image:any,touched:any,errors:any,getImageFileObject:any,runAfterImageDelete:any,setFieldTouched:any})=>{
     return <div className="d-flex flex-wrap align-items-center">
     <div className="mt-4 kjfas-ijdsare">
       <Dropdown
@@ -12,7 +12,19 @@ export default ({services,values,setFieldValue,categories,getFieldProps,_Image,t
           return {
             title: x.title,
             onClick: () =>
-              setFieldValue("serviceId", x?.id),
+          {
+            if(setFieldValue)
+            {
+              setFieldValue("serviceId", x?.id);
+              setFieldValue("categoryId",undefined);
+            }
+           if(setFieldTouched)
+           {
+            setFieldTouched("serviceId",false)
+
+           }
+          }
+
           };
         })}
         title={
@@ -23,11 +35,14 @@ export default ({services,values,setFieldValue,categories,getFieldProps,_Image,t
             : "Select Service"
         }
       />
+          {touched.serviceId && errors.serviceId && <p style={{color:'red'}}>{errors.serviceId}</p>}
+
     </div>
+
     <div className="mt-4 kjfas-ijdsare">
       <Dropdown
         label="Select Category"
-        items={categories.map((x: ICategory) => {
+        items={categories.filter(x=>x.serviceId==values.serviceId).map((x: ICategory) => {
           return {
             title: x.title,
             onClick: () =>
@@ -42,6 +57,9 @@ export default ({services,values,setFieldValue,categories,getFieldProps,_Image,t
             : "Select Category"
         }
       />
+          {touched.categoryId && errors.categoryId && <p style={{color:'red'}}>{errors.categoryId}</p>}
+
+
     </div>
 
     <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">

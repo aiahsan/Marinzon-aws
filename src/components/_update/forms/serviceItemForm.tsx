@@ -3,13 +3,13 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddCategory, UpdateCategory } from "../../../functions/Categories";
 import { AddServices, UpdateServices } from "../../../functions/Services";
-import { ICategory, IService } from "../../../interfaces/data/objects";
+import { ICategory, IItem, IService } from "../../../interfaces/data/objects";
 import { IReduxStore } from "../../../interfaces/data/reduxStore";
 import { DisplayingErrorMessagesCategorySchema, DisplayingErrorMessagesServiceSchema } from "../../../utiles/ErrorSchema";
 import Dropdown from "../../dropdown";
 import Textbox from "../inputs/textbox";
 import ImageUpload from "./imageUpload";
-export default ({ PostData ,data}: { PostData: (values: ICategory) => void,data?:ICategory }) => {
+export default ({ PostData ,data,setData}: { PostData: (values: IItem) => void,data?:IItem,setData:any }) => {
   const [_Image, _setImage] = React.useState<any>();
   const dispatch = useDispatch();
   const user = useSelector((x: IReduxStore) => x.User);

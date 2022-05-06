@@ -32,10 +32,7 @@ export const _csttags:IServiceItemService[]= [
   },
 ];
 export const  _cstServicesInclude :IFAQService[]= ([
-  {
-    id: Date.now().toString(),
-    serviceTitle: "",
-  },
+  
 ]);
 
 export const _cstFaqQuestion:IFAQQuestion[]=([{
