@@ -39,7 +39,7 @@ import {
   _cstServicesInclude,
   _csttags,
 } from "../../utiles/constants";
-import { AddItem } from "../../functions/Items";
+import { AddItem, UpdateItem } from "../../functions/Items";
 import { useLocation, useParams } from "react-router-dom";
 import { GetServices } from "../../functions/Services";
 import { GetCategory } from "../../functions/Categories";
@@ -79,6 +79,7 @@ function App() {
       dataGet.serviceItemServices=  dataGet.serviceItemServices.map(x=>{
           return {
             ...x,
+            Id:x.id,
             isCompleted:true,
             serviceItemServicePrices:x?.serviceItemServicePrices.map((v:any)=>{
               return {
@@ -88,11 +89,22 @@ function App() {
 
               }
             })
+
           }
       })
 
-      dataGet.fAQServices=dataGet.faqServices;
-      dataGet.fAQQuestions=dataGet.faqQuestions;
+      dataGet.fAQServices=dataGet.faqServices.map((x:any)=>{
+        return {
+          ...x,
+          Id:x?.id
+        }
+      });
+      dataGet.fAQQuestions=dataGet.faqQuestions.map((x:any)=>{
+        return {
+          ...x,
+          Id:x?.id
+        }
+      });;
             //@ts-ignore
 
       _setUpdateState(dataGet);
@@ -176,6 +188,8 @@ function App() {
                   let formData = new FormData();
                   formData.append("title", values.title);
                   formData.append("description", values.description);
+
+                  if(_Image?.file)
                   formData.append("uploadImage", _Image?.file || values.image);
                   //@ts-ignore
                   formData.append("recordUserId", user.id);
@@ -197,30 +211,75 @@ function App() {
   
                   formData.append(
                     "serviceItemServices",
-                    JSON.stringify(changeKeysToUpper(values.serviceItemServices))
+                    JSON.stringify(changeKeysToUpper(values.serviceItemServices.map(x=>{
+                        return {
+                          ...x,
+                          Id:x.id,
+                          //@ts-ignore
+                          ServiceItemServicePrices:x.serviceItemServicePrices.map(t=>{
+                            return {
+                              ...t,
+                              Id:t.id,
+                            }
+                          })
+                        }
+                    })))
                   );
                   console.log(values);
                   //@ts-ignore
                  (async ()=>{
-                                     //@ts-ignore
 
-                  const valueG= await  dispatch(AddItem(formData));
-                  //@ts-ignore
-
-                  if(valueG==1)
+                  if(_updateState!=undefined)
                   {
-                    resetForm();
-                    setFieldValue("serviceItemServices",[{
-                      id: Date.now().toString(),
-                      serviceItemServiceTitle: "",
-                      serviceItemServicePrices: [],
-                      isCompleted: false,
-                    }])
-                    setFieldValue("fAQServices",[..._cstServicesInclude])
-                    setFieldValue("fAQQuestions",[..._cstFaqQuestion])
-    
-                    _setactive(0);
+                    formData.append(
+                      "Id",
+                      //@ts-ignore
+                      values.id
+                    );
+
+                   //@ts-ignore
+
+                   const valueG= await  dispatch(UpdateItem(formData));
+                   //@ts-ignore
+ 
+                   if(valueG==1)
+                   {
+                     resetForm();
+                     setFieldValue("serviceItemServices",[{
+                       id: Date.now().toString(),
+                       serviceItemServiceTitle: "",
+                       serviceItemServicePrices: [],
+                       isCompleted: false,
+                     }])
+                     setFieldValue("fAQServices",[..._cstServicesInclude])
+                     setFieldValue("fAQQuestions",[..._cstFaqQuestion])
+     
+                     _setactive(0);
+                   }
                   }
+                  else
+                  {
+                   //@ts-ignore
+
+                   const valueG= await  dispatch(AddItem(formData));
+                   //@ts-ignore
+ 
+                   if(valueG==1)
+                   {
+                     resetForm();
+                     setFieldValue("serviceItemServices",[{
+                       id: Date.now().toString(),
+                       serviceItemServiceTitle: "",
+                       serviceItemServicePrices: [],
+                       isCompleted: false,
+                     }])
+                     setFieldValue("fAQServices",[..._cstServicesInclude])
+                     setFieldValue("fAQQuestions",[..._cstFaqQuestion])
+     
+                     _setactive(0);
+                   }
+                                    }
+                  
                  })()
                  }
                  

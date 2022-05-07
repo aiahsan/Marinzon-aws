@@ -90,7 +90,7 @@ export function AddItem(dataP:any) {
 }
 export function UpdateItem(dataP:IItem) {
   return function (dispatch: any, getState: any): any {
-    (async () => {
+   return (async () => {
       try {
         dispatch(loadingAction(true));
          const { status, data }: any = await repository
@@ -106,6 +106,7 @@ export function UpdateItem(dataP:IItem) {
             })
           );
             dispatch(updateItemAM(data?.data));
+            return 1;
         } else {
           dispatch(loadingAction(false));
           dispatch(
