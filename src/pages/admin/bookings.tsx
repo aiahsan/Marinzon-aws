@@ -237,9 +237,11 @@ function App() {
           <p>Booking Instructions: <strong>{_currentService?.bookingInstructions}</strong> </p>
           <p>Booking Status: <strong>{_currentService?.bookingStatus}</strong> </p>
           <p>Booking Assign To: <strong>{_currentService?.assignBooking?.fullName}</strong> </p>
-          <h3>Assign Booking To Vendor</h3>
           {
+            
          user?.isAdmin&&user.isAdmin==true?<div className="w-50">
+                   <h3>Assign Booking To Vendor</h3>
+
          <select onChange={(e)=>{
            if(e.target.value!="")
            {
