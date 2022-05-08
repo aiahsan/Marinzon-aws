@@ -48,7 +48,7 @@ export default ()=>{
 
       <div className="my-5">
 
-        <div className="d-flex ">
+        <div className="d-flex jkdacs-3je8w">
           <div className=" ">
             <div className="njadfskdfns-dsfsad">
               <BarChart />

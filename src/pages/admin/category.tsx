@@ -59,7 +59,7 @@ function App() {
         </div>
       </div>
 
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between kmsadockse-erl">
         <div className="box-shadow mt-3 p-3 w-100 nmkacjsf-asndfe">
           <h5 className="hd-5">Add New Category</h5>
 

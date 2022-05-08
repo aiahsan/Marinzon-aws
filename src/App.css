@@ -679,6 +679,28 @@ table {
   padding: 5px !important;
 }
 
+@media (max-width: 1024px) {
+  .kmsadockse-erl{
+    flex-direction: column;
+  }
+  .nmkacjsf-asndfe{
+    margin-left: 0px!important;
+  }
+}
+@media (max-width: 375px) {
+  .njadfskdfns-dsfsad
+  {
+    max-width: 280px!important;
+  }
+}
+@media (max-width: 1230px) {
+  .jkdacs-3je8w{
+    flex-direction: column;
+  }
+ .jkdacs-3je8w .nvsdc-amwdi{
+     margin-left: 0px!important;
+  }
+}
 @media (max-width: 1200px) {
   .app {
     overflow-x: hidden;
