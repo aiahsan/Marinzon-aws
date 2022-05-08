@@ -1,21 +1,22 @@
 import moment from 'moment';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { UpdateBookingStatus } from '../../../functions/Booking';
+import { UpdateBookingStatus,UpdateAssignBooking } from '../../../functions/Booking';
 import { IBooking } from '../../../interfaces/data/objects';
 import { ImageUrl } from '../../../utiles/baseUrl';
 import { bookingStatus } from '../../../utiles/constants';
-export default ({booking}:{booking:IBooking})=>{
+export default ({booking,onClick}:{booking:IBooking,onClick:any})=>{
   const dispatch=useDispatch();
     return <div className="accoms-1">
     <div className="medal-bar-1">
-      <img src={ImageUrl+booking.serviceItem?.image} alt="" />
+      {/* <img src={ImageUrl+booking.serviceItem?.image} alt="" /> */}
       <div className="adobe-bar">
         <h3>{booking.serviceItem?.title}</h3>
         <p>Booking By :<strong>{booking?.user?.fullName}</strong></p>
         <div className="accoms-ch">
-          <p>Booking Date: <strong>{moment(booking?.bookingDateTime).format("yyyy-MM-DD  hh:mm:ss")}</strong> </p>
-          <p>Booking Status: <strong>{booking.bookingStatus}</strong> </p>
+          <p>Booking Date: <strong>{booking?.bookingDateTime}</strong> </p>
+          <p>Booking Time: <strong>{booking?.bookingTime}</strong> </p>
+           <p>Booking Status: <strong>{booking.bookingStatus}</strong> </p>
 
           <div className='d-flex justify-content-between mt-2' >
             <button className='btn btn-danger kjdsfad-aweinmsa' onClick={()=>{
@@ -38,6 +39,13 @@ export default ({booking}:{booking:IBooking})=>{
             </button>
           
           </div>
+            <div>
+            <button className='btn btn-success w-100 kjdsfad-aweinmsa mt-2' onClick={()=>{
+               onClick();
+               }}>
+            Assign / View Booking
+            </button>
+            </div>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import { IItem } from '../../../interfaces/data/objects';
 import { IReduxStore } from '../../../interfaces/data/reduxStore';
 import { ImageUrl } from '../../../utiles/baseUrl';
 
- export default ({items}:{items:any})=>{
+ export default ({items,onClick}:{items:any,onClick:any})=>{
     
     return <div>
     
@@ -14,7 +14,7 @@ import { ImageUrl } from '../../../utiles/baseUrl';
       
       <section className="results-section results--grid">
        {
-           items().map((x:IItem)=> <a href='/service' className="profile">
+           items().map((x:IItem)=> <a style={{cursor:'pointer'}} onClick={()=>onClick(x)} className="profile">
            <div className="profile__image"><img src={ImageUrl + x?.image} alt="yacht" /></div>
            <div className="profile__info">
              <h4>{x.title}</h4>

@@ -15,4 +15,5 @@ export interface IModal {
   children?: React.ReactChild | React.ReactChild[];
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  size?:"sm" | "lg" | "xl" | "md";
 }

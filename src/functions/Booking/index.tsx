@@ -6,6 +6,7 @@ import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
 import { addServicesAM, deleteServiceAM, setServicesAM, updateServiceAM } from "../../redux/actionMethodes/Services";
 import { repository } from "../../utiles/repository";
+import { GetUsers } from "../User";
 
 export function GetBookings() {
   return function (dispatch: any, getState: any): any {
@@ -26,6 +27,8 @@ export function GetBookings() {
             })
           );
             dispatch(setBookingAM(data?.data));
+            dispatch(GetUsers());
+
         } else {
           dispatch(loadingAction(false));
           dispatch(
@@ -149,6 +152,55 @@ export function UpdateBookingStatus(dataP:IBooking) {
           );
           
             dispatch(updateBookingAM(data?.data));
+        } else {
+          dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 3,
+              message:
+                data?.message || "Something wen't wrong contact support",
+            })
+          );
+        }
+      } catch (e) {
+        dispatch(loadingAction(false));
+        dispatch(
+          messageAction({
+            type: 3,
+            message: e as string,
+          })
+        );
+      }
+    })();
+  };
+}
+export function UpdateAssignBooking(bookingId:number,assignId:number) {
+  return function (dispatch: any, getState: any): any {
+   return (async () => {
+      try {
+        dispatch(loadingAction(true));
+          const { status, data }: any = await repository
+          .AssignBookings(getState().User?.token || "",{
+            bookingId,
+            assignId,
+            userId:getState().User?.id
+          })
+          .then((x) => x);
+          console.log(status,data)
+        if (status == 200 && data?.success == true) {
+          dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 1,
+              message: data?.message,
+            })
+          );
+          
+            dispatch(updateBookingAM(data?.data));
+            if(status==200 && data?.success && data?.success==true)
+            {
+              return data?.data;
+            }
         } else {
           dispatch(loadingAction(false));
           dispatch(

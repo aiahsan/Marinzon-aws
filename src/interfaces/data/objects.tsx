@@ -40,7 +40,8 @@ export interface IItem extends IBase {
   bookingBy?:number | string ;
   user?:ILogin;
   service?: IService;
-  category?:ICategory
+  category?:ICategory;
+  isApproved?:boolean;
 }
 export interface IFAQService extends IBase {
   id?: number | undefined |string;
@@ -75,6 +76,11 @@ export interface IBooking extends IBase {
   bookingStatus?: string|undefined;
   serviceItem?: IItem
   user?:ILogin;
+  bookingAddress?:string;
+  bookingInstructions?:string;
+  bookingTime?:string;
+  assignBooking?:ILogin;
+  assignBookingId?:number;
 }
 
 export interface IBookingReview extends IBase {

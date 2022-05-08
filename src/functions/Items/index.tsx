@@ -106,7 +106,56 @@ export function UpdateItem(dataP:IItem) {
             })
           );
             dispatch(updateItemAM(data?.data));
-            return 1;
+            if(status==200 && data?.success &&data?.success==true)
+            {
+              return data?.data
+            }
+            
+        } else {
+          dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 3,
+              message:
+                data?.message || "Something wen't wrong contact support",
+            })
+          );
+        }
+      } catch (e) {
+        dispatch(loadingAction(false));
+        dispatch(
+          messageAction({
+            type: 3,
+            message: e as string,
+          })
+        );
+      }
+    })();
+  };
+}
+export function UpdateItemStatus(id:number) {
+  return function (dispatch: any, getState: any): any {
+   return (async () => {
+      try {
+        dispatch(loadingAction(true));
+         const { status, data }: any = await repository
+          .UpdateServiceItemStatus(getState().User?.token || "",id)
+          .then((x) => x);
+          console.log(status,data)
+        if (status == 200 && data?.success == true) {
+          dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 1,
+              message: data?.message,
+            })
+          );
+            dispatch(updateItemAM(data?.data));
+            if(status==200 && data?.success &&data?.success==true)
+            {
+              return data?.data
+            }
+            
         } else {
           dispatch(loadingAction(false));
           dispatch(

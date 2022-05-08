@@ -69,6 +69,39 @@ function App() {
   React.useEffect(() => {
     
   }, [_active]);
+
+  const setDataState=(dataGet:any)=>{
+    dataGet.serviceItemServices=  dataGet.serviceItemServices.map((x:any)=>{
+      return {
+        ...x,
+        Id:x.id,
+        isCompleted:true,
+        serviceItemServicePrices:x?.serviceItemServicePrices.map((v:any)=>{
+          return {
+            ...v,
+            ServiceItemServiceTitle:v.serviceItemServiceTitle,
+            ServiceItemServiceValue:v.serviceItemServiceValue
+
+          }
+        })
+
+      }
+  })
+
+  dataGet.fAQServices=dataGet.faqServices.map((x:any)=>{
+    return {
+      ...x,
+      Id:x?.id
+    }
+  });
+  dataGet.fAQQuestions=dataGet.faqQuestions.map((x:any)=>{
+    return {
+      ...x,
+      Id:x?.id
+    }
+  });
+    return {...dataGet}
+  }
   React.useEffect(() => {
     //@ts-ignore
     if (parms?.state?.data) {
@@ -76,38 +109,10 @@ function App() {
 
       var dataGet=parms?.state?.data;
             //@ts-ignore
-      dataGet.serviceItemServices=  dataGet.serviceItemServices.map(x=>{
-          return {
-            ...x,
-            Id:x.id,
-            isCompleted:true,
-            serviceItemServicePrices:x?.serviceItemServicePrices.map((v:any)=>{
-              return {
-                ...v,
-                ServiceItemServiceTitle:v.serviceItemServiceTitle,
-                ServiceItemServiceValue:v.serviceItemServiceValue
-
-              }
-            })
-
-          }
-      })
-
-      dataGet.fAQServices=dataGet.faqServices.map((x:any)=>{
-        return {
-          ...x,
-          Id:x?.id
-        }
-      });
-      dataGet.fAQQuestions=dataGet.faqQuestions.map((x:any)=>{
-        return {
-          ...x,
-          Id:x?.id
-        }
-      });;
+     
             //@ts-ignore
 
-      _setUpdateState(dataGet);
+      _setUpdateState(setDataState(dataGet));
       }
   }, [parms]);
 
@@ -165,8 +170,9 @@ function App() {
                 description:  _updateState?.description || "",
                 serviceItemServices:_updateState?.serviceItemServices || _csttags,
                 fAQServices:_updateState?.fAQServices || _cstServicesInclude,
-                fAQQuestions:_updateState?.fAQQuestions || _cstFaqQuestion,
+                fAQQuestions:_updateState?.fAQQuestions &&_updateState?.fAQQuestions.length>0?_updateState?.fAQQuestions: _cstFaqQuestion,
               }}
+              isInitialValid={_updateState!=undefined?true:false}
               enableReinitialize={true}
               validationSchema={DisplayingErrorMessagesItemSchema}
               onSubmit={async (values, { setSubmitting ,resetForm,setFieldValue}) => {
@@ -185,6 +191,7 @@ function App() {
                  }
                  else
                  {
+                   
                   let formData = new FormData();
                   formData.append("title", values.title);
                   formData.append("description", values.description);
@@ -199,9 +206,10 @@ function App() {
                   //@ts-ignore
   
                   formData.append("categoryId", values.categoryId);
+                  const oldDataFaqServices=[...values.fAQServices];
                   formData.append(
                     "fAQServices",
-                    JSON.stringify(changeKeysToUpper(values.fAQServices))
+                    JSON.stringify([...changeKeysToUpper([...oldDataFaqServices])])
                   );
   
                   formData.append(
@@ -212,11 +220,15 @@ function App() {
                   formData.append(
                     "serviceItemServices",
                     JSON.stringify(changeKeysToUpper(values.serviceItemServices.map(x=>{
+                      delete x.id;
+
                         return {
                           ...x,
                           Id:x.id,
                           //@ts-ignore
                           ServiceItemServicePrices:x.serviceItemServicePrices.map(t=>{
+                            delete t.id;
+
                             return {
                               ...t,
                               Id:t.id,
@@ -225,8 +237,7 @@ function App() {
                         }
                     })))
                   );
-                  console.log(values);
-                  //@ts-ignore
+                   //@ts-ignore
                  (async ()=>{
 
                   if(_updateState!=undefined)
@@ -240,20 +251,16 @@ function App() {
                    //@ts-ignore
 
                    const valueG= await  dispatch(UpdateItem(formData));
-                   //@ts-ignore
- 
+                    if(valueG!=undefined)
+                    {
+                      _setUpdateState(setDataState(valueG));
+
+                    }
+                                      //@ts-ignore
+
                    if(valueG==1)
                    {
-                     resetForm();
-                     setFieldValue("serviceItemServices",[{
-                       id: Date.now().toString(),
-                       serviceItemServiceTitle: "",
-                       serviceItemServicePrices: [],
-                       isCompleted: false,
-                     }])
-                     setFieldValue("fAQServices",[..._cstServicesInclude])
-                     setFieldValue("fAQQuestions",[..._cstFaqQuestion])
-     
+                    
                      _setactive(0);
                    }
                   }
@@ -481,7 +488,7 @@ function App() {
                               e.preventDefault();
                               if(_active==0)
                               {
-                                if(isValid==true)
+                                   if(isValid==true)
                                 {
                                   _setactive(_active + 1);
                                 }

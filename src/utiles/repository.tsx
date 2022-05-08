@@ -64,6 +64,11 @@ const UpdateServiceItem = async (token: string,data:IItem) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const UpdateServiceItemStatus = async (token: string,data:number) => {
+  return await api.put("/ServiceItem/approveStatus?id="+data,{},{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 const DeleteServiceItem = async (token: string,data:IItem) => {
   return await api.delete("/ServiceItem",{Id:data?.id,RecordUserId:data.recordUserId},{
     headers: { Authorization: `Bearer ${token}` },
@@ -82,6 +87,11 @@ const PostBookings = async (token: string,data:IBooking) => {
 };
 const UpdateBookings = async (token: string,data:IBooking) => {
   return await api.put("/Booking",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+const AssignBookings = async (token: string,data:any) => {
+  return await api.put(`/Booking/assign?bookingId=${data?.bookingId}&assignId=${data?.assignId}&userId=${data?.userId}`,undefined,{
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -164,5 +174,7 @@ export const repository = {
   UpdateBookingReviewstatus,
   updateUser,
   GetUsers,
-  DeleteUser
+  DeleteUser,
+  UpdateServiceItemStatus,
+  AssignBookings
 };

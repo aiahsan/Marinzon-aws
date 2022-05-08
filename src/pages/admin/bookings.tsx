@@ -7,11 +7,12 @@ import { Table } from "react-bootstrap";
 import Searchbar from "../../components/_update/inputs/searchbar";
 import { IBooking } from "../../interfaces/data/objects";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteBookings, GetBookings } from "../../functions/Booking";
+import { DeleteBookings, GetBookings, UpdateAssignBooking } from "../../functions/Booking";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
 import { bookingStatus, ItemStatus } from "../../utiles/constants";
 import moment from "moment";
 import Modal from "../../components/_update/modal";
+import { GetUsers } from "../../functions/User";
 
 function App() {
   const [view, setView] = React.useState(0);
@@ -19,14 +20,21 @@ function App() {
   const bookings = useSelector((x: IReduxStore) => x.Bookings);
   const [_Bookings, _setBookings] = React.useState<IBooking[]>();
   const [_currentStatus, _setcurrentStatus] = React.useState("");
+  const [_currentAssign, _setcurrentAssign] = React.useState();
   const [_show, _setshow] = React.useState(false);
+  const [_show1, _setshow1] = React.useState(false);
+  const Users = useSelector((x: IReduxStore) => x.Users);
 
   const [_currentService, _setcurrentService] = React.useState<
     IBooking | undefined
   >();
   React.useEffect(() => {
-    //@ts-ignore
+   if(bookings.length<=0)
+   {
+      //@ts-ignore
     dispatch(GetBookings());
+   }
+   
   }, []);
   const Delete = (Id: number | undefined) => {
     let obj = bookings.find((x) => x.id == Id);
@@ -171,7 +179,15 @@ function App() {
       ) : (
         <div className="complete-web-1">
           {getItems().map((x) => (
-            <BookingCard booking={x} />
+            <BookingCard onClick={()=>{
+              if(x)
+              {
+                console.log(x);
+                _setcurrentService(x)
+                _setshow1(true)
+              }
+    
+            }}  booking={x} />
           ))}
         </div>
       )}
@@ -201,6 +217,70 @@ function App() {
           </div>
         </>
       </Modal>
+
+      {  <Modal title="Service Details"   size="lg"   show={_show1} setShow={_setshow1}>
+      <>
+        
+        <div className="modal-cst-text">
+        <h5><span>Service: </span> {_currentService?.serviceItem?.service?.title }</h5>
+        <h5><span>Category: </span> {_currentService?.serviceItem?.category?.title }</h5>
+        <h5><span>Title: </span> {_currentService?.serviceItem?.title }</h5>
+        <h5><span>Description: </span> {_currentService?.serviceItem?.description }</h5>
+        <h5><span>Status: </span> {_currentService?.serviceItem?.serviceStatus }</h5>
+        <h5><span>Created By : </span> {_currentService?.serviceItem?.user?.fullName }</h5>
+         
+         <h3>Booking Details</h3>
+         <p>Booking Date: <strong>{_currentService?.bookingDateTime}</strong> </p>
+          <p>Booking Time: <strong>{_currentService?.bookingTime}</strong> </p>
+          <p>Booking Address: <strong>{_currentService?.bookingAddress}</strong> </p>
+          <p>Booking Instructions: <strong>{_currentService?.bookingInstructions}</strong> </p>
+          <p>Booking Status: <strong>{_currentService?.bookingStatus}</strong> </p>
+          <p>Booking Assign To: <strong>{_currentService?.assignBooking?.fullName}</strong> </p>
+          <h3>Assign Booking To Vendor</h3>
+
+              <div className="w-50">
+              <select onChange={(e)=>{
+                if(e.target.value!="")
+                {
+                   console.log(Users);
+                  //@ts-ignore
+                  _setcurrentAssign(e.target.value)
+                }
+                else
+                {
+                  _setcurrentAssign(undefined);
+
+                }
+              }} className="form-control">
+             <option value="">Select Vendor</option>
+             {
+               //@ts-ignore
+               Users.filter(x=>x?.roles?.map(t=>t.roleId).includes(4)).map(x=><option value={x?.id}>{x.fullName}</option>)
+               
+             }
+           </select>
+           <button className="btn btn-success mt-3" onClick={()=>{
+             (async()=>{
+                 //@ts-ignore
+           const dataG=await dispatch(UpdateAssignBooking(_currentService?.id,_currentAssign))
+           console.log(dataG);
+            //@ts-ignore
+           _setcurrentService(dataG);
+             })()
+           }}>
+             Assign Booking To Vendor
+           </button>
+              </div>
+        </div>
+        <div className="d-flex flex-row justify-content-end">
+                
+          <button onClick={() => _setshow1(false)} className="btn btn-info">
+            Cancel
+          </button>
+          
+        </div>
+      </>
+    </Modal>  }
     </Layout>
   );
 }

@@ -6,7 +6,7 @@ import { RiLayoutGridFill, RiListCheck2 } from "react-icons/ri";
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
-import { DeleteItem, GetItems } from "../../functions/Items";
+import { DeleteItem, GetItems, UpdateItemStatus } from "../../functions/Items";
 import { IItem, IServiceItemService } from "../../interfaces/data/objects";
 import { ItemStatus } from "../../utiles/constants";
  import {useHistory} from 'react-router-dom'
@@ -17,6 +17,10 @@ function App() {
   const Items=useSelector((x:IReduxStore)=>x.ServiceItem);
   const [_currentItems,_setcurrentItems]=React.useState<IItem[]>([]);
   const [_show, _setshow] = React.useState(false);
+  const [_show1, _setshow1] = React.useState(false);
+  const user = useSelector((x: IReduxStore) => x.User);
+
+
   const [_currentService, _setcurrentService] = React.useState<
   IItem | undefined
 >();
@@ -150,6 +154,24 @@ function App() {
                       }
                   </td>
                   <th className="d-flex   manasjd-ajwe">
+                  {
+                      user?.isAdmin&&user.isAdmin==true?    <button
+                      className={`btn ${
+                        x?.isApproved==true ? "btn-danger" : "btn-success"
+                      } mx-2`}
+                      onClick={() => {
+                        (async ()=>{
+                          
+                          //@ts-ignore
+                          let value=await  dispatch(UpdateItemStatus(x?.id));
+
+                        })()
+                      }}
+                    >
+                      {x?.isApproved ? "Reject" : "Approved"}
+                    </button>:<></>
+                    }
+
                     <button className="btn btn-info" onClick={()=>  history.push({
            pathname: '/item',
             state: { data: x }
@@ -178,7 +200,15 @@ function App() {
           </div>
         </div>
       ) : (
-        <ProductCard  items={getItems}/>
+        <ProductCard onClick={(item:any)=>{
+          if(item)
+          {
+            console.log(item);
+            _setcurrentService(item)
+            _setshow1(true)
+          }
+
+        }}  items={getItems}/>
       )}
  <Modal title="Confirm" show={_show} setShow={_setshow}>
         <>
@@ -203,7 +233,72 @@ function App() {
           </div>
         </>
       </Modal>
+              {
+                //@ts-ignore
+      <Modal title="Service Details"   size="lg"   show={_show1} setShow={_setshow1}>
+      <>
+        
+        <div className="modal-cst-text">
+        <h5><span>Service: </span> {_currentService?.service?.title }</h5>
+        <h5><span>Category: </span> {_currentService?.category?.title }</h5>
+          <h5><span>Title: </span> {_currentService?.title }</h5>
+          <h5><span>Description: </span> {_currentService?.description }</h5>
+          <h5><span>Status: </span> {_currentService?.serviceStatus }</h5>
+          <h5><span>Created By : </span> {_currentService?.user?.fullName }</h5>
+          <h5><span>Faq Questions:</span> </h5>
+          {
+            //@ts-ignore
+           _currentService?.faqQuestions?.map(x=><>
+           <h6>{x?.serviceFAQQuestion}</h6>
+           <p>{x?.serviceFAQAnswer}</p>
+           </>)
+          }
+          <h5><span>Services Items:</span> </h5>
+          {
+            //@ts-ignore
+           _currentService?.serviceItemServices?.map(x=><>
+           <h6>Title {
+             x?.serviceItemServiceTitle
+             }</h6>
+           <div className="d-flex flex-wrap">
+             {
+               //@ts-ignore
+               x?.serviceItemServicePrices.map(y=>{
+                 //@ts-ignore
+                 return <p>{y?.serviceItemServiceTitle} at {y?.serviceItemServiceValue} AED ,</p>
+               })
+             }
+           </div>
+           </>)
+          }
+          <h5><span>Faq Services Included:</span> </h5>
+          {
+            <ul>
+
+              {
+                //@ts-ignore
+                 _currentService?.faqServices?.map(x=><>
+                  <li>{x?.serviceTitle}</li>
+                 
+                  </>)
+              }
+            </ul>
+            //@ts-ignore
+          
+          }
+        </div>
+        <div className="d-flex flex-row justify-content-end">
+                
+          <button onClick={() => _setshow1(false)} className="btn btn-info">
+            Cancel
+          </button>
+          
+        </div>
+      </>
+    </Modal>
+              }
       
+
     </Layout>
   );
 }

@@ -1473,3 +1473,23 @@ body .btn-warning {
   .cst-dropdown .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle{
     border: 1px solid!important;
   }
+  .modal-cst-text h3{
+    font-weight: 700;
+    font-size: 18px;
+    margin: 10px 0px!important;
+  }
+  .modal-cst-text h5 span{
+    font-weight: 700;
+  }
+  .modal-cst-text h5{
+    font-size: 14px;
+    margin-bottom: 5px!important;
+  }
+  .modal-cst-text h6{
+    font-size: 12px;
+    margin-bottom: 5px!important;
+    }
+  .modal-cst-text p{
+    font-size: 12px;
+    margin-bottom: 5px!important;
+  }
