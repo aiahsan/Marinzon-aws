@@ -65,17 +65,17 @@ const dispatch=useDispatch();
               >
                 Services
               </MenuItem>
-               <MenuItem
+              
+            </> 
+            :<></>
+            }
+           
+           <MenuItem
               onClick={() => history.push("/category")}
               icon={<MdFeaturedPlayList color="#4a4a4a" fontSize={20} />}
             >
               Categories
             </MenuItem>
-            </> 
-            :<></>
-            }
-           
-
               <MenuItem
                 onClick={() => history.push("/item")}
                 icon={<RiListCheck2 color="#4a4a4a" fontSize={20} />}
