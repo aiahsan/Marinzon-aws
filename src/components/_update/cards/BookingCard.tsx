@@ -43,14 +43,13 @@ export default ({booking,onClick}:{booking:IBooking,onClick:any})=>{
           
           </div>
             <div>
-              {
-                user?.isAdmin&&user.isAdmin==true?  <button className='btn btn-success w-100 kjdsfad-aweinmsa mt-2' onClick={()=>{
+            <button className='btn btn-success w-100 kjdsfad-aweinmsa mt-2' onClick={()=>{
                   onClick();
                   }}>
-               Assign / View Booking
-               </button>:<></>
-              }
-          
+                    {user?.isAdmin&&user.isAdmin==true? "Assign /" : ""}
+                View Booking
+               </button>
+             
             </div>
         </div>
       </div>

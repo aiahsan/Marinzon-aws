@@ -24,6 +24,7 @@ function App() {
   const [_show, _setshow] = React.useState(false);
   const [_show1, _setshow1] = React.useState(false);
   const Users = useSelector((x: IReduxStore) => x.Users);
+  const user=useSelector((x:IReduxStore)=>x.User);
 
   const [_currentService, _setcurrentService] = React.useState<
     IBooking | undefined
@@ -237,40 +238,42 @@ function App() {
           <p>Booking Status: <strong>{_currentService?.bookingStatus}</strong> </p>
           <p>Booking Assign To: <strong>{_currentService?.assignBooking?.fullName}</strong> </p>
           <h3>Assign Booking To Vendor</h3>
+          {
+         user?.isAdmin&&user.isAdmin==true?<div className="w-50">
+         <select onChange={(e)=>{
+           if(e.target.value!="")
+           {
+              console.log(Users);
+             //@ts-ignore
+             _setcurrentAssign(e.target.value)
+           }
+           else
+           {
+             _setcurrentAssign(undefined);
 
-              <div className="w-50">
-              <select onChange={(e)=>{
-                if(e.target.value!="")
-                {
-                   console.log(Users);
-                  //@ts-ignore
-                  _setcurrentAssign(e.target.value)
-                }
-                else
-                {
-                  _setcurrentAssign(undefined);
-
-                }
-              }} className="form-control">
-             <option value="">Select Vendor</option>
-             {
-               //@ts-ignore
-               Users.filter(x=>x?.roles?.map(t=>t.roleId).includes(4)).map(x=><option value={x?.id}>{x.fullName}</option>)
-               
-             }
-           </select>
-           <button className="btn btn-success mt-3" onClick={()=>{
-             (async()=>{
-                 //@ts-ignore
-           const dataG=await dispatch(UpdateAssignBooking(_currentService?.id,_currentAssign))
-           console.log(dataG);
+           }
+         }} className="form-control">
+        <option value="">Select Vendor</option>
+        {
+          //@ts-ignore
+          Users.filter(x=>x?.roles?.map(t=>t.roleId).includes(4)).map(x=><option value={x?.id}>{x.fullName}</option>)
+          
+        }
+      </select>
+      <button className="btn btn-success mt-3" onClick={()=>{
+        (async()=>{
             //@ts-ignore
-           _setcurrentService(dataG);
-             })()
-           }}>
-             Assign Booking To Vendor
-           </button>
-              </div>
+      const dataG=await dispatch(UpdateAssignBooking(_currentService?.id,_currentAssign))
+      console.log(dataG);
+       //@ts-ignore
+      _setcurrentService(dataG);
+        })()
+      }}>
+        Assign Booking To Vendor
+      </button>
+         </div>:<></>
+       }
+              
         </div>
         <div className="d-flex flex-row justify-content-end">
                 
