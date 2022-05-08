@@ -27,6 +27,9 @@ export const BookingReducer = (
     //@ts-ignore
     return [...state.filter((x) => x.id != action.payload.id)];
   }
+  else if (action.type === types.logOut) {
+    return [];
+  }
 
   return state;
 };

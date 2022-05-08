@@ -1,11 +1,14 @@
 import moment from 'moment';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UpdateBookingStatus,UpdateAssignBooking } from '../../../functions/Booking';
 import { IBooking } from '../../../interfaces/data/objects';
+import { IReduxStore } from '../../../interfaces/data/reduxStore';
 import { ImageUrl } from '../../../utiles/baseUrl';
 import { bookingStatus } from '../../../utiles/constants';
 export default ({booking,onClick}:{booking:IBooking,onClick:any})=>{
+  const user=useSelector((x:IReduxStore)=>x.User);
+
   const dispatch=useDispatch();
     return <div className="accoms-1">
     <div className="medal-bar-1">
@@ -40,11 +43,14 @@ export default ({booking,onClick}:{booking:IBooking,onClick:any})=>{
           
           </div>
             <div>
-            <button className='btn btn-success w-100 kjdsfad-aweinmsa mt-2' onClick={()=>{
-               onClick();
-               }}>
-            Assign / View Booking
-            </button>
+              {
+                user?.isAdmin&&user.isAdmin==true?  <button className='btn btn-success w-100 kjdsfad-aweinmsa mt-2' onClick={()=>{
+                  onClick();
+                  }}>
+               Assign / View Booking
+               </button>:<></>
+              }
+          
             </div>
         </div>
       </div>
