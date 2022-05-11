@@ -42,7 +42,7 @@ export default ({services,values,setFieldValue,categories,getFieldProps,setField
     <div className="mt-4 kjfas-ijdsare">
       <Dropdown
         label="Select Category"
-        items={categories.filter(x=>x.serviceId==values.serviceId).map((x: ICategory) => {
+        items={categories.filter(x=>x.serviceId==values.serviceId&&x.isApproved==true&&x.isActive==true).map((x: ICategory) => {
           return {
             title: x.title,
             onClick: () =>

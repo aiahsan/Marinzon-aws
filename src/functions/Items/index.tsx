@@ -24,7 +24,8 @@ export function GetItems() {
               message: data?.message,
             })
           );
-            dispatch(setItemAM(data?.data));
+          console.log(data?.data?.filter((x:IItem)=>x?.category?.isActive==true &&x?.category?.isApproved==true),"mmmmm")
+            dispatch(setItemAM(data?.data?.filter((x:IItem)=>x?.category?.isActive==true &&x?.category?.isApproved==true)));
          } else {
           dispatch(loadingAction(false));
           dispatch(
