@@ -81,6 +81,7 @@ export interface IBooking extends IBase {
   bookingTime?:string;
   assignBooking?:ILogin;
   assignBookingId?:number;
+  bookingItems?:any
 }
 
 export interface IBookingReview extends IBase {

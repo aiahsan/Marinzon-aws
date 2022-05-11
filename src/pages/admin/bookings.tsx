@@ -219,7 +219,7 @@ function App() {
         </>
       </Modal>
 
-      {  <Modal title="Service Details"   size="lg"   show={_show1} setShow={_setshow1}>
+      {  <Modal title="Booking Details"   size="lg"   show={_show1} setShow={_setshow1}>
       <>
         
         <div className="modal-cst-text">
@@ -237,8 +237,17 @@ function App() {
           <p>Booking Instructions: <strong>{_currentService?.bookingInstructions}</strong> </p>
           <p>Booking Status: <strong>{_currentService?.bookingStatus}</strong> </p>
           <p>Booking Assign To: <strong>{_currentService?.assignBooking?.fullName}</strong> </p>
+          
+          <h3>Booking Items</h3>
+              {
+                _currentService?.bookingItems?.map((x:any)=> <p>{x?.serviceItemService?.serviceItemServiceTitle}: <strong>{x?.serviceItemServicePrice?.serviceItemServiceTitle} At {x?.price} AED</strong> </p>)
+              }
+                      <h3>Total Price</h3>
+{
+  _currentService?.bookingItems?.map((x:any)=>x.price).reduce(function(a:number, b:number) { return a + b; }, 0) +" AED"
+}
           {
-            
+          
          user?.isAdmin&&user.isAdmin==true?<div className="w-50">
                    <h3>Assign Booking To Vendor</h3>
 
