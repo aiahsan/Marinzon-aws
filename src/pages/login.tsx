@@ -19,99 +19,89 @@ export default () => {
   const disptach = useDispatch();
 
   const PostData = async (values: ILogin) => {
-        //@ts-ignore
+    //@ts-ignore
 
-    disptach(LoginUser(values,history))
+    disptach(LoginUser(values, history));
   };
   return (
-    <div className="login-box d-flex justify-content-center w-100 mb-5 mt5p">
-      <div className="box-shadow p-4 container bg-white pb-5  ">
-        <div className="row d-flex justify-content-start align-items-center mt-sm-5">
-          <div className="col-lg-5 col-10">
-            <div className="pb-5 kjafs-airdm9asi3mem">
-              {" "}
-              <img
-                className="kdjfa-wajem2-23"
-                src="https://i.imgur.com/uNGdWHi.png"
-                alt=""
-              />{" "}
+    <div className="login-box-p">
+      <div className="container">
+      <div className="d-flex justify-content-between align-items-center mvw-100">
+        <div className="p-an">
+          <h5>Selling with marinzon is now really easy!</h5>
+          <h6>List your products and start your business with marinzon</h6>
+          <p>
+            Start selling absolutely free. All you need is to register, list
+            your catalogue and start selling your products.
+          </p>
+          <a className="btn-brd" href="/#/register" style={{textDecoration:'none'}}>
+            <span>Start Selling</span>
+          </a>
+        </div>
+        <div className="lgn-p">
+          <div className="">
+            <div className="sandkas-nrker jsa-sffwr mb-3">
+              <img src="/Marinzon Final logo-01.png" className="logo" />
             </div>
           </div>
-          <div className="col-lg-4 offset-lg-2 col-md-6 offset-md-3">
-            <div className="pt-4 ">
-              <h6>
-                <span className="fa fa-superpowers text-primary px-md-2" />
-                <img src="/Marinzon Final logo-01.png" className="logo" />
-              </h6>
-            </div>
-            <div className="mt-3 mt-md-5">
-              <h5 className="text-center mb-2">Log in to your account</h5>
-              <Formik
-                initialValues={{
-                  userName: "",
-                  password: "",
-                }}
-                validationSchema={DisplayingErrorMessagesLoginSchema}
-                onSubmit={async (values, { setSubmitting }) => {
-                  await PostData(values);
-                }}
-              >
-                {({ errors, touched, getFieldProps, handleSubmit }) => {
-                  return (
-                    <div className="login-form">
-                      <h3 className="text-center mb-2">Welcome Back</h3>
-                      <h5 className="text-center mb-4">
-                        Enter Your Email and Password
-                      </h5>
-                      <Form className="pt-4">
-                        <div className="d-flex flex-column pb-3 w-100">
-                          <Textbox
-                            label="Email / Phone Number"
-                            getFieldProps={getFieldProps}
-                            feildName="userName"
-                            touched={touched.userName}
-                            error={errors.userName}
-                            placeholder="Input Email / Phone Number"
-                            type="input"
-                          />
-                        </div>
-                        <div className="d-flex flex-column pb-3">
-                          <Textbox
-                            label="Password"
-                            getFieldProps={getFieldProps}
-                            feildName="password"
-                            touched={touched.password}
-                            error={errors.password}
-                            placeholder="Input Password"
-                            type="password"
-                          />
-                        </div>
-                        <div className="d-flex jusity-content-end pb-4">
-                          <div className="ml-auto">
-                            {" "}
-                            <a
-                              href="#"
-                              className="text-danger text-decoration-none"
-                            >
-                              Forgot password?
-                            </a>{" "}
-                          </div>
-                        </div>{" "}
-                        <input
-                          type="submit"
-                          defaultValue="Log in"
-                          
-                          className="btn btn-primary btn-block mb-3"
+          <div className="lgn-box">
+            <Formik
+              initialValues={{
+                userName: "",
+                password: "",
+              }}
+              validationSchema={DisplayingErrorMessagesLoginSchema}
+              onSubmit={async (values, { setSubmitting }) => {
+                await PostData(values);
+              }}
+            >
+              {({ errors, touched, getFieldProps, handleSubmit }) => {
+                return (
+                  <div className="login-form p-an">
+                    <h5 className="text-center">Welcome Back</h5>
+                    <h6 className="text-center mb-3">
+                      Sign in to your account
+                    </h6>
+                    <Form className="pt-4">
+                      <div className="d-flex flex-column pb-3 w-100">
+                        <Textbox
+                          label="Email / Phone Number"
+                          getFieldProps={getFieldProps}
+                          feildName="userName"
+                          touched={touched.userName}
+                          error={errors.userName}
+                          placeholder="Input Email / Phone Number"
+                          type="input"
                         />
-                      </Form>
-                    </div>
-                  );
-                }}
-              </Formik>
-            </div>
+                      </div>
+                      <div className="d-flex flex-column pb-3">
+                        <Textbox
+                          label="Password"
+                          getFieldProps={getFieldProps}
+                          feildName="password"
+                          touched={touched.password}
+                          error={errors.password}
+                          placeholder="Input Password"
+                          type="password"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        defaultValue="Log in"
+                        className="btn-brd"
+                      >
+                        <span> Sign In</span>
+                      </button>
+                    </Form>
+                  </div>
+                );
+              }}
+            </Formik>
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -18,6 +18,7 @@ import { IReduxStore } from "../interfaces/data/reduxStore";
 import Loader from "../components/_update/loader";
 import Toast from "../components/_update/toast";
 import { messageAction } from '../redux/actionMethodes/message';
+import Register from '../pages/register';
 function Routes() {
 
   const User = useSelector((x: IReduxStore) => x.User);
@@ -72,6 +73,9 @@ function Routes() {
           </>:<>
           <Route exact path="/">
           <Login />
+          </Route>
+          <Route exact path="/register">
+          <Register />
           </Route>
           </>}
           <Route>
