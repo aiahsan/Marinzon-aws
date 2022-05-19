@@ -1924,3 +1924,6 @@ margin-right: 15px;
   text-align: left!important;
   margin-bottom: 10px!important;
 }
+.pro-sidebar > .pro-sidebar-inner {
+   top: -57px;
+ }
