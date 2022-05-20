@@ -78,59 +78,64 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
           setFieldValue("image", undefined);
         };
         return (
+          <div className="login-form p-an">
+        
           <Form className="">
-             <div className="mb-0 cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
-             <div className="">
-              <Dropdown
+                       <div className="mb-0 cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
+                       <div className="">
+                        <Dropdown
+          
+                          label="Select Service"
+                          items={services.map((x:IService)=>{
+                            return {
+                              title:x.title,
+                               onClick: () => {
+                                setFieldValue("serviceId",x?.id)
+                                }
+                              }
+                          })}
+                          title={values.serviceId?services.find(y=>y.id==values.serviceId)?.title || "Select Service":"Select Service"}
+                        />
+                                            {touched.serviceId && errors.serviceId && <p style={{color:'red'}}>{errors.serviceId}</p>}
+          
+                      </div>
+                      
+                      </div>
+                      
+                      <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
+                         <Textbox
+                          label="Title"
+                          getFieldProps={getFieldProps}
+                          feildName="title"
+                          touched={touched.title}
+                          
+                          error={errors.title}
+                          placeholder="Input Title"
+                          type="input"
+                        />
+          
+                      </div>
+                      <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
+                        <Textbox
+                          label="Description"
+                          getFieldProps={getFieldProps}
+                          feildName="description"
+                          touched={touched.description}
+                          error={errors.description}
+                          placeholder="Input Description"
+                          type="textarea"
+                        />
+                      </div>
+          
+                      <div className="d-flex justify-content-end my-4">
+                        
 
-                label="Select Service"
-                items={services.map((x:IService)=>{
-                  return {
-                    title:x.title,
-                     onClick: () => {
-                      setFieldValue("serviceId",x?.id)
-                      }
-                    }
-                })}
-                title={values.serviceId?services.find(y=>y.id==values.serviceId)?.title || "Select Service":"Select Service"}
-              />
-                                  {touched.serviceId && errors.serviceId && <p style={{color:'red'}}>{errors.serviceId}</p>}
-
-            </div>
-            
-            </div>
-            
-            <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
-               <Textbox
-                label="Title"
-                getFieldProps={getFieldProps}
-                feildName="title"
-                touched={touched.title}
-                
-                error={errors.title}
-                placeholder="Input Title"
-                type="input"
-              />
-
-            </div>
-            <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
-              <Textbox
-                label="Description"
-                getFieldProps={getFieldProps}
-                feildName="description"
-                touched={touched.description}
-                error={errors.description}
-                placeholder="Input Description"
-                type="textarea"
-              />
-            </div>
-
-            <div className="d-flex justify-content-end my-4">
-              <button className="btn sakdhsad-dsad" type="submit">
-               {data?"Update Category":"Add New Category"}
-              </button>
-            </div>
-          </Form>
+                        <button type="submit" defaultValue="Add New Service" className="btn-brd">
+                        {data?"Update Category":"Add New Category"}
+          </button>
+                      </div>
+                    </Form>
+                </div>
         );
       }}
     </Formik>

@@ -52,10 +52,12 @@ function App() {
   return (
     <Layout title=" ">
       <div className="main-div">
-        <div className="hdsf0s-sadmsa mt-3">
-          <h3>All Users</h3>
+        
+        <div className="hdsf0s-sadmsa mt-3 p-an ml-0">
+          <h5 className="cst-mx-0 ">All Users</h5>
         </div>
       </div>
+
 
       <div className="d-flex justify-content-between">
         <div className="box-shadow p-4 mt-4 jhfadjsf-andsd w-100 justify-content-between d-flex flex-column">

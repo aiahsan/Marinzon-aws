@@ -131,8 +131,8 @@ function App() {
   return (
     <Layout title="">
       <div className="main-div">
-        <div className="hdsf0s-sadmsa mt-3">
-          <h3>Add New Service Item</h3>
+        <div className="hdsf0s-sadmsa mt-3 p-an ml-0">
+          <h5 className="cst-mx-0 ">Add New Service Item</h5>
         </div>
       </div>
       <div className="d-flex flex-row mt-4">

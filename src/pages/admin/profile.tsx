@@ -20,10 +20,10 @@ const MenuItems1 = [
 function App() {
   return (
     <Layout title="">
-        <div className="hdsf0s-sadmsa mt-3">
-               
-              <h3>Profile</h3>
-            </div>
+         
+            <div className="hdsf0s-sadmsa mt-3 p-an ml-0">
+          <h5 className="cst-mx-0 ">Profile</h5>
+        </div>
       <div className="d-flex flex-row mt-4">
         <div className="right-card px-4">
           <div className="box-shadow p-4">

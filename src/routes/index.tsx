@@ -68,7 +68,7 @@ function Routes() {
             <Bookings />
           </Route>
           <Route exact path="/">
-            <Dashboard />
+            <Dashboard   />
           </Route>
           </>:<>
           <Route exact path="/">

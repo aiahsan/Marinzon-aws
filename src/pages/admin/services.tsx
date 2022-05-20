@@ -50,8 +50,8 @@ function App() {
   return (
     <Layout title=" ">
       <div className="main-div">
-        <div className="hdsf0s-sadmsa mt-3">
-          <h3>Recent Services</h3>
+        <div className="hdsf0s-sadmsa mt-3 p-an ml-0">
+          <h5 className="cst-mx-0 ">Services</h5>
         </div>
       </div>
       <div className="d-flex   flex-wrap">
@@ -68,8 +68,8 @@ function App() {
         })}
       </div>
       <div className="d-flex justify-content-between kmsadockse-erl">
-        <div className="box-shadow mt-3 p-3 w-100 nmkacjsf-asndfe">
-          <h5 className="hd-5">Add New Service</h5>
+        <div className="box-shadow mt-3 p-3 w-100 nmkacjsf-asndfe p-an">
+          <h6 className="hd-5 text-left ml-0 cst-mx-0 m-0">Add New Service</h6>
 
           <ServiceForm PostData={() => {}} data={_currentService} />
         </div>

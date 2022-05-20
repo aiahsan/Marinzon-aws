@@ -14,14 +14,15 @@ export default (props:any) => {
        {({theme, toggleTheme}) => (
             <>
                 <SideBar collapsed={collapsed} />
-                <main  className={`${theme=="light"?"themeLight":"themeDark"}`}>
+                 <main  className={`${theme=="light"?"themeLight":"themeDark"}`}>
                     <div>
                         <div className="btn-toggle" onClick={() => setcollapsed(!collapsed)}>
                             <FaBars color="#59bad8" />
                         </div>
                         <header>
                             <h1 >
-                                {props.title}
+                                
+                              Marinzon Dashboard
                             </h1>
         
                             <Searchbar />
@@ -44,7 +45,7 @@ export default (props:any) => {
                         <br />
         
                     </footer>
-                </main>
+                </main>  
         
         </>
      

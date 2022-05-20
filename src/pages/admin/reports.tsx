@@ -19,8 +19,10 @@ function App() {
   return (
     <Layout title="">
       <div className="hdsf0s-sadmsa my-4">
-        <h3>Reports</h3>
-        <div className="complete-web-1">
+      <div className="hdsf0s-sadmsa mt-3 p-an ml-0">
+          <h5 className="cst-mx-0 ">Reports</h5>
+        </div>
+         <div className="complete-web-1">
           
             <div className="hjsaisa-sdnjassd jsdif-dsndawje">
               <ReportCard sub="Bookings" title="Booking Report"/>

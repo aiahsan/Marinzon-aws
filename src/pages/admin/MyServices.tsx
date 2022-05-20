@@ -69,8 +69,9 @@ function App() {
   return (
     <Layout title=" ">
       <div className="main-div">
-        <div className="hdsf0s-sadmsa mt-3">
-          <h3>All Services Items</h3>
+        
+        <div className="hdsf0s-sadmsa mt-3 p-an ml-0">
+          <h5 className="cst-mx-0 ">All Services Items</h5>
         </div>
       </div>
       <div className="umpire-1-cst d-flex align-items-center justify-content-between">

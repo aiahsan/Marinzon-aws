@@ -54,8 +54,9 @@ function App() {
   return (
     <Layout title=" ">
       <div className="main-div">
-        <div className="hdsf0s-sadmsa mt-3">
-          <h3>Categories</h3>
+        
+        <div className="hdsf0s-sadmsa mt-3 p-an ml-0">
+          <h5 className="cst-mx-0 ">Categories</h5>
         </div>
       </div>
 

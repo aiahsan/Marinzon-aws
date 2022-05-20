@@ -14,6 +14,14 @@ import {
   MdOutlineDarkMode,
   MdHomeRepairService,
   MdFeaturedPlayList,
+  MdOutlineSpaceDashboard,
+  MdOutlineHomeRepairService,
+  MdOutlineCategory,
+  MdList,
+  MdOutlineSupervisedUserCircle,
+  MdOutlineBook,
+  MdOutlineRateReview,
+  MdOutlineReportGmailerrorred,
 } from "react-icons/md";
 import { AiFillFolderOpen, AiFillCar } from "react-icons/ai";
 import { GiBookmarklet, GiCaptainHatProfile, GiPoliceOfficerHead } from "react-icons/gi";
@@ -45,23 +53,27 @@ const dispatch=useDispatch();
           className={`${theme == "light" ? "themeLight" : "themeDark"}`}
         >
           <SidebarHeader>
+            <div className="nkdsf0-kemw">
             <img src="/Marinzon Final logo-01.png" />
+            </div>
           </SidebarHeader>
 
           <SidebarContent>
             <Menu iconShape="circle">
               <MenuItem
                 onClick={() => history.push("/")}
-                icon={<MdSpaceDashboard color="#4a4a4a" fontSize={20} />}
+                icon={<MdOutlineSpaceDashboard color="#4a4a4a" fontSize={18} />}
               >
                 Dashboard
               </MenuItem>
              
             {
               user?.isAdmin&&user.isAdmin==true? <>
+            <h5>Services</h5>
+            
                <MenuItem
                 onClick={() => history.push("/services")}
-                icon={<MdHomeRepairService color="#4a4a4a" fontSize={20} />}
+                icon={<MdOutlineHomeRepairService color="#4a4a4a" fontSize={18} />}
               >
                 Services
               </MenuItem>
@@ -72,57 +84,70 @@ const dispatch=useDispatch();
            
            <MenuItem
               onClick={() => history.push("/category")}
-              icon={<MdFeaturedPlayList color="#4a4a4a" fontSize={20} />}
+              icon={<MdOutlineCategory color="#4a4a4a" fontSize={18} />}
             >
               Categories
             </MenuItem>
               <MenuItem
                 onClick={() => history.push("/item")}
-                icon={<RiListCheck2 color="#4a4a4a" fontSize={20} />}
+                icon={<RiListCheck2 color="#4a4a4a" fontSize={18} />}
               >
                 Service Item
               </MenuItem>
               <MenuItem
                 onClick={() => history.push("/myservices")}
-                icon={<HiDocumentReport color="#4a4a4a" fontSize={20} />}
+                icon={<MdList color="#4a4a4a" fontSize={18} />}
               >
                 My Services
               </MenuItem>
               {
-              user?.isAdmin&&user.isAdmin==true?   <MenuItem
+              user?.isAdmin&&user.isAdmin==true?<>
+              <h5>User</h5>
+              <MenuItem
               onClick={() => history.push("/users")}
-              icon={<FaUsers color="#4a4a4a" fontSize={20} />}
+              icon={<MdOutlineSupervisedUserCircle color="#4a4a4a" fontSize={18} />}
             >
               Users
-            </MenuItem>:<></>
+            </MenuItem>
+              </>:<></>
             }
-              
-
-              <MenuItem
-                onClick={() => history.push("/bookings")}
-                icon={<GiBookmarklet color="#4a4a4a" fontSize={20} />}
-              >
-                Bookings
-              </MenuItem>
-              <MenuItem
+               <MenuItem
                 onClick={() => history.push("/profile")}
                 icon={<BiUserCircle color="#4a4a4a" fontSize={20} />}
               >
-                Profiles
+                Profile
               </MenuItem>
+
+              <h5>Bookings</h5>
+
+              <MenuItem
+                onClick={() => history.push("/bookings")}
+                icon={<MdOutlineBook color="#4a4a4a" fontSize={18} />}
+              >
+                Bookings
+              </MenuItem>
+             
               <MenuItem
                 onClick={() => history.push("/reviews")}
-                icon={<GrBook color="#4a4a4a" fontSize={20} />}
+                icon={<MdOutlineRateReview color="#4a4a4a" fontSize={18} />}
               >
                 Reviews
               </MenuItem>
               {
-              user?.isAdmin&&user.isAdmin==true?    <MenuItem
+              user?.isAdmin&&user.isAdmin==true?  
+              <>
+                            <h5>Reports</h5>
+
+
+              <MenuItem
               onClick={() => history.push("/reports")}
-              icon={<HiTemplate color="#4a4a4a" fontSize={20} />}
+              className="anjasd-awenw"
+              icon={<MdOutlineReportGmailerrorred color="#4a4a4a" fontSize={18} />}
             >
               Reports
-            </MenuItem>:<></>
+            </MenuItem>
+            </>
+            :<></>
             }
              
 {/* 

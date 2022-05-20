@@ -59,10 +59,10 @@ function App() {
 
   return (
     <Layout title="">
-      <div className="hdsf0s-sadmsa mt-3">
-        <h3>All Reviews List</h3>
-      </div>
-
+      
+      <div className="hdsf0s-sadmsa mt-3 p-an ml-0">
+          <h5 className="cst-mx-0 ">All Reviews List</h5>
+        </div>
       <div className="umpire-1-cst d-flex align-items-center justify-content-between">
         <div className="maxima">
           <button

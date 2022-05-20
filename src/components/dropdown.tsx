@@ -14,10 +14,10 @@ interface ItemProp {
 const Comp = (props: DropdownProps) => {
     const { title, items, style ,label } = props;
     return <div className="cst-dropdown label-bar-1">
-        {
-            label?<p className='mb-2'>                   {label}
+        {/* {
+            label?<p className='mb-2 cst-mx-0'>                   {label}
             </p>:<></>
-        }
+        } */}
         <Dropdown>
             <Dropdown.Toggle style={style ? { ...style } : {}}>
                 <div className="d-flex w-100 justify-content-between d-flex">
