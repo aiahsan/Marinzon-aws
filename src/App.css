@@ -1937,3 +1937,7 @@ body .cst-mx-0
 body  .p-an h6{
   margin-left: 0px!important;
 }
+
+.pro-menu-item:hover{
+  background-color: #f3f3f3;
+}
