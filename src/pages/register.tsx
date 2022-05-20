@@ -38,8 +38,12 @@ export default () => {
             <div className="stepper-cst">
               <div
                 className={`knsdao3e-km3e ${
-                  activeState == 1 ? "knsdao3e-km3e-a" : "mdkse-aemnw"
-                }`}
+                  activeState >= 1&&activeState <6 ? "knsdao3e-km3e-a " : "mdkse-aemnw "
+                }
+                ${activeState>1?"kjnaskd-awn3edw":""}
+                `
+              
+              }
               >
                 <div className="d-fxwewe">
                   <img src="https://login.noon.partners/static/images/partners/login1.svg" />
@@ -48,8 +52,10 @@ export default () => {
               </div>
               <div
                 className={`knsdao3e-km3e ${
-                  activeState == 2 ? "knsdao3e-km3e-a" : ""
-                }`}
+                  activeState >= 2&&activeState <6  ? "knsdao3e-km3e-a bjasnkc0-wejw" : ""
+                }
+                ${activeState>2?"kjnaskd-awn3edw":""}
+                `}
               >
                 {" "}
                 <div className="d-fxwewe">
@@ -59,8 +65,10 @@ export default () => {
               </div>
               <div
                 className={`knsdao3e-km3e ${
-                  activeState == 3 ? "knsdao3e-km3e-a" : ""
-                }`}
+                  activeState >= 3&&activeState <6  ? "knsdao3e-km3e-a bjasnkc0-wejw" : ""
+                }
+                ${activeState>3?"kjnaskd-awn3edw":""}
+                `}
               >
                 {" "}
                 <div className="d-fxwewe">
@@ -70,8 +78,10 @@ export default () => {
               </div>
               <div
                 className={`knsdao3e-km3e ${
-                  activeState == 4 ? "knsdao3e-km3e-a" : ""
-                }`}
+                  activeState >= 4&&activeState <6? "knsdao3e-km3e-a bjasnkc0-wejw" : ""
+                }
+                ${activeState>4?"kjnaskd-awn3edw":""}
+                `}
               >
                 {" "}
                 <div className="d-fxwewe">
@@ -81,8 +91,10 @@ export default () => {
               </div>
               <div
                 className={`knsdao3e-km3e ${
-                  activeState == 5 ? "knsdao3e-km3e-a m-0" : ""
-                }`}
+                  activeState == 5 ? "knsdao3e-km3e-a bjasnkc0-wejw m-0" : ""
+                }
+               
+                `}
               >
                 {" "}
                 <div className="d-fxwewe">

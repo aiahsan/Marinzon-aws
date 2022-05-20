@@ -1773,11 +1773,12 @@ margin-right: 15px;
 .stepper-cst{
   width: 100%;
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     background-color: #e2e5f1;
     border-radius: 20px;
     padding: 0px;
     margin-bottom: 20px;
+    max-width: 412px;
 }
 .knsdao3e-km3e h5{
   font-size: 9px;
@@ -1940,4 +1941,16 @@ body  .p-an h6{
 
 .pro-menu-item:hover{
   background-color: #f3f3f3;
+}
+.kjnaskd-awn3edw
+{
+  margin-right: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-left: 0px;
+}
+.bjasnkc0-wejw
+{
+  border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
