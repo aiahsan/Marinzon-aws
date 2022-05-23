@@ -1753,10 +1753,12 @@ align-items: center;
   width: 100%;
 } 
  .nksds-wedn .ksjadlas34 {
-  font-weight: 600;
   color: #7e7e7e;
   font-size: 1.5rem;
   margin: 5px 0px 20px 0px!important;
+  font-variant: petite-caps;
+  font-weight: 700;
+  font-size: 1.7rem;
 }
 .knsdao3e-km3e{
 display: flex;

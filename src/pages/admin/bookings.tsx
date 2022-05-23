@@ -252,7 +252,7 @@ function App() {
          user?.isAdmin&&user.isAdmin==true?<div className="w-50">
                    <h3>Assign Booking To Vendor</h3>
 
-         <select onChange={(e)=>{
+         <select value={_currentService?.assignBookingId} onChange={(e)=>{
            if(e.target.value!="")
            {
               console.log(Users);
