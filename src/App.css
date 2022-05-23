@@ -1956,3 +1956,7 @@ body  .p-an h6{
   border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }
+.public-DraftEditor-content{
+border: 1px solid #c9c9c9;
+height: 150px!important;
+}

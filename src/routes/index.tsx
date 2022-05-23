@@ -10,7 +10,9 @@ import Bookings from "../pages/admin/bookings";
 import Reports from "../pages/admin/reports";
 import Reviews from "../pages/admin/Reviews";
 import Profile from "../pages/admin/profile";
-
+import EOrders from "../pages/admin/ebookings";
+import ECategory from '../pages/admin/ecategory';
+import EProducts from '../pages/admin/eproduct';
 import Login from "../pages/login";
 import PageNotFound from "../pages/404";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,7 +65,16 @@ function Routes() {
           <Route exact path="/reports">
             <Reports />
           </Route>
+          <Route exact path="/ecategory">
+            <ECategory />
+          </Route>
 
+          <Route exact path="/eproducts">
+            <EProducts />
+          </Route>
+          <Route exact path="/eorders">
+            <EOrders />
+          </Route>
           <Route exact path="/bookings">
             <Bookings />
           </Route>

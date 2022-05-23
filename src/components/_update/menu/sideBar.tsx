@@ -22,6 +22,8 @@ import {
   MdOutlineBook,
   MdOutlineRateReview,
   MdOutlineReportGmailerrorred,
+  MdOutlineProductionQuantityLimits,
+  MdOutlineStoreMallDirectory,
 } from "react-icons/md";
 import { AiFillFolderOpen, AiFillCar } from "react-icons/ai";
 import { GiBookmarklet, GiCaptainHatProfile, GiPoliceOfficerHead } from "react-icons/gi";
@@ -102,13 +104,44 @@ const dispatch=useDispatch();
               </MenuItem>
               {
               user?.isAdmin&&user.isAdmin==true?<>
-              <h5>User</h5>
+              <h5>E commerce</h5>
+              <MenuItem
+              onClick={() => history.push("/ecategory")}
+              icon={<MdOutlineCategory color="#4a4a4a" fontSize={18} />}
+            >
+              Categories
+            </MenuItem>
+               <MenuItem
+              onClick={() => history.push("/eproducts")}
+              icon={<MdOutlineProductionQuantityLimits color="#4a4a4a" fontSize={18} />}
+            >
+              Products
+            </MenuItem>
+            <MenuItem
+              onClick={() => history.push("/eorders")}
+              icon={<MdOutlineStoreMallDirectory color="#4a4a4a" fontSize={18} />}
+            >
+              Orders
+            </MenuItem>
+              </>:<></>
+            }
+              {
+              user?.isAdmin&&user.isAdmin==true?<>
+              <h5>Vendors</h5>
+              <MenuItem
+              onClick={() => history.push("/users")}
+              icon={<MdOutlineSupervisedUserCircle color="#4a4a4a" fontSize={18} />}
+            >
+              Vendors
+            </MenuItem>
+            <h5>User</h5>
               <MenuItem
               onClick={() => history.push("/users")}
               icon={<MdOutlineSupervisedUserCircle color="#4a4a4a" fontSize={18} />}
             >
               Users
             </MenuItem>
+            
               </>:<></>
             }
                <MenuItem
