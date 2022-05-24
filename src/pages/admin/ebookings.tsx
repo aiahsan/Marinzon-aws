@@ -5,7 +5,7 @@ import BookingCard from "../../components/_update/cards/BookingCard";
 import { RiLayoutGridFill, RiListCheck2 } from "react-icons/ri";
 import { Table } from "react-bootstrap";
 import Searchbar from "../../components/_update/inputs/searchbar";
-import { IBooking } from "../../interfaces/data/objects";
+import { IBooking, IEOrder } from "../../interfaces/data/objects";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteBookings, GetBookings, UpdateAssignBooking } from "../../functions/Booking";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
@@ -13,11 +13,14 @@ import { bookingStatus, ItemStatus } from "../../utiles/constants";
 import moment from "moment";
 import Modal from "../../components/_update/modal";
 import { GetUsers } from "../../functions/User";
+import { GetEOrder ,DeleteEOrder} from "../../functions/EOrder";
+import OrderCard from "../../components/_update/cards/OrderCard";
+import EProductCard from "../../components/_update/cards/EProductCard";
 
 function App() {
   const [view, setView] = React.useState(0);
   const dispatch = useDispatch();
-  const bookings = useSelector((x: IReduxStore) => x.Bookings);
+  const bookings = useSelector((x: IReduxStore) => x.EOrders);
   const [_Bookings, _setBookings] = React.useState<IBooking[]>();
   const [_currentStatus, _setcurrentStatus] = React.useState("");
   const [_currentAssign, _setcurrentAssign] = React.useState();
@@ -27,13 +30,16 @@ function App() {
   const user=useSelector((x:IReduxStore)=>x.User);
 
   const [_currentService, _setcurrentService] = React.useState<
-    IBooking | undefined
+    IEOrder | undefined
   >();
   React.useEffect(() => {
    if(bookings.length<=0)
    {
-      //@ts-ignore
-    dispatch(GetBookings());
+           //@ts-ignore
+
+    dispatch(GetEOrder());
+    
+    
    }
    
   }, []);
@@ -138,32 +144,40 @@ function App() {
             <Table responsive borderless className="table-custom">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Order By</th>
+                   <th>Order By</th>
                   <th>Order Date</th>
+                  <th>Order Payable Price</th>
+                  <th>Order Discount</th>
+                  <th>Order Orignal Price</th>
+                  <th>Order Items</th>
                   <th>Order Status</th>
                   <th className="text-center">Action</th>
                 </tr>
               </thead>
-              <tbody>
-                {getItems().map((x, i) => (
-                  <tr key={i}>
-                    <td>{x.serviceItem?.title}</td>
-                    <td>{x.user?.fullName}</td>
-                    <td>
-                      {moment(x?.bookingDateTime).format(
-                        "yyyy-MM-DD  hh:mm:ss"
-                      )}
-                    </td>
-                    <td>{x.bookingStatus}</td>
-
-                    <td>
-                      {/* <button className="btn btn-info">Edit</button> */}
-                      <button className="btn btn-warning" onClick={()=>Delete(x.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              {
+                   <tbody>
+                   {getItems().map((x, i) => (
+                     <tr key={i}>
+                       <td>{x.user?.fullName}</td>
+                       
+                       <td>
+                         {moment(x?.createAt).format(
+                           "yyyy-MM-DD  hh:mm:ss"
+                         )}
+                       </td>
+                       <td>{x.purchasePrice}-AED</td>
+                       <td>{x.discountPer} %</td>
+                       <td>{}</td>
+                       <td>{x?.ordersItems?.length}</td>
+                       <td>{x.bookingStatus}</td>
+                       <td>
+                         {/* <button className="btn btn-info">Edit</button> */}
+                         <button className="btn btn-warning" onClick={()=>Delete(x.id)}>Delete</button>
+                       </td>
+                     </tr>
+                   ))}
+                 </tbody>
+              }
             </Table>
           </div>
           <div className="d-flex justify-content-end pagination-container">
@@ -181,7 +195,7 @@ function App() {
       ) : (
         <div className="complete-web-1">
           {getItems().map((x) => (
-            <BookingCard onClick={()=>{
+            <OrderCard onClick={()=>{
               if(x)
               {
                 console.log(x);
@@ -209,7 +223,7 @@ function App() {
                 if (_currentService) {
                   _setshow(false);
                   //@ts-ignore
-                  dispatch(DeleteBookings(_currentService));
+                  dispatch(DeleteEOrder(_currentService));
                 }
               }}
               className="btn btn-danger mx-2"
@@ -222,71 +236,8 @@ function App() {
 
       {  <Modal title="Booking Details"   size="lg"   show={_show1} setShow={_setshow1}>
       <>
-        
-        <div className="modal-cst-text">
-        <h5><span>Service: </span> {_currentService?.serviceItem?.service?.title }</h5>
-        <h5><span>Category: </span> {_currentService?.serviceItem?.category?.title }</h5>
-        <h5><span>Title: </span> {_currentService?.serviceItem?.title }</h5>
-        <h5><span>Description: </span> {_currentService?.serviceItem?.description }</h5>
-        <h5><span>Status: </span> {_currentService?.serviceItem?.serviceStatus }</h5>
-        <h5><span>Created By : </span> {_currentService?.serviceItem?.user?.fullName }</h5>
-         
-         <h3>Booking Details</h3>
-         <p>Booking Date: <strong>{_currentService?.bookingDateTime}</strong> </p>
-          <p>Booking Time: <strong>{_currentService?.bookingTime}</strong> </p>
-          <p>Booking Address: <strong>{_currentService?.bookingAddress}</strong> </p>
-          <p>Booking Instructions: <strong>{_currentService?.bookingInstructions}</strong> </p>
-          <p>Booking Status: <strong>{_currentService?.bookingStatus}</strong> </p>
-          <p>Booking Assign To: <strong>{_currentService?.assignBooking?.fullName}</strong> </p>
-          
-          <h3>Booking Items</h3>
-              {
-                _currentService?.bookingItems?.map((x:any)=> <p>{x?.serviceItemService?.serviceItemServiceTitle}: <strong>{x?.serviceItemServicePrice?.serviceItemServiceTitle} At {x?.price} AED</strong> </p>)
-              }
-                      <h3>Total Price</h3>
-{
-  _currentService?.bookingItems?.map((x:any)=>x.price).reduce(function(a:number, b:number) { return a + b; }, 0) +" AED"
-}
-          {
-          
-         user?.isAdmin&&user.isAdmin==true?<div className="w-50">
-                   <h3>Assign Booking To Vendor</h3>
-
-         <select   onChange={(e)=>{
-           if(e.target.value!="")
-           {
-              console.log(Users);
-             //@ts-ignore
-             _setcurrentAssign(e.target.value)
-           }
-           else
-           {
-             _setcurrentAssign(undefined);
-
-           }
-         }} className="form-control">
-        <option value="">Select Vendor</option>
-        {
-          //@ts-ignore
-          Users.filter(x=>x?.roles?.map(t=>t.roleId).includes(4)).map(x=><option value={x?.id}>{x.fullName}</option>)
-          
-        }
-      </select>
-      <button className="btn btn-success mt-3" onClick={()=>{
-        (async()=>{
-            //@ts-ignore
-      const dataG=await dispatch(UpdateAssignBooking(_currentService?.id,_currentAssign))
-      console.log(dataG);
-       //@ts-ignore
-      _setcurrentService(dataG);
-        })()
-      }}>
-        Assign Booking To Vendor
-      </button>
-         </div>:<></>
-       }
               
-        </div>
+                <EProductCard items={_currentService?.ordersItems}/>
         <div className="d-flex flex-row justify-content-end">
                 
           <button onClick={() => _setshow1(false)} className="btn btn-info">

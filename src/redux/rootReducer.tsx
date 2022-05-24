@@ -9,6 +9,7 @@ import * as Message  from './reducers/messsage/idnex';
  import * as Booking  from './reducers/Booking/idnex';
  import * as BookingReview  from './reducers/BookingReview/idnex';
  import * as EProducts  from './reducers/EProduct/idnex';
+ import * as EOrders  from './reducers/EOrder/idnex';
 import {persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -23,7 +24,8 @@ export const rootReducer = combineReducers({
   BookingReviews:BookingReview.BookingReviewReducer,
   Bookings:Booking.BookingReducer,
   Users:User.UsersReducer,
-  EProducts:EProducts.EProductReducer
+  EProducts:EProducts.EProductReducer,
+  EOrders:EOrders.EOrderReducer
  });
 
 const persistConfig={

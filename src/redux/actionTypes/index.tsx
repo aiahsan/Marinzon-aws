@@ -57,4 +57,11 @@ SET_EProduct: "SET_EProduct",
 Delete_EProduct: "Delete_EProduct",
 
 
+Add_EOrder: "Add_EOrder",
+SET_EOrders: "SET_EOrders",
+SET_EOrder: "SET_EOrder",
+Delete_EOrder: "Delete_EOrder",
+
+
+
 };

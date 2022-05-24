@@ -136,3 +136,26 @@ export interface IEProduct extends IBase {
   image: string;
    isApproved?:boolean;
 }
+
+export interface IEOrder extends IBase {
+  id?: number;
+  purchasePrice: number;
+  discountPer: number;
+  deliveryAddress: string;
+  deliveryInstructions : string;
+  bookingStatus : string;
+  orderBy : number;
+  user : any;
+  isApproved?:boolean;
+  ordersItems?:IEOrderItems[]|[]
+}
+
+export interface IEOrderItems extends IBase {
+  id?: number;
+  purchasePrice: number;
+  discountPer: number;
+  orignalPrice: number;
+  eOrderId: number;
+  eProductId:number;
+  eProduct:IEProduct  
+}

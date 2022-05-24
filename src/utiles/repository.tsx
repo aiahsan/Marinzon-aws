@@ -1,4 +1,4 @@
-import { IBooking, IBookingReview, ICategory, IECategory, IEProduct, IItem, ILogin, IService } from "../interfaces/data/objects";
+import { IBooking, IBookingReview, ICategory, IECategory, IEOrder, IEProduct, IItem, ILogin, IService } from "../interfaces/data/objects";
 import { api } from "./baseUrl";
 const login = async (data: ILogin) => {
   return await api.post("/user/login", data);
@@ -188,7 +188,35 @@ const DeleteEProduct = async (token: string,data:IEProduct) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const GetEOrder = async (token: string) => {
+  return await api.get("/EOrder",undefined,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 
+
+const PostEOrder = async (token: string,data:IEOrder) => {
+  return await api.post("/EOrder",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+const UpdateEOrder = async (token: string,data:IEOrder) => {
+  return await api.put("/EOrder",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+const UpdateEOrderStatus = async (token: string,data:IEOrder) => {
+  return await api.put("/EOrder/bookingstatus",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+const DeleteEOrder = async (token: string,data:IEOrder) => {
+  return await api.delete("/EOrder",{Id:data?.id,recordUserId:data.recordUserId},{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
 export const repository = {
   login,
   register,
@@ -226,5 +254,10 @@ export const repository = {
   GetEProduct,
   PostEProduct,
   UpdateEProduct,
-  DeleteEProduct
+  DeleteEProduct,
+  GetEOrder,
+  PostEOrder,
+  UpdateEOrder,
+  UpdateEOrderStatus,
+  DeleteEOrder
 };
