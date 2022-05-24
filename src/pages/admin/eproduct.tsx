@@ -11,41 +11,47 @@ import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import { useSelector } from "react-redux";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
-import { ICategory, IService } from "../../interfaces/data/objects";
+import { IEProduct, IService } from "../../interfaces/data/objects";
 import { DeleteServices, GetServices } from "../../functions/Services";
-import { DeleteCategory, GetCategory, UpdateCategory } from "../../functions/Categories";
+import { DeleteEProduct, GetEProduct, UpdateEProduct } from "../../functions/EProduct";
 import Modal from "../../components/_update/modal";
-import ECategoryForm from "../../components/_update/forms/EcategoryForm";
-import EproductForm from "../../components/_update/forms/EproductForm";
+ import EproductForm from "../../components/_update/forms/EproductForm";
+import { GetECategory } from "../../functions/ECategories";
+import { ImageUrl } from "../../utiles/baseUrl";
 
 function App() {
   const dispatch = useDispatch();
-  const categoreis = useSelector((x: IReduxStore) => x.Categories);
+  const categoreis = useSelector((x: IReduxStore) => x.ECategories);
+  const products = useSelector((x: IReduxStore) => x.EProducts);
   const services = useSelector((x: IReduxStore) => x.Services);
   const user = useSelector((x: IReduxStore) => x.User);
-
+  
+  const [_show1, _setshow1] = React.useState(false);
   const [_show, _setshow] = React.useState(false);
   const [_currentService, _setcurrentService] = React.useState<
-    ICategory | undefined
+    IEProduct | undefined
   >();
   const [_IsEdit, _setIsEdit] = React.useState(false);
 
   React.useEffect(() => {
+     
     //@ts-ignore
-    dispatch(GetServices());
+    dispatch(GetECategory());
     //@ts-ignore
-    dispatch(GetCategory());
+    dispatch(GetEProduct());
   }, []);
 
+ 
+
   const Update = (Id: number | undefined) => {
-    let obj = categoreis.find((x) => x.id == Id);
+    let obj = products.find((x) => x.id == Id);
     //@ts-ignore
     if (obj != undefined) {
       _setcurrentService(obj);
     }
   };
   const Delete = (Id: number | undefined) => {
-    let obj = categoreis.find((x) => x.id == Id);
+    let obj = products.find((x) => x.id == Id);
     //@ts-ignore
     if (obj != undefined) {
       _setcurrentService(obj);
@@ -83,20 +89,41 @@ function App() {
           <Table responsive borderless className="table-custom">
             <thead>
               <tr>
+                 <th>Image</th>
                  <th>Title</th>
+                 <th>Category</th>
                 <th>Description</th>
                 <th>Price</th>
-                <th>Discount %</th>
+                <th>Discount</th>
+                <th>Product By</th>
+                <th>Total Amount</th>
                 <th>Approved Status</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-              {/* {categoreis.map((x: ICategory, i) => (
+              { products.map((x: IEProduct, i) => (
                 <tr key={i}>
                   
+                  <td>
+                    <img src={ImageUrl+x.image} />
+                  </td>
                   <td>{x.title}</td>
+                  <td className="mncais-ads">{
+                    //@ts-ignore
+                    x?.eCategory?.title
+                  }</td>
                   <td className="mncais-ads">{x.description}</td>
+                  <td className="mncais-ads">{x.price}</td>
+                  <td className="mncais-ads">{x.discountPer}%</td>
+                  <td className="mncais-ads">{
+                    //@ts-ignore
+                    x?.productBy?.mobileNumberEmail
+                  }</td>
+                   <td className="mncais-ads">{
+                     //@ts-ignore
+                   (parseInt(x?.price)||0) *((100-(parseInt(x?.discountPer)||0))/100)
+                   }</td>
                   <td className="mncais-ads">
                     {x?.isApproved == true ? "Approved" : "Pending"}
                   </td>
@@ -109,18 +136,30 @@ function App() {
                       } mx-2`}
                       onClick={() => {
                         let formData = new FormData();
-                        formData.append("Title", x.title);
-                        formData.append("description", x.description);
-                        formData.append("serviceId", x.serviceId.toString());
+                     
                         formData.append("isApproved", x.isApproved==true?"false":"true");
                         //@ts-ignore
                         formData.append("recordUserId", user.id);
+                        //@ts-ignore
+                        formData.append("title", x.title);
+                        //@ts-ignore
+                        formData.append("description", x.description);
+                        //@ts-ignore
+                        formData.append("eCategoryId", x.eCategoryId);
+                        //@ts-ignore
+                        formData.append("rDescription", x.rDescription);
+                        
+                        //@ts-ignore
+                        formData.append("price", x.price);
+                        //@ts-ignore
+                        formData.append("discountPer", x.discountPer);
+                        
                         //@ts-ignore
                         formData.append("Id", x.id);
                         (async ()=>{
                         //@ts-ignore
 
-                          let value=await  dispatch(UpdateCategory(formData));
+                          let value=await  dispatch(UpdateEProduct(formData));
 
                         })()
                       }}
@@ -128,7 +167,15 @@ function App() {
                       {x?.isApproved ? "Reject" : "Approved"}
                     </button>:<></>
                     }
-                
+                  <button
+                      className="btn btn-info mx-2"
+                      onClick={() =>{
+                        _setcurrentService(x);
+                        _setshow1(true);
+                      }}
+                    >
+                      View Rich Description
+                    </button>
                     <button
                       className="btn btn-info mx-2"
                       onClick={() => Update(x?.id)}
@@ -143,7 +190,7 @@ function App() {
                     </button>
                   </td>
                 </tr>
-              ))} */}
+              ))}  
             </tbody>
           </Table>
         </div>
@@ -174,13 +221,28 @@ function App() {
                 if (_currentService) {
                   _setshow(false);
                   //@ts-ignore
-                  dispatch(DeleteCategory(_currentService));
+                  dispatch(DeleteEProduct(_currentService));
                 }
               }}
               className="btn btn-danger mx-2"
             >
               Confirm
             </button>
+          </div>
+        </>
+      </Modal>
+      <Modal title="Rich Description" size="xl" show={_show1} setShow={_setshow1}>
+        <>
+              <div 
+               dangerouslySetInnerHTML={{
+                //@ts-ignore 
+                __html: _currentService?.rDescription}}
+              />
+          <div className="d-flex flex-row justify-content-end">
+            <button onClick={() => _setshow1(false)} className="btn btn-info">
+              Cancel
+            </button>
+            
           </div>
         </>
       </Modal>

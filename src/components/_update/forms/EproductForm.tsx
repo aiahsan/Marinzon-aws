@@ -3,57 +3,80 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddCategory, UpdateCategory } from "../../../functions/Categories";
 import { AddServices, UpdateServices } from "../../../functions/Services";
-import { ICategory, IService } from "../../../interfaces/data/objects";
+import { ICategory, IECategory, IEProduct, IService } from "../../../interfaces/data/objects";
 import { IReduxStore } from "../../../interfaces/data/reduxStore";
-import { DisplayingErrorMessagesCategorySchema, DisplayingErrorMessagesServiceSchema } from "../../../utiles/ErrorSchema";
+import { DisplayingErrorMessagesCategorySchema, DisplayingErrorMessagesProductSchema, DisplayingErrorMessagesServiceSchema } from "../../../utiles/ErrorSchema";
 import Dropdown from "../../dropdown";
 import Textbox from "../inputs/textbox";
 import ImageUpload from "./imageUpload";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
+ 
 //@ts-ignore
 import { Editor } from "react-draft-wysiwyg";
 //@ts-ignore
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw,convertFromHTML,ContentState } from "draft-js";
 //@ts-ignore
 import draftToHtml from "draftjs-to-html";
+import { AddEProduct, UpdateEProduct } from "../../../functions/EProduct";
 
-export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => void,data?:ICategory,setData:any }) => {
+export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => void,data?:IEProduct,setData:any }) => {
   const [_Image, _setImage] = React.useState<any>();
   const dispatch = useDispatch();
   const user = useSelector((x: IReduxStore) => x.User);
-  const services = useSelector((x: IReduxStore) => x.Services);
+  const services = useSelector((x: IReduxStore) => x.ECategories);
    
   const [editorState, seteditorstate] = React.useState(
     EditorState.createEmpty()
   );
+  React.useEffect(()=>{
+   
+    if (data?.rDescription) {
+      const blocksFromHTML = convertFromHTML(data?.rDescription);
+      const state = ContentState.createFromBlockArray(
+        blocksFromHTML.contentBlocks,
+        blocksFromHTML.entityMap
+      );
+
+      seteditorstate(EditorState.createWithContent(state))
+ }
+  },[data])
   return (
     <Formik
       initialValues={{
         id: data?.id || undefined,
         title: data?.title || "",
         description: data?.description ||"",
-        serviceId: data?.serviceId ||"",
-        // image:data?.image || "",
+        rDescription: data?.rDescription ||"",
+        eCategoryId: data?.eCategoryId ||"",
+        price: data?.price ||1,
+        discountPer: data?.discountPer ||0,
+        image:data?.image || "",
 
        }}
       enableReinitialize={true}
-      validationSchema={DisplayingErrorMessagesCategorySchema}
+      validationSchema={DisplayingErrorMessagesProductSchema}
       onSubmit={async (values, { setSubmitting,resetForm }) => {
         console.log(values)
         let formData = new FormData();
-        formData.append("Title", values.title);
+        formData.append("title", values.title);
         formData.append("description", values.description);
-        formData.append("serviceId", values.serviceId.toString());
+        formData.append("eCategoryId", values.eCategoryId.toString());
+        formData.append("rDescription", values.rDescription);
+        formData.append("price", values.price.toString());
+        formData.append("discountPer", values.discountPer.toString());
          //@ts-ignore
         formData.append("recordUserId", user.id);
+
+        formData.append("uploadImage", _Image?.file || values.image);
+
         if(data)
         {
             //@ts-ignore
             formData.append("Id", values.id);
 
-         //@ts-ignore
-         let value=await  dispatch(UpdateCategory(formData));
+         
+        //@ts-ignore
+         let value=await  dispatch(UpdateEProduct(formData));
          //@ts-ignore
           if(value && value==1)
           {
@@ -62,8 +85,8 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
         }
         else
         {
-             //@ts-ignore
-             let value=await dispatch(AddCategory(formData));
+                         //@ts-ignore
+             let value=await dispatch(AddEProduct(formData));
              //@ts-ignore
              if(value && value==1)
              {
@@ -99,17 +122,17 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
                         <Dropdown
           
                           label="Select Category"
-                          items={services.map((x:IService)=>{
+                          items={services.map((x:IECategory)=>{
                             return {
                               title:x.title,
                                onClick: () => {
-                                setFieldValue("serviceId",x?.id)
+                                setFieldValue("eCategoryId",x?.id)
                                 }
                               }
                           })}
-                          title={values.serviceId?services.find(y=>y.id==values.serviceId)?.title || "Select Category":"Select Category"}
+                          title={values.eCategoryId?services.find(y=>y.id==values.eCategoryId)?.title || "Select Category":"Select Category"}
                         />
-                                            {touched.serviceId && errors.serviceId && <p style={{color:'red'}}>{errors.serviceId}</p>}
+                                            {touched.eCategoryId && errors.eCategoryId && <p style={{color:'red'}}>{errors.eCategoryId}</p>}
           
                       </div>
                       
@@ -148,22 +171,25 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
                     onEditorStateChange={(editorStateget:any) => {
                       seteditorstate(editorStateget);
                       setFieldValue(
-                        "rdescription",
+                        "rDescription",
                         draftToHtml(
                           convertToRaw(editorStateget.getCurrentContent())
                         )
                       );
                     }}
                   />
+                  { 
+               errors.rDescription && <p style={{color:'red'}}>{errors.rDescription}</p>
+                }
                       </div>
                       <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
                          <Textbox
-                          label="Title"
+                          label="Price"
                           getFieldProps={getFieldProps}
-                          feildName="title"
-                          touched={touched.title}
+                          feildName="price"
+                          touched={touched.price}
                           
-                          error={errors.title}
+                          error={errors.price}
                           placeholder="Input Price"
                           type="number"
                         />
@@ -171,12 +197,12 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
                       </div>
                       <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
                          <Textbox
-                          label="Title"
+                          label="Discount Per"
                           getFieldProps={getFieldProps}
-                          feildName="title"
-                          touched={touched.title}
+                          feildName="discountPer"
+                          touched={touched.discountPer}
                           
-                          error={errors.title}
+                          error={errors.discountPer}
                           placeholder="Input Discount in % ex:10"
                           type="number"
                         />
@@ -188,12 +214,11 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
             <ImageUpload
                  getImageFileObject={getImageFileObject}
                  runAfterImageDelete={runAfterImageDelete}
-                 //image={data?.image}
-                 image={undefined}
-                 _Image={_Image}
+                 image={data?.image}
+                  _Image={_Image}
                />
                { 
-                //errors.image && <p style={{color:'red'}}>{errors.image}</p>
+               errors.image && <p style={{color:'red'}}>{errors.image}</p>
                 }
                  
             </div>

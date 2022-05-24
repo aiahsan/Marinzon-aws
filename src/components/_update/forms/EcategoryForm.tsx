@@ -1,17 +1,16 @@
 import { Form, Formik } from "formik";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AddCategory, UpdateCategory } from "../../../functions/Categories";
+import { AddECategory, UpdateECategory } from "../../../functions/ECategories";
 import { AddServices, UpdateServices } from "../../../functions/Services";
-import { ICategory, IService } from "../../../interfaces/data/objects";
+import { ICategory, IECategory, IService } from "../../../interfaces/data/objects";
 import { IReduxStore } from "../../../interfaces/data/reduxStore";
-import { DisplayingErrorMessagesCategorySchema, DisplayingErrorMessagesServiceSchema } from "../../../utiles/ErrorSchema";
+import { DisplayingErrorMessagesECategorySchema, DisplayingErrorMessagesServiceSchema } from "../../../utiles/ErrorSchema";
 import Dropdown from "../../dropdown";
 import Textbox from "../inputs/textbox";
 import ImageUpload from "./imageUpload";
-export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => void,data?:ICategory,setData:any }) => {
-  const [_Image, _setImage] = React.useState<any>();
-  const dispatch = useDispatch();
+export default ({ PostData ,data,setData}: { PostData: (values: IECategory) => void,data?:IECategory,setData:any }) => {
+   const dispatch = useDispatch();
   const user = useSelector((x: IReduxStore) => x.User);
   const services = useSelector((x: IReduxStore) => x.Services);
    
@@ -22,17 +21,15 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
         id: data?.id || undefined,
         title: data?.title || "",
         description: data?.description ||"",
-        serviceId: data?.serviceId ||"",
-       }}
+        }}
       enableReinitialize={true}
-      validationSchema={DisplayingErrorMessagesCategorySchema}
+      validationSchema={DisplayingErrorMessagesECategorySchema}
       onSubmit={async (values, { setSubmitting,resetForm }) => {
         console.log(values)
         let formData = new FormData();
-        formData.append("Title", values.title);
+        formData.append("title", values.title);
         formData.append("description", values.description);
-        formData.append("serviceId", values.serviceId.toString());
-         //@ts-ignore
+          //@ts-ignore
         formData.append("recordUserId", user.id);
         if(data)
         {
@@ -40,7 +37,7 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
             formData.append("Id", values.id);
 
          //@ts-ignore
-         let value=await  dispatch(UpdateCategory(formData));
+         let value=await  dispatch(UpdateECategory(formData));
          //@ts-ignore
           if(value && value==1)
           {
@@ -50,7 +47,7 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
         else
         {
              //@ts-ignore
-             let value=await dispatch(AddCategory(formData));
+             let value=await dispatch(AddECategory(formData));
              //@ts-ignore
              if(value && value==1)
              {
@@ -69,14 +66,7 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
         setFieldTouched,
         values
       }) => {
-        const getImageFileObject = (Image: any) => {
-          _setImage(Image);
-          setFieldValue("image", Image?.file?.name);
-        };
-        const runAfterImageDelete = (Image: any) => {
-          _setImage(undefined);
-          setFieldValue("image", undefined);
-        };
+        
         return (
           <div className="login-form p-an">
         

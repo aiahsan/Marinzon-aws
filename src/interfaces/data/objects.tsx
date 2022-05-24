@@ -116,3 +116,23 @@ export interface ItechStacks {
   label: string;
   value: string;
 }
+
+
+export interface IECategory extends IBase {
+  id?: number;
+  title: string;
+  description: string;
+   isApproved?:boolean;
+}
+
+export interface IEProduct extends IBase {
+  id?: number;
+  eCategoryId: number;
+  title: string;
+  description: string;
+  rDescription: string;
+  price: number;
+  discountPer: number;
+  image: string;
+   isApproved?:boolean;
+}

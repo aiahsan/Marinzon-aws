@@ -161,6 +161,7 @@ Theme
 
 ::-webkit-scrollbar {
   width: 5px;
+
 }
 
 /* Track */
@@ -1959,4 +1960,14 @@ body  .p-an h6{
 .public-DraftEditor-content{
 border: 1px solid #c9c9c9;
 height: 150px!important;
+}
+.table-custom{
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  white-space: nowrap;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+
 }

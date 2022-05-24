@@ -45,4 +45,16 @@ SET_User: "SET_User",
 Delete_User: "Delete_User",
 
 
+Add_ECategory: "Add_ECategory",
+  SET_ECategories: "SET_ECategories",
+  SET_ECategory: "SET_ECategory",
+  Delete_ECategory: "Delete_ECategory",
+
+
+  Add_EProduct: "Add_EProduct",
+SET_EProducts: "SET_EProducts",
+SET_EProduct: "SET_EProduct",
+Delete_EProduct: "Delete_EProduct",
+
+
 };

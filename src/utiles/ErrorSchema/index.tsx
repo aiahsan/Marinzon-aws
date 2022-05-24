@@ -19,6 +19,21 @@ export const DisplayingErrorMessagesCategorySchema = Yup.object().shape({
    serviceId: Yup.string().required("Required"),
    
 });
+export const DisplayingErrorMessagesECategorySchema = Yup.object().shape({
+  title: Yup.string().required("Required") ,
+   description: Yup.string().required("Required"),
+    
+});
+
+export const DisplayingErrorMessagesProductSchema = Yup.object().shape({
+  title: Yup.string().required("Required") ,
+  image: Yup.string().required("Required") ,
+  description: Yup.string().required("Required") ,
+  rDescription: Yup.string().required("Required") ,
+  eCategoryId: Yup.string().required("Required") ,
+  price: Yup.string().required("Required") ,
+  discountPer: Yup.string().required("Required") ,
+});
 export const DisplayingErrorMessagesItemSchema = Yup.object().shape({
   title: Yup.string().required("Required") ,
   image: Yup.string().required("Required") ,

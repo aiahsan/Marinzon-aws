@@ -4,9 +4,11 @@ import * as Loader from './reducers/loader/idnex';
 import * as Message  from './reducers/messsage/idnex';
  import * as Services  from './reducers/Services/idnex';
  import * as Categories  from './reducers/Category/idnex';
+ import * as ECategories  from './reducers/ECategory/idnex';
  import * as ServiceItem  from './reducers/Item/idnex';
  import * as Booking  from './reducers/Booking/idnex';
  import * as BookingReview  from './reducers/BookingReview/idnex';
+ import * as EProducts  from './reducers/EProduct/idnex';
 import {persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -16,10 +18,12 @@ export const rootReducer = combineReducers({
   Message:Message.messageReducer,
   Services:Services.ServicesReducer,
   Categories:Categories.CategoryReducer,
+  ECategories:ECategories.ECategoryReducer,
   ServiceItem:ServiceItem.ItemReducer,
   BookingReviews:BookingReview.BookingReviewReducer,
   Bookings:Booking.BookingReducer,
-  Users:User.UsersReducer
+  Users:User.UsersReducer,
+  EProducts:EProducts.EProductReducer
  });
 
 const persistConfig={

@@ -11,29 +11,30 @@ import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import { useSelector } from "react-redux";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
-import { ICategory, IService } from "../../interfaces/data/objects";
+import { ICategory, IECategory, IService } from "../../interfaces/data/objects";
 import { DeleteServices, GetServices } from "../../functions/Services";
 import { DeleteCategory, GetCategory, UpdateCategory } from "../../functions/Categories";
 import Modal from "../../components/_update/modal";
 import ECategoryForm from "../../components/_update/forms/EcategoryForm";
+import { DeleteECategory, GetECategory, UpdateECategory } from "../../functions/ECategories";
 
 function App() {
   const dispatch = useDispatch();
-  const categoreis = useSelector((x: IReduxStore) => x.Categories);
+  const categoreis = useSelector((x: IReduxStore) => x.ECategories);
   const services = useSelector((x: IReduxStore) => x.Services);
   const user = useSelector((x: IReduxStore) => x.User);
 
   const [_show, _setshow] = React.useState(false);
   const [_currentService, _setcurrentService] = React.useState<
-    ICategory | undefined
+    IECategory | undefined
   >();
   const [_IsEdit, _setIsEdit] = React.useState(false);
 
   React.useEffect(() => {
-    //@ts-ignore
-    dispatch(GetServices());
-    //@ts-ignore
-    dispatch(GetCategory());
+    
+         //@ts-ignore
+
+    dispatch(GetECategory());
   }, []);
 
   const Update = (Id: number | undefined) => {
@@ -89,7 +90,8 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {/* {categoreis.map((x: ICategory, i) => (
+              { 
+              categoreis.map((x: IECategory, i) => (
                 <tr key={i}>
                   
                   <td>{x.title}</td>
@@ -108,16 +110,14 @@ function App() {
                         let formData = new FormData();
                         formData.append("Title", x.title);
                         formData.append("description", x.description);
-                        formData.append("serviceId", x.serviceId.toString());
-                        formData.append("isApproved", x.isApproved==true?"false":"true");
+                         formData.append("isApproved", x.isApproved==true?"false":"true");
                         //@ts-ignore
                         formData.append("recordUserId", user.id);
                         //@ts-ignore
                         formData.append("Id", x.id);
                         (async ()=>{
                         //@ts-ignore
-
-                          let value=await  dispatch(UpdateCategory(formData));
+                          let value=await  dispatch(UpdateECategory(formData));
 
                         })()
                       }}
@@ -140,7 +140,9 @@ function App() {
                     </button>
                   </td>
                 </tr>
-              ))} */}
+              ))
+              }
+
             </tbody>
           </Table>
         </div>
@@ -171,7 +173,7 @@ function App() {
                 if (_currentService) {
                   _setshow(false);
                   //@ts-ignore
-                  dispatch(DeleteCategory(_currentService));
+                  dispatch(DeleteECategory(_currentService));
                 }
               }}
               className="btn btn-danger mx-2"
