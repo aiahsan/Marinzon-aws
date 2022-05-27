@@ -324,6 +324,7 @@ Theme
   color: #59bad8;
   padding: 14px 0px !important;
   border-bottom: 1px solid rgba(68, 68, 93, 0.07) !important;
+  text-align: center;
 }
 
 .pagination-container button {

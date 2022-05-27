@@ -159,3 +159,14 @@ export interface IEOrderItems extends IBase {
   eProductId:number;
   eProduct:IEProduct  
 }
+
+export interface IECoupons extends IBase {
+  id?: number;
+  couponCode: String;
+  isAvailed: boolean;
+  availedById?: number;
+  totalDiscount?: number;
+  expiryDate: string;
+  eCouponsAvailedBy?: any;  
+  totalCouponsLeft?:Number;
+}

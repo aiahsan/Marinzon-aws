@@ -13,6 +13,13 @@ export const DisplayingErrorMessagesServiceSchema = Yup.object().shape({
   image: Yup.string().required("Required") ,
   description: Yup.string().required("Required") 
 });
+
+export const DisplayingErrorMessagesCouponSchema = Yup.object().shape({
+  couponCode: Yup.string().required("Required") ,
+  totalCouponsLeft: Yup.string().required("Required") ,
+  expiryDate: Yup.string().required("Required"), 
+  totalDiscount: Yup.string().required("Required"), 
+});
 export const DisplayingErrorMessagesCategorySchema = Yup.object().shape({
   title: Yup.string().required("Required") ,
    description: Yup.string().required("Required"),

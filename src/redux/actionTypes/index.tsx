@@ -62,6 +62,12 @@ SET_EOrders: "SET_EOrders",
 SET_EOrder: "SET_EOrder",
 Delete_EOrder: "Delete_EOrder",
 
+Add_ECoupons: "Add_ECoupons",
+SET_ECouponss: "SET_ECouponss",
+SET_ECoupons: "SET_ECoupons",
+Delete_ECoupons: "Delete_ECoupons",
+
+
 
 
 };

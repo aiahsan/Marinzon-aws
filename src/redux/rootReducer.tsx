@@ -10,6 +10,7 @@ import * as Message  from './reducers/messsage/idnex';
  import * as BookingReview  from './reducers/BookingReview/idnex';
  import * as EProducts  from './reducers/EProduct/idnex';
  import * as EOrders  from './reducers/EOrder/idnex';
+ import * as ECoupons  from './reducers/ECoupons/idnex';
 import {persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -19,13 +20,15 @@ export const rootReducer = combineReducers({
   Message:Message.messageReducer,
   Services:Services.ServicesReducer,
   Categories:Categories.CategoryReducer,
-  ECategories:ECategories.ECategoryReducer,
   ServiceItem:ServiceItem.ItemReducer,
   BookingReviews:BookingReview.BookingReviewReducer,
   Bookings:Booking.BookingReducer,
   Users:User.UsersReducer,
   EProducts:EProducts.EProductReducer,
-  EOrders:EOrders.EOrderReducer
+  EOrders:EOrders.EOrderReducer,
+  ECategories:ECategories.ECategoryReducer,
+  ECoupons:ECoupons.ECouponsReducer,
+
  });
 
 const persistConfig={

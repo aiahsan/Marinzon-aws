@@ -14,6 +14,7 @@ import EOrders from "../pages/admin/ebookings";
 import ECategory from '../pages/admin/ecategory';
 import EProducts from '../pages/admin/eproduct';
 import Login from "../pages/login";
+import Coupons from "../pages/admin/coupons";
 import PageNotFound from "../pages/404";
 import { useDispatch, useSelector } from "react-redux";
 import { IReduxStore } from "../interfaces/data/reduxStore";
@@ -78,6 +79,9 @@ function Routes() {
           <Route exact path="/bookings">
             <Bookings />
           </Route>
+          <Route exact path="/coupons">
+          <Coupons />
+          </Route>
           <Route exact path="/">
             <Dashboard   />
           </Route>
@@ -88,6 +92,7 @@ function Routes() {
           <Route exact path="/register">
           <Register />
           </Route>
+    
           </>}
           <Route>
             <PageNotFound />

@@ -123,6 +123,12 @@ const dispatch=useDispatch();
             >
               Orders
             </MenuItem>
+            <MenuItem
+              onClick={() => history.push("/coupons")}
+              icon={<MdOutlineStoreMallDirectory color="#4a4a4a" fontSize={18} />}
+            >
+              Coupons
+            </MenuItem>
               </>:<></>
             }
               {
