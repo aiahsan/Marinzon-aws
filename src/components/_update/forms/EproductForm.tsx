@@ -50,6 +50,7 @@ export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => vo
         eCategoryId: data?.eCategoryId ||"",
         price: data?.price ||1,
         discountPer: data?.discountPer ||0,
+        availableStock: data?.availableStock ||1,
         image:data?.image || "",
 
        }}
@@ -63,6 +64,7 @@ export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => vo
         formData.append("eCategoryId", values.eCategoryId.toString());
         formData.append("rDescription", values.rDescription);
         formData.append("price", values.price.toString());
+        formData.append("availableStock", values.availableStock.toString());
         formData.append("discountPer", values.discountPer.toString());
          //@ts-ignore
         formData.append("recordUserId", user.id);
@@ -191,6 +193,19 @@ export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => vo
                           
                           error={errors.price}
                           placeholder="Input Price"
+                          type="number"
+                        />
+          
+                      </div>
+                      <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
+                         <Textbox
+                          label="Available Stock"
+                          getFieldProps={getFieldProps}
+                          feildName="availableStock"
+                          touched={touched.availableStock}
+                          
+                          error={errors.availableStock}
+                          placeholder="Input Available Stock"
                           type="number"
                         />
           

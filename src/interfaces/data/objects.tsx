@@ -134,7 +134,8 @@ export interface IEProduct extends IBase {
   price: number;
   discountPer: number;
   image: string;
-   isApproved?:boolean;
+  isApproved?:boolean;
+  availableStock?:number;
 }
 
 export interface IEOrder extends IBase {
