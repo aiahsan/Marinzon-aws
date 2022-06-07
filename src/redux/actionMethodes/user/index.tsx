@@ -21,3 +21,13 @@ export const deleteUserAM=(payload:ILogin)=>{
   return {type:types.Delete_User,payload:payload}
 }
 
+
+
+export const addVUserAM=(payload:ILogin)=>{
+ return {type:types.Add_VUser,payload:payload}
+} 
+export const deleteVUserAM=(payload:ILogin)=>{
+return {type:types.Delete_VUser,payload:payload}
+}
+
+

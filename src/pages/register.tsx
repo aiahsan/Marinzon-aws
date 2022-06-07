@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom";
 import { ThemeContext } from "../App";
 import { ILogin } from "../interfaces/data/objects";
@@ -7,24 +7,31 @@ import { loadingAction } from "../redux/actionMethodes/loader";
 import { messageAction } from "../redux/actionMethodes/message";
 import { repository } from "../utiles/repository";
 import jwt_decode from "jwt-decode";
-import { LoginAction } from "../redux/actionMethodes/user";
+import { deleteVUserAM, LoginAction } from "../redux/actionMethodes/user";
 import { Form, Formik } from "formik";
 import { DisplayingErrorMessagesLoginSchema } from "../utiles/ErrorSchema";
 import Textbox from "../components/_update/inputs/textbox";
 import { UserRoles } from "../utiles/constants";
-import { LoginUser, UpdateUser } from "../functions/User";
+import { LoginUser, UpdateUser, VLoginUser } from "../functions/User";
+import LoginForm from "../components/_update/forms/vendor/loginForm";
+import StoreForm from "../components/_update/forms/vendor/storeForm";
+import DocumentForm from "../components/_update/forms/vendor/documentForm";
+import BankForm from "../components/_update/forms/vendor/bankForm";
+import VatForm from "../components/_update/forms/vendor/vatForm";
+import { values } from "lodash";
 
 export default () => {
   const history = useHistory();
   const disptach = useDispatch();
-  const [activeState, setactiveState] = React.useState(1);
+  //@ts-ignore
+  const vUser=useSelector(x=>x.VUser)
+  const [activeState, setactiveState] = React.useState(vUser!=null?2:1);
   const PostData = async (values: ILogin) => {
+    
     //@ts-ignore
-
-    disptach(LoginUser(values, history));
+    disptach(VLoginUser(values, history));
   };
-
-  return (
+   return (
     <div className="login-box-p nksds-wedn">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mvw-100">
@@ -108,289 +115,217 @@ export default () => {
                 initialValues={{
                   userName: "",
                   password: "",
+
+                  email:"",
+                  name:"",
+                  storeName:"",
+                  companyPhoneNumber:"",
+                  legalName:"",
+                  fullAddress:"",
+                  serviceOfferId:"",
+                  storeId:"",
+
+
+                  tradeLicenseId:"",
+                  nationCardId:"",
+
+
+                  
+                  beneficiaryName:"",
+                  payoneerEmail:"",
+                  bankName:"",
+                  branchName:"",
+                  accountNumber:"",
+                  iBANNumber:"",
+                  swiftCode:"",
+                  currency:"",
+                  documentId:"",
+                 
+                  taxRegistrationNumber:"",
+                  documentVatId:"",
+
+
                 }}
                 validationSchema={DisplayingErrorMessagesLoginSchema}
                 onSubmit={async (values, { setSubmitting }) => {
                   await PostData(values);
                 }}
               >
-                {({ errors, touched, getFieldProps, handleSubmit }) => {
+                {({ errors, touched, getFieldProps, handleSubmit,initialValues ,setFieldValue,values,resetForm}) => {
                   const getPageData = (st: Number) => {
                     switch (st) {
                       case 1: {
                         return (
-                          <div className="">
-                            <div className="d-flex flex-column pb-3 w-100">
-                              <Textbox
-                                label="Email / Phone Number"
-                                getFieldProps={getFieldProps}
-                                feildName="userName"
-                                touched={touched.userName}
-                                error={errors.userName}
-                                placeholder="Input Email / Phone Number"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label="Password"
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Input Password"
-                                type="password"
-                              />
-                            </div>
-                          </div>
+                          <LoginForm
+                          
+                          activeState={activeState}
+                          setactiveState={setactiveState}
+                          docvalues={{
+                            userName:values.userName,
+                            password:values.password,
+                          }} PostData={(values1:any)=>{
+                            setFieldValue("userName",values1.userName);
+                            setFieldValue("password",values1.password);
+                          }}/>
                         );
                         break;
                       }
                       case 2: {
                         return (
-                          <div className="p-an">
-                            <h5 className="jnskdf-san4rke">Seller Details</h5>
-                            <div className="d-flex flex-column pb-3 w-100">
-                              <Textbox
-                                label="Email / Phone Number"
-                                getFieldProps={getFieldProps}
-                                feildName="userName"
-                                touched={touched.userName}
-                                error={errors.userName}
-                                placeholder="Input Email / Phone Number"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Whats your store name"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Company Legal Name"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Company Phone Number"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Company Phone Number"
-                                type="textarea"
-                              />
-                            </div>
-                          </div>
+                         <StoreForm   activeState={activeState}
+                         setactiveState={setactiveState}
+                         docvalues={{
+                          email:values.email,
+                          name:values.name,
+                          storeName:values.storeName,
+                          legalName:values.legalName,
+                          companyPhoneNumber:values.companyPhoneNumber,
+                          fullAddress:values.fullAddress,
+                          serviceOfferId:values.serviceOfferId,
+                          }} PostData={(values1:any)=>{
+                           setFieldValue("email",values1.email);
+                           setFieldValue("name",values1.name);
+                           setFieldValue("storeName",values1.storeName);
+                           setFieldValue("legalName",values1.legalName);
+                           setFieldValue("companyPhoneNumber",values1.companyPhoneNumber);
+                           setFieldValue("fullAddress",values1.fullAddress);
+                           setFieldValue("serviceOfferId",values1.serviceOfferId);
+                           }}/>
                         );
                         break;
                       }
                       case 3: {
                         return (
-                          <div className="p-an">
-                            <h5 className="jnskdf-san4rke">
-                              Document Verification
-                            </h5>
-                            <div className=" pb-3 w-100">
-                              <h2 className="knsadfkcdsk-mere">Upload Trade Liceense</h2>
-                              <div className="upload-btn-wrapper">
-                                <button className="btn-brd1 m-0">
-                                  Browse Files
-                                </button>
-                                <input
-                                  className="file"
-                                  type="file"
-                                  name="myfile"
-                                />
-                              </div>
-                            </div>
-                           
+                         <DocumentForm   activeState={activeState}
+                         setactiveState={setactiveState}   docvalues={{
+                          tradeLicenseId:values.tradeLicenseId,
+                          nationCardId:values.nationCardId,
+                      
+                          }} PostData={(values1:any)=>{
+
                             
-                       
-                            <div className=" pb-3 w-100">
-                              <h2 className="knsadfkcdsk-mere">Upload Trade Liceense  {`(Emirates ID, Saudi Iqama or Passport Copy with VISA)`}</h2>
-                              <div className="upload-btn-wrapper">
-                                <button className="btn-brd1 m-0">
-                                Browse Files
-                                </button>
-                                <input
-                                  className="file"
-                                  type="file"
-                                  name="myfile"
-                                />
-                              </div>
-                            </div>
-                          </div>
+                           setFieldValue("tradeLicenseId",values1.tradeLicenseId);
+                           setFieldValue("nationCardId",values1.nationCardId);
+                           
+                           }}/>
                         );
                         break;
                       }
                       case 4: {
                         return (
-                          <div className="p-an">
-                            <h5 className="jnskdf-san4rke">Bank Details</h5>
-                            <div className="d-flex flex-column pb-3 w-100">
-                              <Textbox
-                                label=" "
-                                getFieldProps={getFieldProps}
-                                feildName="userName"
-                                touched={touched.userName}
-                                error={errors.userName}
-                                placeholder="Beneficiary Name"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Payoneer Email"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Bank Name"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Branch Name"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Account Number"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="IBAN Number"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Swift Code"
-                                type="input"
-                              />
-                            </div>
-                            <div className="d-flex flex-column pb-3">
-                              <Textbox
-                                label=""
-                                getFieldProps={getFieldProps}
-                                feildName="password"
-                                touched={touched.password}
-                                error={errors.password}
-                                placeholder="Currency"
-                                type="input"
-                              />
-                            </div>
-                            <div className=" pb-3 w-100">
-                              <h2 className="knsadfkcdsk-mere">Upload either certificate and stamped document by the bank with having the information mentioned above or Cancelled Cheque</h2>
-                              <div className="upload-btn-wrapper">
-                                <button className="btn-brd1 m-0">
-                                  Browse Files
-                                </button>
-                                <input
-                                  className="file"
-                                  type="file"
-                                  name="myfile"
-                                />
-                              </div>
-                            </div>
-                          </div>
+                        <BankForm  activeState={activeState}
+                        setactiveState={setactiveState}   docvalues={{
+                          beneficiaryName:values.beneficiaryName,
+                          payoneerEmail:values.payoneerEmail,
+                          bankName:values.bankName,
+                          branchName:values.branchName,
+                          accountNumber:values.accountNumber,
+                          iBANNumber:values.iBANNumber,
+                          swiftCode:values.swiftCode,
+                          currency:values.currency,
+                          documentId:values.documentId,
+                       
+                     
+                         }} PostData={(values1:any)=>{
+                          setFieldValue("beneficiaryName",values1.beneficiaryName);
+                          setFieldValue("payoneerEmail",values1.payoneerEmail);
+                          setFieldValue("bankName",values1.bankName);
+                          setFieldValue("branchName",values1.branchName);
+                          setFieldValue("accountNumber",values1.accountNumber);
+                          setFieldValue("iBANNumber",values1.iBANNumber);
+                          setFieldValue("swiftCode",values1.swiftCode);
+                          setFieldValue("currency",values1.currency);
+                          setFieldValue("documentId",values1.documentId);
+                          
+                          }}/>
                         );
                         break;
                       }
                       case 5: {
                         return (
-                          <div className="p-an">
-                            <h5 className="jnskdf-san4rke">Bank Details</h5>
-                            <div className="d-flex flex-column pb-3 w-100">
-                              <Textbox
-                                label=" "
-                                getFieldProps={getFieldProps}
-                                feildName="userName"
-                                touched={touched.userName}
-                                error={errors.userName}
-                                placeholder="Tax Registration Number"
-                                type="input"
-                              />
-                            </div>
-                          
-                          
-                            <div className=" pb-3 w-100">
-                              <h2 className="knsadfkcdsk-mere">Upload Tax Registration Certificate</h2>
-                              <div className="upload-btn-wrapper">
-                                <button className="btn-brd1 m-0">
-                                  Browse Files
-                                </button>
-                                <input
-                                  className="file"
-                                  type="file"
-                                  name="myfile"
-                                />
-                              </div>
-                            </div>
-                            <div className=" ">
-                              <p className="kjsca-em2e mb-2">I acknowledge and agree that marinzon will be raising and facilitating VAT invoice and credit notes on behalf of my compay in relation to consumer transaction on the marinzon</p>
-                            </div>
-                          </div>
+                        <VatForm  activeState={activeState}
+                        setactiveState={setactiveState}   docvalues={{
+                          taxRegistrationNumber:values.taxRegistrationNumber,
+                          documentVatId:values.documentVatId,
+                     
+                         }} PostData={(values1:any)=>{
+                           setFieldValue("taxRegistrationNumber",values1.taxRegistrationNumber);
+                          setFieldValue("documentVatId",values1.documentVatId);
+                              var objToSend={
+                              userId:vUser?.id,
+                              email:values.email,
+                              name :values.name,
+                              storeName  :values.storeName,
+                              legalName  :values.legalName,
+                              companyPhoneNumber  :values.companyPhoneNumber ,
+                              fullAddress  :values.fullAddress ,
+                              serviceOfferId   :values.serviceOfferId ,
+                              tradeLicenseId   :values.tradeLicenseId ,
+                              nationCardId:values.nationCardId ,
+                              beneficiaryName:values.beneficiaryName ,
+                              payoneerEmail:values.payoneerEmail ,
+                              bankName:values.bankName ,
+                              branchName:values.branchName ,
+                              accountNumber:values.accountNumber ,
+                              iBANNumber :values.iBANNumber ,
+                              swiftCode :values.swiftCode,
+                              currency :values.currency,
+                              documentId :values.documentId,
+                              taxRegistrationNumber  :values1.taxRegistrationNumber,
+                              documentVatId  :values1.documentVatId,
+
+                             };
+                             (async ()=>{
+                              try{
+                                disptach(loadingAction(true));
+                                const { status, data }: any = await repository
+                                .PostVendorRegi( "",{
+                                  ...objToSend,
+                                  recordUserId:vUser?.id
+                                })
+                                .then((x) => x);
+
+                                if (status == 200 && data?.success == true){
+                                  resetForm();
+                                  //@ts-ignore
+                                  disptach(deleteVUserAM())
+                                  setactiveState(1);
+                                  disptach(loadingAction(false));
+
+                                  disptach(
+                                    messageAction({
+                                      type: 1,
+                                      message: data?.message,
+                                    })
+                                  );
+                                }
+                                else
+                                {
+                                  disptach(loadingAction(false));
+                                  disptach(
+                                    messageAction({
+                                      type: 3,
+                                      message:
+                                        data?.message || "Something wen't wrong contact support",
+                                    })
+                                  );
+                                }
+
+                               }
+                               catch(e)
+                               {
+                                disptach(loadingAction(false));
+                                disptach(
+                                  messageAction({
+                                    type: 3,
+                                    message: e as string,
+                                  })
+                                );
+                               }
+                             })()
+                             
+
+                          }}/>
                         );
                         break;
                       }
@@ -398,51 +333,10 @@ export default () => {
                   };
                   return (
                     <div className="login-form p-an">
-                      <Form className="">
+                      <div className="">
                         {getPageData(activeState)}
-                        <div className="mncsp-ejnadwe">
-                          {activeState != 1 ? (
-                            <div className="nsaodw-wdem">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (activeState > 1) {
-                                    setactiveState(activeState - 1);
-                                  }
-                                }}
-                                defaultValue="Log in"
-                                className="btn-brd"
-                              >
-                                <span> Go Back</span>
-                              </button>
-                            </div>
-                          ) : (
-                            <></>
-                          )}
-                          <div className="nsaodw-wdem">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                if (activeState < 5) {
-                                  setactiveState(activeState + 1);
-                                }
-                              }}
-                              defaultValue="Log in"
-                              className="btn-brd"
-                            >
-                              <span> Next</span>
-                            </button>
-                          </div>
-                          {activeState == 1 ? (
-                            <h2>
-                              Dont't have a noon acount?{" "}
-                              <a href="">Sign Up now!</a>
-                            </h2>
-                          ) : (
-                            <></>
-                          )}
-                        </div>
-                      </Form>
+
+                      </div>
                     </div>
                   );
                 }}

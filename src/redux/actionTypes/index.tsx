@@ -68,6 +68,11 @@ SET_ECoupons: "SET_ECoupons",
 Delete_ECoupons: "Delete_ECoupons",
 
 
+Add_VUser: "Add_VUser",
+Delete_VUser: "Delete_VUser",
+
+
+
 
 
 };

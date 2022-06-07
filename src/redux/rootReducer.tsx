@@ -28,13 +28,14 @@ export const rootReducer = combineReducers({
   EOrders:EOrders.EOrderReducer,
   ECategories:ECategories.ECategoryReducer,
   ECoupons:ECoupons.ECouponsReducer,
+  VUser:User. VuserReducer
 
  });
 
 const persistConfig={
   key:'root',
   storage,
-  whitelist:['User']
+  whitelist:['User','VUser']
 }
 
 export default persistReducer(persistConfig,rootReducer )

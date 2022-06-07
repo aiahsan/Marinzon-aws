@@ -40,3 +40,16 @@ export const UsersReducer = (
 
   return state;
 };
+
+
+export const VuserReducer=(
+  state=null,
+  action:any
+)=>{
+  if (action.type === types.Add_VUser) {
+    return action.payload;
+  } else if (action.type === types.Delete_VUser) {
+    return null;
+  }
+  return state;
+}

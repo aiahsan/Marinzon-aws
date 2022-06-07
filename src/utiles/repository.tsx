@@ -243,7 +243,11 @@ const DeleteECoupons = async (token: string,data:IECoupons) => {
   });
 }
 
-
+const PostVendorRegi = async (token: string,data:any) => {
+  return await api.post("/EVendor/register",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 export const repository = {
   login,
   register,
@@ -290,5 +294,6 @@ export const repository = {
   GetECoupons,
 DeleteECoupons,
 UpdateECoupons,
-PostECoupons
+PostECoupons,
+PostVendorRegi
 };

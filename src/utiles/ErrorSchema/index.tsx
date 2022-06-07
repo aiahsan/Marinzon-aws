@@ -8,10 +8,44 @@ export const DisplayingErrorMessagesLoginSchema = Yup.object().shape({
       "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
     ),
 });
-export const DisplayingErrorMessagesServiceSchema = Yup.object().shape({
+export const DisplayingErrorMessagesStoreSchema = Yup.object().shape({
+  email: Yup.string().required("Required").email(),
+  name: Yup.string().required("Required") ,
+  storeName: Yup.string().required("Required") ,
+  legalName: Yup.string().required("Required") ,
+  companyPhoneNumber: Yup.string().required("Required") ,
+  fullAddress: Yup.string().required("Required") ,
+  serviceOfferId: Yup.string().required("Required") ,
+
+});
+export const  DisplayingErrorMessagesServiceSchema  = Yup.object().shape({
   title: Yup.string().required("Required") ,
   image: Yup.string().required("Required") ,
   description: Yup.string().required("Required") 
+});
+
+export const  DisplayingErrorMessagesVatSchema  = Yup.object().shape({
+  taxRegistrationNumber: Yup.string().required("Required") ,
+  documentVatId: Yup.string().required("Required") ,
+ });
+
+
+export const DisplayingErrorMessagesBankSchema= Yup.object().shape({
+  beneficiaryName: Yup.string().required("Required") ,
+  payoneerEmail: Yup.string().required("Required").email() ,
+  bankName: Yup.string().required("Required") ,
+  branchName: Yup.string().required("Required"), 
+  accountNumber: Yup.string().required("Required"), 
+  iBANNumber: Yup.string().required("Required"), 
+  swiftCode: Yup.string().required("Required"), 
+  currency: Yup.string().required("Required"), 
+  documentId: Yup.string().required("Required"), 
+});
+
+export const DisplayingErrorMessagesDocumentsSchema = Yup.object().shape({
+  tradeLicenseId: Yup.string().required("Required") ,
+  nationCardId: Yup.string().required("Required") ,
+   
 });
 
 export const DisplayingErrorMessagesCouponSchema = Yup.object().shape({

@@ -4,7 +4,7 @@ import { IReduxStore } from "../../interfaces/data/reduxStore";
 import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
 import { addServicesAM, deleteServiceAM, setServicesAM, updateServiceAM } from "../../redux/actionMethodes/Services";
-import { deleteUserAM, LoginAction, setUserAM } from "../../redux/actionMethodes/user";
+import { addVUserAM, deleteUserAM, LoginAction, setUserAM } from "../../redux/actionMethodes/user";
 import { repository } from "../../utiles/repository";
 import jwt_decode from "jwt-decode";
 import { UserRoles } from "../../utiles/constants";
@@ -323,6 +323,93 @@ export function GetUsers() {
     })();
   };
 }
+
+
+export function VLoginUser(dataP:ILogin,history?:any) {
+   return function (dispatch: any, getState: any): any {
+    return (async ()=>{
+    try {
+      dispatch(loadingAction(true));
+      const { status, data }: any =  await repository
+        .login(dataP)
+        .then((x) => x);
+         if (status == 200 && data?.success == true) {
+
+        dispatch(loadingAction(false));
+         dispatch(
+          messageAction({
+            type: 1,
+            message: data?.message,
+          })
+        );
+
+         const decoded: any = jwt_decode(data?.data);
+           const dataToPush={ ...decoded,Roles:JSON.parse(decoded?.roles)?.map((x:any)=>{
+            if(x?.RoleId==UserRoles.Admin)
+            {
+              return "Admin"
+            }
+            else if(x?.RoleId==UserRoles.Support)
+            {
+              return "Support"
+            }
+            else if(x?.RoleId==UserRoles.User)
+            {
+              return "User"
+            }
+            else if(x?.RoleId==UserRoles.Vendor)
+            {
+              return "Vendor"
+            }
+            else
+            {
+              return "User"
+  
+            }
+           })};
+            
+           if(dataToPush?.Roles?.includes("Admin") ||dataToPush?.Roles?.includes("Vendor"))
+           {
+            dispatch(addVUserAM({...dataToPush, token: data?.data,isAdmin:dataToPush?.Roles?.includes("Admin") }));
+            return 1;
+           }
+           else
+           {
+            dispatch(loadingAction(false));
+            dispatch(
+              messageAction({
+                type: 3,
+                message: "Un-Authorized",
+              })
+            );
+            return 0;
+           }
+          
+           
+      } else {
+        dispatch(loadingAction(false));
+        dispatch(
+          messageAction({
+            type: 1,
+            message: data?.message,
+          })
+        );
+        return 0;
+      }
+    } catch (e) {
+      dispatch(loadingAction(false));
+      dispatch(
+        messageAction({
+          type: 0,
+          message: e as string,
+        })
+      );
+      return 0;
+    }
+   })()
+  };
+}
+ 
 /*
 export function DeleteServices(dataP:IService) {
   return function (dispatch: any, getState: any): any {

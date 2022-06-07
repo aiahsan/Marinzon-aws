@@ -33,7 +33,7 @@ function Routes() {
     {
       setTimeout(() => {
         dispatch(messageAction());
-      }, 3000);
+      }, 5000);
     }
   },[Message])
   return (
