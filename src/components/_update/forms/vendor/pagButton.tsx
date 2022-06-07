@@ -35,8 +35,8 @@ export default ({activeState,setactiveState}:{activeState:number,setactiveState:
     </div>
     {activeState == 1 ? (
       <h2>
-        Dont't have a noon acount?{" "}
-        <a href="">Sign Up now!</a>
+        Dont't have a marinzon acount?{" "}
+        <a href="https://marinzon.com/en-AE/signup" target="#">Sign Up now!</a>
       </h2>
     ) : (
       <></>
