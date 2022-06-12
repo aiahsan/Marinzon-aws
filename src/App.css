@@ -2038,3 +2038,12 @@ font-weight: 600;
     align-items: center;
     flex-direction: column;
 }
+
+.accordion-header .d-flex{
+  align-items: center;
+}
+.accordion-header img{
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
