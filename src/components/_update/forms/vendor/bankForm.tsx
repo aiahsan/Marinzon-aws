@@ -6,19 +6,28 @@ import { DisplayingErrorMessagesBankSchema, DisplayingErrorMessagesLoginSchema }
 import Textbox from "../../inputs/textbox";
 import { mainUrl } from "../../../../utiles/baseUrl";
 import PagButton from "./pagButton";
+import {useLocation} from 'react-router-dom'
+
 export default ({
   PostData,
   docvalues,
   activeState,
   setactiveState,
+  isFromUpdate
+
 }: {
   PostData: any;
   docvalues: any;
   activeState: number;
   setactiveState: any;
-}) => {
-  const [_files,_setfiles]=React.useState(["",""])
+  isFromUpdate?:boolean
 
+}) => {
+  const hst=useLocation();
+
+  //@ts-ignore
+  const [_files,_setfiles]=React.useState([hst.state?.data?.document?.image || "",""])
+  console.log(hst,"vvvvvv")
   return (
     <>
       <Formik
@@ -172,11 +181,13 @@ export default ({
                     }
                   }}
                 />
-                <h5>{_files[0]}</h5>
+                <h5><a href={mainUrl+"wwwroot/Uploads/"+_files[0]} target="#">{_files[0]}</a></h5>
                       {errors.documentId&& <p>{errors.documentId}</p>}
 
             </div>
             <PagButton
+                                              isFromUpdate={isFromUpdate}
+
                   activeState={activeState}
                   setactiveState={setactiveState}
                 />

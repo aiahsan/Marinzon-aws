@@ -7,23 +7,31 @@ import "react-dropzone-uploader/dist/styles.css";
 import Dropzone from "react-dropzone-uploader";
 import { mainUrl } from "../../../../utiles/baseUrl";
 import _ from "lodash";
+import {useLocation} from 'react-router-dom'
 export default ({
   PostData,
   docvalues,
   activeState,
   setactiveState,
+  isFromUpdate
+
 }: {
   PostData: any;
   docvalues: any;
   activeState: number;
   setactiveState: any;
+  isFromUpdate?:boolean
+
 }) => {
-  const [_files,_setfiles]=React.useState(["",""])
+  const hst=useLocation();
+
+  //@ts-ignore
+  const [_files,_setfiles]=React.useState([hst.state?.data?.tradeLicense?.image || "",hst.state?.data?.nationCard?.image || ""])
   return (
     <>
       <Formik
         initialValues={{
-          tradeLicenseId: docvalues.tradeLicenseId?docvalues.tradeLicenseId:"",
+           tradeLicenseId: docvalues.tradeLicenseId?docvalues.tradeLicenseId:"",
           nationCardId: docvalues.nationCardId?docvalues.nationCardId:"",
          }}
        validationSchema={DisplayingErrorMessagesDocumentsSchema}
@@ -60,7 +68,7 @@ export default ({
                     }
                   }}
                 />
-                <h5>{_files[0]}</h5>
+                <h5><a href={mainUrl+"wwwroot/Uploads/"+_files[0]} target="#">{_files[0]}</a></h5>
                       {errors.tradeLicenseId&& <p>{errors.tradeLicenseId}</p>}
 
                 </div>
@@ -91,13 +99,15 @@ export default ({
                     }
                   }}
                 />
-                                <h5>{_files[1]}</h5>
+                <h5><a href={mainUrl+"wwwroot/Uploads/"+_files[1]} target="#">{_files[1]}</a></h5>
 
                       {errors.nationCardId&& <p>{errors.nationCardId}</p>}
 
                 </div>
                
                 <PagButton
+                                  isFromUpdate={isFromUpdate}
+
                   activeState={activeState}
                   setactiveState={setactiveState}
                 />

@@ -22,6 +22,14 @@ import Loader from "../components/_update/loader";
 import Toast from "../components/_update/toast";
 import { messageAction } from '../redux/actionMethodes/message';
 import Register from '../pages/register';
+import Store from '../pages/admin/Bookings/store'
+import Documents from '../pages/admin/Bookings/document'
+import Bank from '../pages/admin/Bookings/bank'
+import Vat from '../pages/admin/Bookings/vat'
+import Application from '../pages/admin/Bookings/application'
+import MyApplication from '../pages/admin/myapplication';
+import { GetDocument } from '../functions/Document';
+import Vendors from '../pages/admin/vendors';
 function Routes() {
 
   const User = useSelector((x: IReduxStore) => x.User);
@@ -36,6 +44,15 @@ function Routes() {
       }, 5000);
     }
   },[Message])
+
+  React.useEffect(() => {
+    if(User!=null)
+    {
+                 //@ts-ignore
+    dispatch(GetDocument());
+    
+    }
+  }, [User]);
   return (
     <BrowserRouter>
       <Router>
@@ -45,6 +62,9 @@ function Routes() {
             <Route exact path="/services">
             <Services />
           </Route>
+          <Route exact path="/myapplication">
+          <MyApplication />
+          </Route>
           <Route exact path="/category">
             <Category />
           </Route>
@@ -53,6 +73,9 @@ function Routes() {
           </Route>
           <Route exact path="/users">
             <Users />
+          </Route>
+          <Route exact path="/vendors">
+            <Vendors />
           </Route>
           <Route exact path="/myservices">
             <MyServices />
@@ -82,6 +105,21 @@ function Routes() {
           <Route exact path="/coupons">
           <Coupons />
           </Route>
+          <Route exact path="/edit/storedetails">
+          <Store />
+          </Route>
+          <Route exact path="/edit/documents">
+          <Documents />
+          </Route>
+          <Route exact path="/edit/bank">
+          <Bank />
+          </Route>
+          <Route exact path="/edit/vat">
+          <Vat />
+          </Route>
+          <Route exact path="/edit/application">
+          <Application />
+          </Route>
           <Route exact path="/">
             <Dashboard   />
           </Route>
@@ -92,7 +130,7 @@ function Routes() {
           <Route exact path="/register">
           <Register />
           </Route>
-    
+          
           </>}
           <Route>
             <PageNotFound />

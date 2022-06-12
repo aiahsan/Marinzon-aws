@@ -43,8 +43,10 @@ import { IReduxStore } from "../../../interfaces/data/reduxStore";
 export default ({ collapsed }: { collapsed: boolean }) => {
   const history = useHistory();
   const user=useSelector((x:IReduxStore)=>x.User);
-const dispatch=useDispatch();
-  return (
+  const documents=useSelector(((x:any)=>x.Document));
+   const dispatch=useDispatch();
+  console.log(user,"ssss")
+   return (
     <ThemeContext.Consumer>
       {({ theme, toggleTheme }) => (
         <ProSidebar
@@ -68,10 +70,28 @@ const dispatch=useDispatch();
               >
                 Dashboard
               </MenuItem>
-             
-            {
+              {
+             user?.isAdmin==false? <>
+            <h5>Documents</h5>
+            
+               <MenuItem
+                onClick={() => history.push("/myapplication")}
+                icon={<MdOutlineHomeRepairService color="#4a4a4a" fontSize={18} />}
+              >
+                Submitted Application
+              </MenuItem>
+              
+            </> 
+            :<></>
+            }
+          
+          {
+            <>
+                        <h5>Services</h5>
+
+            {documents[0]?.user?.isVendorActivityCompletedandVerfied==true&& documents[0]?.user?.isVerified==true?<>
+              {
               user?.isAdmin&&user.isAdmin==true? <>
-            <h5>Services</h5>
             
                <MenuItem
                 onClick={() => history.push("/services")}
@@ -102,8 +122,6 @@ const dispatch=useDispatch();
               >
                 My Services
               </MenuItem>
-              {
-              user?.isAdmin&&user.isAdmin==true?<>
               <h5>E commerce</h5>
               <MenuItem
               onClick={() => history.push("/ecategory")}
@@ -123,6 +141,10 @@ const dispatch=useDispatch();
             >
               Orders
             </MenuItem>
+              {
+
+              user?.isAdmin&&user.isAdmin==true?<>
+         
             <MenuItem
               onClick={() => history.push("/coupons")}
               icon={<MdOutlineStoreMallDirectory color="#4a4a4a" fontSize={18} />}
@@ -135,7 +157,7 @@ const dispatch=useDispatch();
               user?.isAdmin&&user.isAdmin==true?<>
               <h5>Vendors</h5>
               <MenuItem
-              onClick={() => history.push("/users")}
+              onClick={() => history.push("/vendors")}
               icon={<MdOutlineSupervisedUserCircle color="#4a4a4a" fontSize={18} />}
             >
               Vendors
@@ -188,6 +210,9 @@ const dispatch=useDispatch();
             </>
             :<></>
             }
+            </>:<></>}
+            </>
+          }
              
 {/* 
               <MenuItem

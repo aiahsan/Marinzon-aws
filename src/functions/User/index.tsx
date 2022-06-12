@@ -331,7 +331,7 @@ export function VLoginUser(dataP:ILogin,history?:any) {
     try {
       dispatch(loadingAction(true));
       const { status, data }: any =  await repository
-        .login(dataP)
+        .vlogin(dataP)
         .then((x) => x);
          if (status == 200 && data?.success == true) {
 
@@ -368,22 +368,8 @@ export function VLoginUser(dataP:ILogin,history?:any) {
             }
            })};
             
-           if(dataToPush?.Roles?.includes("Admin") ||dataToPush?.Roles?.includes("Vendor"))
-           {
-            dispatch(addVUserAM({...dataToPush, token: data?.data,isAdmin:dataToPush?.Roles?.includes("Admin") }));
-            return 1;
-           }
-           else
-           {
-            dispatch(loadingAction(false));
-            dispatch(
-              messageAction({
-                type: 3,
-                message: "Un-Authorized",
-              })
-            );
-            return 0;
-           }
+           dispatch(addVUserAM({...dataToPush, token: data?.data,isAdmin:dataToPush?.Roles?.includes("Admin") }));
+           return 1;
           
            
       } else {

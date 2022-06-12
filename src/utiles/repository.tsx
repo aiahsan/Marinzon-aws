@@ -3,6 +3,10 @@ import { api } from "./baseUrl";
 const login = async (data: ILogin) => {
   return await api.post("/user/login", data);
 };
+
+const vlogin = async (data: ILogin) => {
+  return await api.post("/user/vlogin", data);
+};
 const register = async (data: ILogin) => {
   return await api.post("/user/register", data);
 };
@@ -27,7 +31,11 @@ const DeleteServices = async (token: string,data:IService) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
-
+const GetDocument = async (token: string,id:number | string) => {
+   return await api.get("/EVendor/getApplication?userId="+id,undefined,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 const GetCategory = async (token: string) => {
   return await api.get("/Category",undefined,{
     headers: { Authorization: `Bearer ${token}` },
@@ -248,6 +256,32 @@ const PostVendorRegi = async (token: string,data:any) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+
+const UpdateVendorStore = async (token: string,data:any) => {
+  return await api.post("/EVendor/store",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+const UpdateVendordocuments = async (token: string,data:any) => {
+  return await api.post("/EVendor/documents",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+const UpdateVendorbank = async (token: string,data:any) => {
+  return await api.post("/EVendor/bank",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+const UpdateVendorvat = async (token: string,data:any) => {
+  return await api.post("/EVendor/vat",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+const getvendors = async (token: string) => {
+  return await api.get("/EVendor/getvendors", undefined,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 export const repository = {
   login,
   register,
@@ -295,5 +329,12 @@ export const repository = {
 DeleteECoupons,
 UpdateECoupons,
 PostECoupons,
-PostVendorRegi
+PostVendorRegi,
+vlogin,
+GetDocument,
+UpdateVendorvat,
+UpdateVendorbank,
+UpdateVendordocuments,
+UpdateVendorStore,
+getvendors
 };

@@ -1,10 +1,21 @@
 import React from 'react';
 import {useSelector} from 'react-redux'
-export default ({activeState,setactiveState}:{activeState:number,setactiveState:any})=>{
+export default ({activeState,setactiveState,isFromUpdate}:{activeState:number,setactiveState:any,  isFromUpdate?:boolean
+})=>{
   //@ts-ignore
   const vUser=useSelector(x=>x.VUser)
   
-  return <div className="mncsp-ejnadwe">
+  return isFromUpdate?<>
+   <button
+        type="submit"
+        
+        defaultValue="Log in"
+        className="btn-brd"
+      >
+        <span> Save</span>
+      </button>
+  </>:<>
+  <div className="mncsp-ejnadwe">
     {activeState != (vUser!=null?2:1) ? (
       <div className="nsaodw-wdem">
         <button
@@ -42,4 +53,5 @@ export default ({activeState,setactiveState}:{activeState:number,setactiveState:
       <></>
     )}
     </div>
+  </>
 }

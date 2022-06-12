@@ -6,18 +6,25 @@ import Dropzone from "react-dropzone-uploader";
 import { DisplayingErrorMessagesLoginSchema, DisplayingErrorMessagesVatSchema } from "../../../../utiles/ErrorSchema";
 import Textbox from "../../inputs/textbox";
 import PagButton from "./pagButton";
+import { useLocation } from "react-router-dom";
 export default ({
   PostData,
   docvalues,
   activeState,
   setactiveState,
+  isFromUpdate
 }: {
   PostData: any;
   docvalues: any;
   activeState: number;
   setactiveState: any;
+  isFromUpdate?:boolean;
 }) => {
-  const [_files,_setfiles]=React.useState(["",""])
+
+  const hst=useLocation();
+  console.log(hst)
+  //@ts-ignore
+  const [_files,_setfiles]=React.useState([hst.state?.data?.vatDocument?.image || "",""])
 
   return (
     <>
@@ -37,7 +44,7 @@ export default ({
              <Form className="kjndcs-n4r">
 
              <div className="p-an">
-            <h5 className="jnskdf-san4rke">Bank Details</h5>
+            <h5 className="jnskdf-san4rke">VAT Details</h5>
             <div className="d-flex flex-column pb-3 w-100">
               <Textbox
                 label=" "
@@ -75,7 +82,7 @@ export default ({
                     }
                   }}
                 />
-                <h5>{_files[0]}</h5>
+                <h5><a href={mainUrl+"wwwroot/Uploads/"+_files[0]} target="#">{_files[0]}</a></h5>
                       {errors.documentVatId&& <p>{errors.documentVatId}</p>}
 
             </div>
@@ -84,6 +91,7 @@ export default ({
             </div>
           </div>
           <PagButton
+          isFromUpdate={isFromUpdate}
                   activeState={activeState}
                   setactiveState={setactiveState}
                 />

@@ -11,6 +11,8 @@ import * as Message  from './reducers/messsage/idnex';
  import * as EProducts  from './reducers/EProduct/idnex';
  import * as EOrders  from './reducers/EOrder/idnex';
  import * as ECoupons  from './reducers/ECoupons/idnex';
+ import * as _Document  from './reducers/Document/idnex';
+ import * as EVendors  from './reducers/EVendor/idnex';
 import {persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -28,8 +30,9 @@ export const rootReducer = combineReducers({
   EOrders:EOrders.EOrderReducer,
   ECategories:ECategories.ECategoryReducer,
   ECoupons:ECoupons.ECouponsReducer,
-  VUser:User. VuserReducer
-
+  VUser:User. VuserReducer,
+  Vendors:EVendors.EVendorReducer,
+  Document:_Document.DocumentReducer, 
  });
 
 const persistConfig={

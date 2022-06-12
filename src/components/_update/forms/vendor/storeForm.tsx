@@ -17,11 +17,13 @@ export default ({
   docvalues,
   activeState,
   setactiveState,
+  isFromUpdate
 }: {
   PostData: any;
-  docvalues: any;
+  docvalues?: any;
   activeState: number;
   setactiveState: any;
+  isFromUpdate?:boolean
 }) => {
   const services = useSelector((x: IReduxStore) => x.Services);
   const dispatch=useDispatch()
@@ -64,8 +66,7 @@ export default ({
             <>
               <Form>
                 <div className="p-an">
-                  <h5 className="jnskdf-san4rke">Seller Details</h5>
-                  <div className="d-flex flex-column pb-3 w-100">
+                   <div className="d-flex flex-column pb-3 w-100">
                     <Textbox
                       label="Email / Phone Number"
                       getFieldProps={getFieldProps}
@@ -167,6 +168,7 @@ export default ({
                     )}
                   </div>
                   <PagButton
+                  isFromUpdate={isFromUpdate}
                     activeState={activeState}
                     setactiveState={setactiveState}
                   />

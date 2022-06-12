@@ -68,10 +68,16 @@ SET_ECoupons: "SET_ECoupons",
 Delete_ECoupons: "Delete_ECoupons",
 
 
+Add_EVendor: "Add_EVendor",
+SET_EVendors: "SET_EVendors",
+SET_EVendor: "SET_EVendor",
+Delete_EVendor: "Delete_EVendor",
+
 Add_VUser: "Add_VUser",
 Delete_VUser: "Delete_VUser",
 
 
+SET_Documents: "SET_Documents",
 
 
 
