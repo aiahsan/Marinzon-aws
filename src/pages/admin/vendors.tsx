@@ -106,7 +106,7 @@ function App() {
                                         state: {
                                           data: {
                                             ...x?.storeDetails[0],
-                                            
+                                            user:x,
                                             type:1
                                           },
                                         },
@@ -150,7 +150,7 @@ function App() {
                                         pathname: "/edit/application",
                                         state: {
                                           data: { ...x?.document[0],
-                                          
+                                              user:x,
                                             type:2 },
                                         },
                                       });
@@ -194,7 +194,7 @@ function App() {
                                         state: {
                                           data: {
                                             ...x?.bankDetails[0],
-                                            
+                                            user:x,
                                             type:3
                                           },
                                         },
@@ -240,6 +240,7 @@ function App() {
                                           pathname: "/edit/application",
                                           state: {
                                             data: { ...x?.vat[0],
+                                              user:x,
                                             type:4
                                             },
                                           },

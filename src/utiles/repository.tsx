@@ -277,6 +277,11 @@ const UpdateVendorvat = async (token: string,data:any) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const UpdateApproveReject = async (token: string,data:any) => {
+  return await api.post("/EVendor/approvereject",data,{
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 const getvendors = async (token: string) => {
   return await api.get("/EVendor/getvendors", undefined,{
     headers: { Authorization: `Bearer ${token}` },
@@ -336,5 +341,6 @@ UpdateVendorvat,
 UpdateVendorbank,
 UpdateVendordocuments,
 UpdateVendorStore,
-getvendors
+getvendors,
+UpdateApproveReject
 };
