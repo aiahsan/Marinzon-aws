@@ -42,6 +42,8 @@ export interface IItem extends IBase {
   service?: IService;
   category?:ICategory;
   isApproved?:boolean;
+  displayIcon?:string;
+  isFeatured?:boolean;
 }
 export interface IFAQService extends IBase {
   id?: number | undefined |string;
@@ -79,6 +81,7 @@ export interface IBooking extends IBase {
   bookingAddress?:string;
   bookingInstructions?:string;
   bookingTime?:string;
+  bookingEndTime?:string;
   assignBooking?:ILogin;
   assignBookingId?:number;
   bookingItems?:any
@@ -136,6 +139,8 @@ export interface IEProduct extends IBase {
   image: string;
   isApproved?:boolean;
   availableStock?:number;
+  displayIcon?:string;
+  isFeatured?:boolean;
 }
 
 export interface IEOrder extends IBase {

@@ -24,8 +24,9 @@ export function GetItems() {
               message: data?.message,
             })
           );
-          console.log(data?.data?.filter((x:IItem)=>x?.category?.isActive==true &&x?.category?.isApproved==true),"mmmmm")
-            dispatch(setItemAM(data?.data?.filter((x:IItem)=>x?.category?.isActive==true &&x?.category?.isApproved==true)));
+             dispatch(setItemAM(data?.data?.filter((x:IItem)=>{
+              return x?.category?x?.category?.isActive==true &&x?.category?.isApproved==true:true
+             })));
          } else {
           dispatch(loadingAction(false));
           dispatch(

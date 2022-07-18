@@ -119,7 +119,7 @@ function App() {
             <Table responsive borderless className="table-custom">
               <thead>
                 <tr>
-                  <th>Service</th>
+                  <th>Type</th>
                   <th>Category</th>
                   <th>Title</th>
                   <th>Description</th>
@@ -132,7 +132,7 @@ function App() {
               <tbody>
                 {
                   getItems().map((x:IItem,i)=><tr key={i}>
-                  <td>{x.service?.title}</td>
+                  <td>{x?.category?"Service":"Rental"}</td>
                   <td>{x.category?.title}</td>
                   <td className="mncais-ads">{x.title}</td>
                   <td className="mncais-ads">{x.description}</td>

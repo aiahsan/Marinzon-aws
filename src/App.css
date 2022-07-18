@@ -2047,3 +2047,17 @@ font-weight: 600;
   height: 45px;
   border-radius: 50%;
 }
+
+body .hjasdasew-sad .floating__label::before{
+  top: 30px;
+}
+body .hjasdasew-sad .float-input input{
+  margin: 0px;
+ 
+}
+body .hjasdasew-sad .floating{
+
+  margin: 0px;
+  border: none;
+  background-color: transparent;
+}

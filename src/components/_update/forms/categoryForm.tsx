@@ -13,7 +13,7 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
   const [_Image, _setImage] = React.useState<any>();
   const dispatch = useDispatch();
   const user = useSelector((x: IReduxStore) => x.User);
-  const services = useSelector((x: IReduxStore) => x.Services);
+  // const services = useSelector((x: IReduxStore) => x.Services);
    
  
   return (
@@ -31,8 +31,7 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
         let formData = new FormData();
         formData.append("Title", values.title);
         formData.append("description", values.description);
-        formData.append("serviceId", values.serviceId.toString());
-         //@ts-ignore
+          //@ts-ignore
         formData.append("recordUserId", user.id);
         if(data)
         {
@@ -82,7 +81,9 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
         
           <Form className="">
                        <div className="mb-0 cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
-                       <div className="">
+                        {
+                          /*
+                          <div className="">
                         <Dropdown
           
                           label="Select Service"
@@ -100,6 +101,8 @@ export default ({ PostData ,data,setData}: { PostData: (values: ICategory) => vo
           
                       </div>
                       
+                          */
+                        }
                       </div>
                       
                       <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">

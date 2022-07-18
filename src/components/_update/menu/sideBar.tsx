@@ -87,11 +87,16 @@ export default ({ collapsed }: { collapsed: boolean }) => {
           
           {
             <>
+              {
+                /*
                         <h5>Services</h5>
+                       */
+              } 
 
             {documents[0]?.user?.isVendorActivityCompletedandVerfied==true&& documents[0]?.user?.isVerified==true?<>
               {
-              user?.isAdmin&&user.isAdmin==true? <>
+            /*
+            user?.isAdmin&&user.isAdmin==true? <>
             
                <MenuItem
                 onClick={() => history.push("/services")}
@@ -102,6 +107,7 @@ export default ({ collapsed }: { collapsed: boolean }) => {
               
             </> 
             :<></>
+           */ 
             }
            
            <MenuItem

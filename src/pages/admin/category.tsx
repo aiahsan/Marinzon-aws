@@ -31,7 +31,7 @@ function App() {
 
   React.useEffect(() => {
     //@ts-ignore
-    dispatch(GetServices());
+    // dispatch(GetServices());
     //@ts-ignore
     dispatch(GetCategory());
   }, []);
@@ -82,8 +82,7 @@ function App() {
           <Table responsive borderless className="table-custom">
             <thead>
               <tr>
-                <th>Service</th>
-                <th>Title</th>
+                 <th>Title</th>
                 <th>Description</th>
                 <th>Approved Status</th>
                 <th className="text-center">Action</th>
@@ -92,8 +91,7 @@ function App() {
             <tbody>
               {categoreis.map((x: ICategory, i) => (
                 <tr key={i}>
-                  <td>{x?.service?.title}</td>
-                  <td>{x.title}</td>
+                   <td>{x.title}</td>
                   <td className="mncais-ads">{x.description}</td>
                   <td className="mncais-ads">
                     {x?.isApproved == true ? "Approved" : "Pending"}
@@ -109,8 +107,7 @@ function App() {
                         let formData = new FormData();
                         formData.append("Title", x.title);
                         formData.append("description", x.description);
-                        formData.append("serviceId", x.serviceId.toString());
-                        formData.append("isApproved", x.isApproved==true?"false":"true");
+                         formData.append("isApproved", x.isApproved==true?"false":"true");
                         //@ts-ignore
                         formData.append("recordUserId", user.id);
                         //@ts-ignore

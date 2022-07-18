@@ -8,5 +8,6 @@ import { FieldInputProps } from "formik/dist/types";
     feildName:string,
     placeholder:string,
     type:string,
-    label:string
+    label:string,
+    checked?:boolean
 }

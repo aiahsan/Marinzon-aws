@@ -224,8 +224,8 @@ function App() {
       <>
         
         <div className="modal-cst-text">
-        <h5><span>Service: </span> {_currentService?.serviceItem?.service?.title }</h5>
-        <h5><span>Category: </span> {_currentService?.serviceItem?.category?.title }</h5>
+        {/* <h5><span>Service: </span> {_currentService?.serviceItem?.service?.title }</h5> */}
+        <h5><span>Category: </span> {_currentService?.serviceItem?.category?.title || "Rental" }</h5>
         <h5><span>Title: </span> {_currentService?.serviceItem?.title }</h5>
         <h5><span>Description: </span> {_currentService?.serviceItem?.description }</h5>
         <h5><span>Status: </span> {_currentService?.serviceItem?.serviceStatus }</h5>
@@ -234,6 +234,7 @@ function App() {
          <h3>Booking Details</h3>
          <p>Booking Date: <strong>{_currentService?.bookingDateTime}</strong> </p>
           <p>Booking Time: <strong>{_currentService?.bookingTime}</strong> </p>
+          <p>Booking End Time: <strong>{_currentService?.bookingEndTime}</strong> </p>
           <p>Booking Address: <strong>{_currentService?.bookingAddress}</strong> </p>
           <p>Booking Instructions: <strong>{_currentService?.bookingInstructions}</strong> </p>
           <p>Booking Status: <strong>{_currentService?.bookingStatus}</strong> </p>

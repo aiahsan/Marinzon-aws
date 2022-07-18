@@ -8,12 +8,14 @@ export default function App({
   placeholder,
   type,
   label,
+  checked
 }: Itexbox) {
   return (
     <div className="float-input ">
       <div className="floating">
         {type !== "textarea" ? (
           <input
+            checked={checked}
             className="floating__input"
             {...getFieldProps(feildName)}
             type={type}
@@ -23,6 +25,7 @@ export default function App({
           <textarea
             rows={8}
             {...getFieldProps(feildName)}
+           
             placeholder={placeholder}
             className="form-control jkjdsaikfer"
           ></textarea>

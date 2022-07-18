@@ -57,7 +57,7 @@ export const DisplayingErrorMessagesCouponSchema = Yup.object().shape({
 export const DisplayingErrorMessagesCategorySchema = Yup.object().shape({
   title: Yup.string().required("Required") ,
    description: Yup.string().required("Required"),
-   serviceId: Yup.string().required("Required"),
+  //  serviceId: Yup.string().required("Required"),
    
 });
 export const DisplayingErrorMessagesECategorySchema = Yup.object().shape({
@@ -79,8 +79,7 @@ export const DisplayingErrorMessagesItemSchema = Yup.object().shape({
   title: Yup.string().required("Required") ,
   image: Yup.string().required("Required") ,
   description: Yup.string().required("Required") ,
-  serviceId: Yup.string().required("Required"),
-  categoryId: Yup.string().required("Required"),
+   
 
 });
 

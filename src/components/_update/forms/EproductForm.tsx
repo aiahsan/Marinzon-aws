@@ -52,18 +52,23 @@ export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => vo
         discountPer: data?.discountPer ||0,
         availableStock: data?.availableStock ||1,
         image:data?.image || "",
+        isFeatured:data?.isFeatured || false,
+        displayIcon:data?.displayIcon || "",
 
        }}
       enableReinitialize={true}
       validationSchema={DisplayingErrorMessagesProductSchema}
       onSubmit={async (values, { setSubmitting,resetForm }) => {
-        console.log(values)
+        console.log(values,"vvvvvvvveeeeeeeeee")
         let formData = new FormData();
         formData.append("title", values.title);
         formData.append("description", values.description);
         formData.append("eCategoryId", values.eCategoryId.toString());
         formData.append("rDescription", values.rDescription);
         formData.append("price", values.price.toString());
+        formData.append("isFeatured", values.isFeatured.toString());
+        formData.append("displayIcon", values.displayIcon.toString());
+
         formData.append("availableStock", values.availableStock.toString());
         formData.append("discountPer", values.discountPer.toString());
          //@ts-ignore
@@ -237,8 +242,37 @@ export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => vo
                 }
                  
             </div>
-              
+           
              </div>
+
+             <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
+      <div className="mt-1 kjfas-ijdsare">
+        <Textbox
+          label="SVG Icon"
+          getFieldProps={getFieldProps}
+          feildName="displayIcon"
+          touched={touched.displayIcon}
+          error={errors.displayIcon}
+          placeholder="Input SVG String"
+          type="textarea"
+        />
+      </div>
+    </div>
+    <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
+      <div className="mt-1 kjfas-ijdsare hjasdasew-sad">
+        <Textbox
+          label="SVG Icon"
+          getFieldProps={getFieldProps}
+          feildName="isFeatured"
+          touched={touched.isFeatured}
+          error={errors.isFeatured}
+          placeholder="Make Featured"
+          type="checkbox"
+          
+          checked={values?.isFeatured||false}
+        />
+      </div>
+    </div>
                       <div className="d-flex justify-content-end my-4">
                         
 

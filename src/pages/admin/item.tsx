@@ -163,10 +163,12 @@ function App() {
             <Formik
               initialValues={{
                 id: _updateState?.id || undefined,
-                serviceId:_updateState?.serviceId || undefined,
-                categoryId:_updateState?.categoryId ||  undefined,
+                // serviceId:_updateState?.serviceId || 0,
+                categoryId:_updateState?.categoryId ||  0,
                 title: _updateState?.title || "",
                 image: _updateState?.image || "",
+                isFeatured:_updateState?.isFeatured || false,
+                displayIcon:_updateState?.displayIcon || "",
                 description:  _updateState?.description || "",
                 serviceItemServices:_updateState?.serviceItemServices || _csttags,
                 fAQServices:_updateState?.fAQServices || _cstServicesInclude,
@@ -195,6 +197,8 @@ function App() {
                   let formData = new FormData();
                   formData.append("title", values.title);
                   formData.append("description", values.description);
+                  formData.append("isFeatured", values.isFeatured.toString());
+                  formData.append("displayIcon", values.displayIcon.toString());
 
                   if(_Image?.file)
                   formData.append("uploadImage", _Image?.file || values.image);
