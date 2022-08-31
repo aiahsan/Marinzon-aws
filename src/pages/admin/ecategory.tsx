@@ -94,8 +94,8 @@ function App() {
               categoreis.map((x: IECategory, i) => (
                 <tr key={i}>
                   
-                  <td>{x.title}</td>
-                  <td className="mncais-ads">{x.description}</td>
+                  <td><p>{x.title}</p></td>
+                  <td className="mncais-ads"><p>{x.description}</p></td>
                   <td className="mncais-ads">
                     {x?.isApproved == true ? "Approved" : "Pending"}
                   </td>

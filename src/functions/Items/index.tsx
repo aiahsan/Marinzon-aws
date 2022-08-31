@@ -1,20 +1,21 @@
 import { AnyAction, Dispatch } from "redux";
 import { IService, IReturnData, IItem } from "../../interfaces/data/objects";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
+import { setCountAM } from "../../redux/actionMethodes/Count";
 import { addItemAM, deleteItemAM, setItemAM, updateItemAM } from "../../redux/actionMethodes/Item";
 import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
 import { addServicesAM, deleteServiceAM, setServicesAM, updateServiceAM } from "../../redux/actionMethodes/Services";
 import { repository } from "../../utiles/repository";
 
-export function GetItems() {
-  return function (dispatch: any, getState: any): any {
+export function GetItems(page?:any,search?:any) {
+   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
         dispatch(loadingAction(true));
         const isAdimn=getState()?.User?.isAdmin;
           const { status, data }: any = await repository
-          .GetServiceItem(getState().User?.token || "",isAdimn==false?getState().User?.id:undefined)
+          .GetServiceItem(getState().User?.token || "",getState().User?.id,getState().User?.isAdmin,page,search)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
           dispatch(loadingAction(false));
@@ -24,9 +25,11 @@ export function GetItems() {
               message: data?.message,
             })
           );
-             dispatch(setItemAM(data?.data?.filter((x:IItem)=>{
+          dispatch(setCountAM(data?.count));
+         dispatch(setItemAM(data?.data?.filter((x:IItem)=>{
               return x?.category?x?.category?.isActive==true &&x?.category?.isApproved==true:true
              })));
+             
          } else {
           dispatch(loadingAction(false));
           dispatch(

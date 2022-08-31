@@ -3,6 +3,7 @@ export const types = {
   logOut: "LOG_OUT",
   set_Loading: "SET_LOADING",
   set_Message: "SET_MESSAGE",
+  set_Count: "set_Count",
 
   
   Add_Services: "Add_Services",

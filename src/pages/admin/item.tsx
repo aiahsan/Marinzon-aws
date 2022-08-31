@@ -120,9 +120,7 @@ function App() {
     _setactive(0)
   },[])
   React.useEffect(() => {
-        //@ts-ignore
-
-    dispatch(GetServices());
+    
             //@ts-ignore
 
      dispatch(GetCategory());

@@ -10,31 +10,35 @@ import Searchbar from "../../components/_update/inputs/searchbar";
 import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import { useSelector } from "react-redux";
+import { useDebounce } from 'use-debounce';
 import { IReduxStore } from "../../interfaces/data/reduxStore";
 import { ICategory, IService } from "../../interfaces/data/objects";
 import { DeleteServices, GetServices } from "../../functions/Services";
 import { DeleteCategory, GetCategory, UpdateCategory } from "../../functions/Categories";
 import Modal from "../../components/_update/modal";
 import CategoryForm from "../../components/_update/forms/categoryForm";
+import Pagination from "../../components/_update/pagination";
 
 function App() {
   const dispatch = useDispatch();
   const categoreis = useSelector((x: IReduxStore) => x.Categories);
   const services = useSelector((x: IReduxStore) => x.Services);
   const user = useSelector((x: IReduxStore) => x.User);
-
   const [_show, _setshow] = React.useState(false);
   const [_currentService, _setcurrentService] = React.useState<
     ICategory | undefined
   >();
   const [_IsEdit, _setIsEdit] = React.useState(false);
+  const [page,setPage]=React.useState(0);
+  const [search,setsearch]=React.useState('');
+  const [value] = useDebounce(search, 1000);
 
+  
   React.useEffect(() => {
-    //@ts-ignore
-    // dispatch(GetServices());
-    //@ts-ignore
-    dispatch(GetCategory());
-  }, []);
+
+     //@ts-ignore
+    dispatch(GetCategory(categoreis[categoreis.length-1]?.id || 0,value.length>0?value:undefined));
+  }, [value,page]);
 
   const Update = (Id: number | undefined) => {
     let obj = categoreis.find((x) => x.id == Id);
@@ -77,7 +81,7 @@ function App() {
         <div>
           <div className="d-flex align-items-center justify-content-between">
             <h5 className="hd-5">Categories List</h5>
-            <Searchbar isBorder={true} />
+            <Searchbar setsearch={setsearch} isBorder={true} />
           </div>
           <Table responsive borderless className="table-custom">
             <thead>
@@ -91,8 +95,8 @@ function App() {
             <tbody>
               {categoreis.map((x: ICategory, i) => (
                 <tr key={i}>
-                   <td>{x.title}</td>
-                  <td className="mncais-ads">{x.description}</td>
+                   <td><p>{x.title}</p></td>
+                  <td className="mncais-ads"><p>{x.description}</p></td>
                   <td className="mncais-ads">
                     {x?.isApproved == true ? "Approved" : "Pending"}
                   </td>
@@ -142,17 +146,8 @@ function App() {
             </tbody>
           </Table>
         </div>
-        <div className="d-flex justify-content-end pagination-container">
-          <button className="btn cst-none">Previous</button>
-          <div className="d-flex pagination-number-container">
-            <button className="btn">1</button>
-            <button className="btn active">2</button>
-            <button className="btn">3</button>
-            <button className="btn">4</button>
-            <button className="btn mag-18">5</button>
-          </div>
-          <button className="btn cst-none">Next</button>
-        </div>
+        <Pagination setCurrentPage={setPage}/>
+        
       </div>
       <Modal title="Confirm" show={_show} setShow={_setshow}>
         <>

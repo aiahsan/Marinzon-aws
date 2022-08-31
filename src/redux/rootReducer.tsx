@@ -13,6 +13,7 @@ import * as Message  from './reducers/messsage/idnex';
  import * as ECoupons  from './reducers/ECoupons/idnex';
  import * as _Document  from './reducers/Document/idnex';
  import * as EVendors  from './reducers/EVendor/idnex';
+ import * as _Count  from './reducers/Count/idnex';
 import {persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -33,6 +34,7 @@ export const rootReducer = combineReducers({
   VUser:User. VuserReducer,
   Vendors:EVendors.EVendorReducer,
   Document:_Document.DocumentReducer, 
+  Count:_Count.countReducer
  });
 
 const persistConfig={

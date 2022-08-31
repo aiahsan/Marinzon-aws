@@ -326,8 +326,25 @@ Theme
   border-bottom: 1px solid rgba(68, 68, 93, 0.07) !important;
   text-align: center;
 }
-
-.pagination-container button {
+.pagination-container li:focus-visible  , .pagination-container .btn:focus,.pagination-container :focus-visible 
+{
+  outline: 0!important;
+  box-shadow: none!important;
+}
+.pagination-container ul{
+  list-style: none;
+}
+.pagination-container .active a {
+  background-color: #111826;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: white !important;
+}
+.pagination-container li {
+  float: left;
+}
+.pagination-container a {
   font-size: 14px;
   line-height: 16px;
   color: #59bad8;
@@ -2060,4 +2077,11 @@ body .hjasdasew-sad .floating{
   margin: 0px;
   border: none;
   background-color: transparent;
+}
+
+.table-custom td p{
+  width:200px;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
 }

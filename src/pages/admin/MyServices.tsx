@@ -11,6 +11,8 @@ import { IItem, IServiceItemService } from "../../interfaces/data/objects";
 import { ItemStatus } from "../../utiles/constants";
  import {useHistory} from 'react-router-dom'
 import Modal from "../../components/_update/modal";
+import { useDebounce } from "use-debounce";
+import Pagination from "../../components/_update/pagination";
 
 function App() {
   const [view, setView] = React.useState(0);
@@ -19,6 +21,9 @@ function App() {
   const [_show, _setshow] = React.useState(false);
   const [_show1, _setshow1] = React.useState(false);
   const user = useSelector((x: IReduxStore) => x.User);
+  const [page,setPage]=React.useState(0);
+  const [search,setsearch]=React.useState('');
+  const [value] = useDebounce(search, 1000);
 
 
   const [_currentService, _setcurrentService] = React.useState<
@@ -29,8 +34,8 @@ function App() {
   const dispatch=useDispatch();
   React.useEffect(()=>{
     //@ts-ignore
-    dispatch(GetItems());
-  },[])
+    dispatch(GetItems(page,value.length>0?value:undefined));
+  },[value,page])
 
   React.useEffect(()=>{
     if(Items.length>0)
@@ -114,7 +119,7 @@ function App() {
           <div>
             <div className="d-flex align-items-center justify-content-between">
               <h5 className="hd-5">All Services List</h5>
-              <Searchbar isBorder={true} />
+              <Searchbar setsearch={setsearch} isBorder={true} />
             </div>
             <Table responsive borderless className="table-custom">
               <thead>
@@ -133,9 +138,9 @@ function App() {
                 {
                   getItems().map((x:IItem,i)=><tr key={i}>
                   <td>{x?.category?"Service":"Rental"}</td>
-                  <td>{x.category?.title}</td>
-                  <td className="mncais-ads">{x.title}</td>
-                  <td className="mncais-ads">{x.description}</td>
+                  <td><p>{x.category?.title}</p></td>
+                  <td className="mncais-ads"><p>{x.title}</p></td>
+                  <td className="mncais-ads"><p>{x.description}</p></td>
                   <td className="mncais-ads">
                     { 
                  //@ts-ignore
@@ -176,7 +181,7 @@ function App() {
                     <button className="btn btn-info" onClick={()=>  history.push({
            pathname: '/item',
             state: { data: x }
-       })}>Edit</button>
+       })}>Edit / View</button>
 <button
                         className="btn btn-warning"
                         onClick={() => Delete(x?.id)}
@@ -188,19 +193,14 @@ function App() {
               </tbody>
             </Table>
           </div>
-          <div className="d-flex justify-content-end pagination-container">
-            <button className="btn cst-none">Previous</button>
-            <div className="d-flex pagination-number-container">
-              <button className="btn">1</button>
-              <button className="btn active">2</button>
-              <button className="btn">3</button>
-              <button className="btn">4</button>
-              <button className="btn mag-18">5</button>
-            </div>
-            <button className="btn cst-none">Next</button>
-          </div>
+
         </div>
       ) : (
+        <>
+         <div className="d-flex align-items-center justify-content-between">
+              <h5 className="hd-5">All Services List</h5>
+              <Searchbar setsearch={setsearch} isBorder={true} />
+            </div>
         <ProductCard onClick={(item:any)=>{
           if(item)
           {
@@ -210,7 +210,10 @@ function App() {
           }
 
         }}  items={getItems}/>
+      </>
       )}
+                <Pagination setCurrentPage={setPage}/>
+
  <Modal title="Confirm" show={_show} setShow={_setshow}>
         <>
           <p>Are You sure you wan't to delete this service !note this action will not be revoked</p>

@@ -1,9 +1,12 @@
 import React from 'react';
 import Icon from '../../../svgIcons/svgIcons'
-const Comp = ({ isBorder }:{isBorder?:Boolean}) => {
+const Comp = ({ isBorder ,setsearch}:{isBorder?:Boolean,setsearch?:any}) => {
     return <div className={`searchbar-head ${isBorder ? "brd" : ""}`}>
 
-        <input type="text" placeholder="Search" />
+        <input onChange={(e)=>{
+            if(setsearch)
+            setsearch(e.target.value)
+        }} type="text" placeholder="Search" />
         <Icon name="search"  />
     </div>
 }

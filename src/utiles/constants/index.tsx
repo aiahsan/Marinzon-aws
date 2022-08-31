@@ -1,6 +1,7 @@
 import React from "react";
 import { IFAQQuestion, IFAQService, IServiceItemService } from "../../interfaces/data/objects";
  
+export const PageSize=5;
 export const LoginType = {
   Email:1,
   PhoneNumber:2

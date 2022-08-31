@@ -140,7 +140,7 @@ function Routes() {
 
         {Loading === true ? <Loader /> : <></>}
        
-       {Message != null ? <Toast message={Message} /> : <></>}
+       {Message != null &&Message.type==3? <Toast message={Message} /> : <></>}
     </BrowserRouter>
   );
 }

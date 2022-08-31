@@ -36,8 +36,9 @@ const GetDocument = async (token: string,id:number | string) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
-const GetCategory = async (token: string) => {
-  return await api.get("/Category",undefined,{
+const GetCategory = async (token: string,id?:string,isAdmin?:any,page?:string,search?:string) => {
+   let url=("/Category?page="+(page?page:-1)+"&userId="+id+"&isAdmin="+isAdmin+"&search="+search).toString();
+    return await api.get(url,undefined,{
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -76,9 +77,11 @@ const DeleteECategory = async (token: string,data:IECategory) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
-
-const GetServiceItem = async (token: string,userId?:string) => {
-   return await api.get("/ServiceItem"+(userId!=undefined?`?userId=${userId}`:""),undefined,{
+ 
+const GetServiceItem = async (token: string,id?:string,isAdmin?:any,page?:string,search?:string)=> { 
+  let url=("/ServiceItem?page="+page+"&userId="+id+"&isAdmin="+isAdmin+"&search="+search).toString();
+  console.log(url,"url")
+   return await api.get(url,undefined,{
     headers: { Authorization: `Bearer ${token}` },
   });
 };
