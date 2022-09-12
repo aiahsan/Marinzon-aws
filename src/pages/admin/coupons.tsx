@@ -18,6 +18,8 @@ import Modal from "../../components/_update/modal";
 import { DeleteECoupons, GetECoupons } from "../../functions/ECoupons";
 import moment from "moment";
 import ECouponForm from "../../components/_update/forms/eCouponForm";
+import Pagination from "../../components/_update/pagination";
+import { useDebounce } from "use-debounce";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,14 +29,17 @@ function App() {
     IECoupons | undefined
   >();
   const [_IsEdit, _setIsEdit] = React.useState(false);
+  const [page,setPage]=React.useState(0);
+  const [search,setsearch]=React.useState('');
+  const [value] = useDebounce(search, 1000);
 
   React.useEffect(() => {
         //@ts-ignore
 
-    dispatch(GetECoupons());
+    dispatch(GetECoupons(page.toString(),value.length>0?value:undefined));
 
     
-  }, []);
+  }, [value,page]);
 
   const Update = (Id: number | undefined) => {
     let obj = services.find((x) => x.id == Id);
@@ -69,7 +74,7 @@ function App() {
           <div>
             <div className="d-flex align-items-center justify-content-between">
               <h5 className="hd-5">Coupons List</h5>
-              <Searchbar isBorder={true} />
+              <Searchbar setsearch={setsearch} isBorder={true} />
             </div>
             <Table responsive borderless className="table-custom">
               <thead>
@@ -109,17 +114,8 @@ function App() {
               </tbody>
             </Table>
           </div>
-          <div className="d-flex justify-content-end pagination-container">
-            <button className="btn cst-none">Previous</button>
-            <div className="d-flex pagination-number-container">
-              <button className="btn">1</button>
-              <button className="btn active">2</button>
-              <button className="btn">3</button>
-              <button className="btn">4</button>
-              <button className="btn mag-18">5</button>
-            </div>
-            <button className="btn cst-none">Next</button>
-          </div>
+          <Pagination setCurrentPage={setPage}/>
+
         </div>
       </div>
 

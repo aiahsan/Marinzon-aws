@@ -13,6 +13,9 @@ import { ItemStatus } from "../../utiles/constants";
 import Modal from "../../components/_update/modal";
 import { useDebounce } from "use-debounce";
 import Pagination from "../../components/_update/pagination";
+import { repository } from "../../utiles/repository";
+import { loadingAction } from "../../redux/actionMethodes/loader";
+import { messageAction } from "../../redux/actionMethodes/message";
 
 function App() {
   const [view, setView] = React.useState(0);
@@ -43,6 +46,48 @@ function App() {
       _setcurrentItems(Items);
      }
   },[Items])
+
+
+ const getCurrentService=(item:any)=>{
+
+   try{
+   return (async()=>{
+      dispatch(loadingAction(true));
+      //@ts-ignore
+     const {data,status}:any= await repository.GetServiceItemById(user?.token,item?.id)
+      if(status == 200 && data?.success == true)
+      {
+        _setcurrentService(data?.data)
+        _setshow1(true)
+        dispatch(loadingAction(false));
+        return data?.data
+      }
+      else
+      {
+        dispatch(loadingAction(false));
+          dispatch(
+            messageAction({
+              type: 3,
+              message:
+                data?.message || "Something wen't wrong contact support",
+            })
+          );
+      }
+    })()
+   }
+   catch(e)
+   {
+    dispatch(loadingAction(false));
+    dispatch(
+      messageAction({
+        type: 3,
+        message:
+           "Something wen't wrong contact support",
+      })
+    );
+   }
+ 
+  }
 
   const getItems=()=>{
     switch(_currentStatus)
@@ -128,8 +173,7 @@ function App() {
                   <th>Category</th>
                   <th>Title</th>
                   <th>Description</th>
-                  <th>Total Services</th>
-                  <th>Total Services Included</th>
+                  <th>Service By</th> 
                   <th>Starting Price</th>
                   <th className="text-center">Action</th>
                 </tr>
@@ -143,51 +187,57 @@ function App() {
                   <td className="mncais-ads"><p>{x.description}</p></td>
                   <td className="mncais-ads">
                     { 
-                 //@ts-ignore
-                 x.serviceItemServices?.length
+                  x.serviceBy
                  }
                   </td>
+                  
                   <td className="mncais-ads">
-                   { 
-                   //@ts-ignore
-                   x.faqServices?.length
+                   {
+                    x.displayPrice
                    }
                   </td>
-                  <td className="mncais-ads">
-                  {
-                           //@ts-ignore
-                    Math.min.apply(Math, x.serviceItemServices?.map(y=>y.serviceItemServicePrices?.map(c=>c.serviceItemServiceValue)).flatMap((j)=>[...j]))
-                      }
-                  </td>
                   <th className="d-flex   manasjd-ajwe">
-                  {
-                      user?.isAdmin&&user.isAdmin==true?    <button
-                      className={`btn ${
-                        x?.isApproved==true ? "btn-danger" : "btn-success"
-                      } mx-2`}
-                      onClick={() => {
-                        (async ()=>{
-                          
-                          //@ts-ignore
-                          let value=await  dispatch(UpdateItemStatus(x?.id));
+                  
+                   
+                 {
+                  user?.isAdmin&&user.isAdmin==true? <><button
+                  className={`btn ${
+                    x?.isApproved==true ? "btn-danger" : "btn-success"
+                  } mx-2`}
+                  onClick={() => {
+                    (async ()=>{
+                      
+                      //@ts-ignore
+                      let value=await  dispatch(UpdateItemStatus(x?.id));
 
-                        })()
-                      }}
-                    >
-                      {x?.isApproved ? "Reject" : "Approved"}
-                    </button>:<></>
-                    }
+                    })()
+                  }}
+                >
+                  {x?.isApproved ? "Reject" : "Approved"}
+                </button>
+                <button className="btn btn-info" onClick={()=> {
 
-                    <button className="btn btn-info" onClick={()=>  history.push({
-           pathname: '/item',
-            state: { data: x }
-       })}>Edit / View</button>
+(async ()=>{
+const dataGet=await getCurrentService(x);
+if(dataGet)
+{
+ history.push({
+  pathname: '/item',
+   state: { data: dataGet }
+})    
+}
+})()
+
+                
+                }}>Edit / View</button>
 <button
-                        className="btn btn-warning"
-                        onClick={() => Delete(x?.id)}
-                      >
-                        Delete
-                      </button>                  </th>
+                    className="btn btn-warning"
+                    onClick={() => Delete(x?.id)}
+                  >
+                    Delete
+                  </button> </> :<></>
+                 }
+                                </th>
                 </tr>)
                 }
               </tbody>
@@ -204,9 +254,8 @@ function App() {
         <ProductCard onClick={(item:any)=>{
           if(item)
           {
-            console.log(item);
-            _setcurrentService(item)
-            _setshow1(true)
+             
+            getCurrentService(item);
           }
 
         }}  items={getItems}/>

@@ -1,13 +1,14 @@
 import { AnyAction, Dispatch } from "redux";
 import { IService, IReturnData, IECoupons } from "../../interfaces/data/objects";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
+import { setCountAM } from "../../redux/actionMethodes/Count";
 import { addECouponsAM, deleteECouponsAM, setECouponsAM, updateECouponsAM } from "../../redux/actionMethodes/ECoupons";
 import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
 import { addServicesAM, deleteServiceAM, setServicesAM, updateServiceAM } from "../../redux/actionMethodes/Services";
 import { repository } from "../../utiles/repository";
  
-export function GetECoupons() {
+export function GetECoupons(page?:any,search?:any,showApproved?:boolean) {
   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
@@ -15,7 +16,7 @@ export function GetECoupons() {
         const isAdimn=getState()?.User?.isAdmin;
 
          const { status, data }: any = await repository
-          .GetECoupons(getState().User?.token || "")
+          .GetECoupons(getState().User?.token || "",getState().User?.id,getState().User?.isAdmin,page,search,showApproved)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
           dispatch(loadingAction(false));
@@ -25,6 +26,8 @@ export function GetECoupons() {
               message: data?.message,
             })
           );
+          dispatch(setCountAM(data?.count));
+
             dispatch(setECouponsAM(data?.data));
  
         } else {

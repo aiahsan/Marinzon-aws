@@ -5,14 +5,15 @@ import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
 import { addECategoryAM, deleteECategoryAM, setECategoryAM, updateECategoryAM } from "../../redux/actionMethodes/ECategory";
 import { repository } from "../../utiles/repository";
+import { setCountAM } from "../../redux/actionMethodes/Count";
 
-export function GetECategory() {
+export function GetECategory(page?:any,search?:any,showApproved?:boolean) {
   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
         dispatch(loadingAction(true));
          const { status, data }: any = await repository
-          .GetECategory(getState().User?.token || "")
+          .GetECategory(getState().User?.token || "",getState().User?.id,getState().User?.isAdmin,page,search,showApproved)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
 
@@ -23,8 +24,10 @@ export function GetECategory() {
               message: data?.message,
             })
           );
-          console.log(data,"ddddd")
+          dispatch(setCountAM(data?.count));
+
             dispatch(setECategoryAM(data?.data));
+
         } else {
           dispatch(loadingAction(false));
           dispatch(

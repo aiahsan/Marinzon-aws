@@ -13,6 +13,11 @@ import { bookingStatus, ItemStatus } from "../../utiles/constants";
 import moment from "moment";
 import Modal from "../../components/_update/modal";
 import { GetUsers } from "../../functions/User";
+import { useDebounce } from "use-debounce";
+import Pagination from "../../components/_update/pagination";
+import { loadingAction } from "../../redux/actionMethodes/loader";
+import { messageAction } from "../../redux/actionMethodes/message";
+import { repository } from "../../utiles/repository";
 
 function App() {
   const [view, setView] = React.useState(0);
@@ -25,18 +30,18 @@ function App() {
   const [_show1, _setshow1] = React.useState(false);
   const Users = useSelector((x: IReduxStore) => x.Users);
   const user=useSelector((x:IReduxStore)=>x.User);
+   const [page,setPage]=React.useState(0);
+  const [search,setsearch]=React.useState('');
+  const [value] = useDebounce(search, 1000);
 
   const [_currentService, _setcurrentService] = React.useState<
     IBooking | undefined
   >();
   React.useEffect(() => {
-   if(bookings.length<=0)
-   {
-      //@ts-ignore
-    dispatch(GetBookings());
-   }
+     //@ts-ignore
+   dispatch(GetBookings(page.toString(),value.length>0?value:undefined,undefined,page==0?true:false));
    
-  }, []);
+  }, [value,page]);
   const Delete = (Id: number | undefined) => {
     let obj = bookings.find((x) => x.id == Id);
     //@ts-ignore
@@ -66,6 +71,46 @@ function App() {
     }
   };
 
+
+  const getCurrentService=(item:any)=>{
+     try{
+    return (async()=>{
+       dispatch(loadingAction(true));
+        //@ts-ignore
+      const {data,status}:any= await repository.GetBookingItemById(user?.token,item?.id)
+       if(status == 200 && data?.success == true)
+       {
+         _setcurrentService(data?.data)
+         _setshow1(true)
+         dispatch(loadingAction(false));
+         return data?.data
+       }
+       else
+       {
+         dispatch(loadingAction(false));
+           dispatch(
+             messageAction({
+               type: 3,
+               message:
+                 data?.message || "Something wen't wrong contact support",
+             })
+           );
+       }
+     })()
+    }
+    catch(e)
+    {
+     dispatch(loadingAction(false));
+     dispatch(
+       messageAction({
+         type: 3,
+         message:
+            "Something wen't wrong contact support",
+       })
+     );
+    }
+  
+   }
   return (
     <Layout title="">
      
@@ -132,7 +177,7 @@ function App() {
           <div>
             <div className="d-flex align-items-center justify-content-between">
               <h5 className="hd-5">Booking List</h5>
-              <Searchbar isBorder={true} />
+              <Searchbar setsearch={setsearch} isBorder={true} />
             </div>
 
             <Table responsive borderless className="table-custom">
@@ -148,7 +193,7 @@ function App() {
               <tbody>
                 {getItems().map((x, i) => (
                   <tr key={i}>
-                    <td>{x.serviceItem?.title}</td>
+                    <td>{x.bookingNumber}</td>
                     <td>{x.user?.fullName}</td>
                     <td>
                       {moment(x?.bookingDateTime).format(
@@ -166,33 +211,26 @@ function App() {
               </tbody>
             </Table>
           </div>
-          <div className="d-flex justify-content-end pagination-container">
-            <button className="btn cst-none">Previous</button>
-            <div className="d-flex pagination-number-container">
-              <button className="btn">1</button>
-              <button className="btn active">2</button>
-              <button className="btn">3</button>
-              <button className="btn">4</button>
-              <button className="btn mag-18">5</button>
-            </div>
-            <button className="btn cst-none">Next</button>
-          </div>
+
         </div>
+                 
+        
       ) : (
         <div className="complete-web-1">
           {getItems().map((x) => (
             <BookingCard onClick={()=>{
               if(x)
               {
-                console.log(x);
-                _setcurrentService(x)
-                _setshow1(true)
+                 
+                getCurrentService(x);
               }
+    
     
             }}  booking={x} />
           ))}
         </div>
       )}
+ <Pagination setCurrentPage={setPage}/>
 
       <Modal title="Confirm" show={_show} setShow={_setshow}>
         <>

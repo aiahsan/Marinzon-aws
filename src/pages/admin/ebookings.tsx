@@ -16,6 +16,8 @@ import { GetUsers } from "../../functions/User";
 import { GetEOrder ,DeleteEOrder} from "../../functions/EOrder";
 import OrderCard from "../../components/_update/cards/OrderCard";
 import EProductCard from "../../components/_update/cards/EProductCard";
+import { useDebounce } from "use-debounce";
+import Pagination from "../../components/_update/pagination";
 
 function App() {
   const [view, setView] = React.useState(0);
@@ -29,20 +31,21 @@ function App() {
   const Users = useSelector((x: IReduxStore) => x.Users);
   const user=useSelector((x:IReduxStore)=>x.User);
 
+
+  const [page,setPage]=React.useState(0);
+  const [search,setsearch]=React.useState('');
+  const [value] = useDebounce(search, 1000);
+
   const [_currentService, _setcurrentService] = React.useState<
     IEOrder | undefined
   >();
   React.useEffect(() => {
-   if(bookings.length<=0)
-   {
-           //@ts-ignore
-
-    dispatch(GetEOrder());
-    
-    
-   }
+    //@ts-ignore
+    dispatch(GetEOrder(page.toString(),value.length>0?value:undefined));
    
-  }, []);
+  },[value,page]);
+
+
   const Delete = (Id: number | undefined) => {
     let obj = bookings.find((x) => x.id == Id);
     //@ts-ignore
@@ -138,7 +141,7 @@ function App() {
           <div>
             <div className="d-flex align-items-center justify-content-between">
               <h5 className="hd-5">Order List</h5>
-              <Searchbar isBorder={true} />
+              <Searchbar setsearch={setsearch} isBorder={true} />
             </div>
 
             <Table responsive borderless className="table-custom">
@@ -180,20 +183,16 @@ function App() {
               }
             </Table>
           </div>
-          <div className="d-flex justify-content-end pagination-container">
-            <button className="btn cst-none">Previous</button>
-            <div className="d-flex pagination-number-container">
-              <button className="btn">1</button>
-              <button className="btn active">2</button>
-              <button className="btn">3</button>
-              <button className="btn">4</button>
-              <button className="btn mag-18">5</button>
-            </div>
-            <button className="btn cst-none">Next</button>
-          </div>
+         
         </div>
       ) : (
+        <>
+        <div className="d-flex align-items-center justify-content-between">
+              <h5 className="hd-5">Order List</h5>
+              <Searchbar setsearch={setsearch} isBorder={true} />
+            </div>
         <div className="complete-web-1">
+          
           {getItems().map((x) => (
             <OrderCard onClick={()=>{
               if(x)
@@ -206,8 +205,12 @@ function App() {
             }}  booking={x} />
           ))}
         </div>
+        </>
       )}
+    <div className="mt-4">
+    <Pagination setCurrentPage={setPage}/>
 
+    </div>
       <Modal title="Confirm" show={_show} setShow={_setshow}>
         <>
           <p>

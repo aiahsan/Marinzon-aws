@@ -7,13 +7,13 @@ import { addCategoryAM, deleteCategoryAM, setCategoryAM, updateCategoryAM } from
 import { repository } from "../../utiles/repository";
 import { setCountAM } from "../../redux/actionMethodes/Count";
 
-export function GetCategory(page?:any,search?:any) {
+export function GetCategory(page?:any,search?:any,showApproved?:boolean) {
   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
          dispatch(loadingAction(true));
          const { status, data }: any = await repository
-          .GetCategory(getState().User?.token || "",getState().User?.id,getState().User?.isAdmin,page,search)
+          .GetCategory(getState().User?.token || "",getState().User?.id,getState().User?.isAdmin,page,search,showApproved)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
 
@@ -24,7 +24,7 @@ export function GetCategory(page?:any,search?:any) {
               message: data?.message,
             })
           );
-           dispatch(setCountAM(data?.count));
+          dispatch(setCountAM(data?.count));
           dispatch(setCategoryAM(data?.data));
         } else {
           dispatch(loadingAction(false));

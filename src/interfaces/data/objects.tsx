@@ -33,6 +33,8 @@ export interface IItem extends IBase {
   title: string;
   image?:string;
   description: string;
+  serviceBy?: string;
+  displayPrice?: string;
   fAQServices?: IFAQService[];
   fAQQuestions?: IFAQQuestion[];
   serviceItemServices?: IServiceItemService[];
@@ -84,7 +86,8 @@ export interface IBooking extends IBase {
   bookingEndTime?:string;
   assignBooking?:ILogin;
   assignBookingId?:number;
-  bookingItems?:any
+  bookingItems?:any,
+  bookingNumber?:string
 }
 
 export interface IBookingReview extends IBase {

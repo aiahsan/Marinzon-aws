@@ -123,7 +123,7 @@ function App() {
     
             //@ts-ignore
 
-     dispatch(GetCategory());
+     dispatch(GetCategory(undefined,undefined,true));
   }, []);
 
   return (

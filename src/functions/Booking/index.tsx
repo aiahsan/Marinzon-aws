@@ -2,21 +2,22 @@ import { AnyAction, Dispatch } from "redux";
 import { IService, IReturnData, IBooking } from "../../interfaces/data/objects";
 import { IReduxStore } from "../../interfaces/data/reduxStore";
 import { addBookingAM, deleteBookingAM, setBookingAM, updateBookingAM } from "../../redux/actionMethodes/Booking";
+import { setCountAM } from "../../redux/actionMethodes/Count";
 import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
 import { addServicesAM, deleteServiceAM, setServicesAM, updateServiceAM } from "../../redux/actionMethodes/Services";
 import { repository } from "../../utiles/repository";
 import { GetUsers } from "../User";
 
-export function GetBookings() {
-  return function (dispatch: any, getState: any): any {
+export function GetBookings(page?:any,search?:any,showApproved?:boolean,callUsers?:boolean) {
+   
+   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
         dispatch(loadingAction(true));
-        const isAdimn=getState()?.User?.isAdmin;
-
+ 
          const { status, data }: any = await repository
-          .GetBookings(getState().User?.token || "",isAdimn==false?getState().User?.id:undefined)
+          .GetBookings(getState().User?.token || "",getState().User?.id,getState().User?.isAdmin,page,search,showApproved)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
           dispatch(loadingAction(false));
@@ -27,8 +28,14 @@ export function GetBookings() {
             })
           );
             dispatch(setBookingAM(data?.data));
-            dispatch(GetUsers());
+            dispatch(setCountAM(data?.count));
 
+            if(callUsers==true)
+            {
+                dispatch(GetUsers(-1,undefined,true));
+            
+            }
+            
         } else {
           dispatch(loadingAction(false));
           dispatch(
@@ -40,6 +47,7 @@ export function GetBookings() {
           );
         }
       } catch (e) {
+        
         dispatch(loadingAction(false));
         dispatch(
           messageAction({

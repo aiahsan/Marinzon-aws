@@ -8,6 +8,7 @@ import { addVUserAM, deleteUserAM, LoginAction, setUserAM } from "../../redux/ac
 import { repository } from "../../utiles/repository";
 import jwt_decode from "jwt-decode";
 import { UserRoles } from "../../utiles/constants";
+import { setCountAM } from "../../redux/actionMethodes/Count";
 
 /*
 export function GetServices() {
@@ -282,13 +283,13 @@ export function DeleteUser(dataP:ILogin) {
     })();
   };
 }
-export function GetUsers() {
+export function GetUsers(page?:any,search?:any,showApproved?:boolean) {
   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
         dispatch(loadingAction(true));
          const { status, data }: any = await repository
-          .GetUsers(getState().User?.token || "")
+          .GetUsers(getState().User?.token || "",getState().User?.id,getState().User?.isAdmin,page,search,showApproved)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
 
@@ -299,8 +300,12 @@ export function GetUsers() {
               message: data?.message,
             })
           );
-          console.log(data,"ddddd")
-            dispatch(setUserAM(data?.data));
+            if(page&&page!=-1)
+            {
+              dispatch(setCountAM(data?.count));
+            }
+          
+          dispatch(setUserAM(data?.data));
         } else {
           dispatch(loadingAction(false));
           dispatch(

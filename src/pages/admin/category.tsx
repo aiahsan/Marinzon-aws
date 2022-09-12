@@ -22,8 +22,7 @@ import Pagination from "../../components/_update/pagination";
 function App() {
   const dispatch = useDispatch();
   const categoreis = useSelector((x: IReduxStore) => x.Categories);
-  const services = useSelector((x: IReduxStore) => x.Services);
-  const user = useSelector((x: IReduxStore) => x.User);
+   const user = useSelector((x: IReduxStore) => x.User);
   const [_show, _setshow] = React.useState(false);
   const [_currentService, _setcurrentService] = React.useState<
     ICategory | undefined
@@ -35,9 +34,8 @@ function App() {
 
   
   React.useEffect(() => {
-
      //@ts-ignore
-    dispatch(GetCategory(categoreis[categoreis.length-1]?.id || 0,value.length>0?value:undefined));
+    dispatch(GetCategory(page.toString(),value.length>0?value:undefined));
   }, [value,page]);
 
   const Update = (Id: number | undefined) => {
@@ -103,7 +101,9 @@ function App() {
 
                   <td className="d-flex manasjd-ajwe">
                     {
-                      user?.isAdmin&&user.isAdmin==true?    <button
+                      user?.isAdmin&&user.isAdmin==true? <>
+                      
+                      <button
                       className={`btn ${
                         x?.isApproved==true ? "btn-danger" : "btn-success"
                       } mx-2`}
@@ -125,9 +125,7 @@ function App() {
                       }}
                     >
                       {x?.isApproved ? "Reject" : "Approved"}
-                    </button>:<></>
-                    }
-                
+                    </button>
                     <button
                       className="btn btn-info mx-2"
                       onClick={() => Update(x?.id)}
@@ -140,6 +138,10 @@ function App() {
                     >
                       Delete
                     </button>
+                      </>:<></>
+                    }
+                
+             
                   </td>
                 </tr>
               ))}

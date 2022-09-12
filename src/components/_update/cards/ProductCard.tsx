@@ -23,9 +23,8 @@ import { ImageUrl } from '../../../utiles/baseUrl';
                  <div>
                      <p>Price</p>
                      <p><strong>{
-                       //@ts-ignore
-                       Math.min.apply(Math, x.serviceItemServices?.map(y=>y.serviceItemServicePrices?.map(c=>c.serviceItemServiceValue)).flatMap((j)=>[...j])) 
-                       } AED</strong></p>
+                      x.displayPrice
+                      } AED</strong></p>
                  </div>
                  <div>
                      <p>Ratting</p>
@@ -33,7 +32,7 @@ import { ImageUrl } from '../../../utiles/baseUrl';
                  </div>
                  <div>
                      <p>Service By</p>
-                     <p><strong>{x.user?.fullName}</strong></p>
+                     <p><strong>{x.serviceBy}</strong></p>
                  </div>
              </div>
            </div>

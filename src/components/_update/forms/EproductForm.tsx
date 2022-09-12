@@ -245,7 +245,10 @@ export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => vo
            
              </div>
 
-             <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
+            
+    {
+      user?.isAdmin&&user.isAdmin==true?<>
+       <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
       <div className="mt-1 kjfas-ijdsare">
         <Textbox
           label="SVG Icon"
@@ -258,7 +261,8 @@ export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => vo
         />
       </div>
     </div>
-    <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
+    
+      <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
       <div className="mt-1 kjfas-ijdsare hjasdasew-sad">
         <Textbox
           label="SVG Icon"
@@ -273,6 +277,12 @@ export default ({ PostData ,data,setData}: { PostData: (values: IEProduct) => vo
         />
       </div>
     </div>
+      </>:<></>
+    }
+    
+    
+
+
                       <div className="d-flex justify-content-end my-4">
                         
 

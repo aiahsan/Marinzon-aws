@@ -18,6 +18,8 @@ import Modal from "../../components/_update/modal";
  import EproductForm from "../../components/_update/forms/EproductForm";
 import { GetECategory } from "../../functions/ECategories";
 import { ImageUrl } from "../../utiles/baseUrl";
+import { useDebounce } from "use-debounce";
+import Pagination from "../../components/_update/pagination";
 
 function App() {
   const dispatch = useDispatch();
@@ -32,15 +34,20 @@ function App() {
     IEProduct | undefined
   >();
   const [_IsEdit, _setIsEdit] = React.useState(false);
+  const [page,setPage]=React.useState(0);
+  const [search,setsearch]=React.useState('');
+  const [value] = useDebounce(search, 1000);
 
   React.useEffect(() => {
      
     //@ts-ignore
-    dispatch(GetECategory());
-    //@ts-ignore
-    dispatch(GetEProduct());
-  }, []);
+    dispatch(GetEProduct(page.toString(),value.length>0?value:undefined));
+  }, [value,page]);
 
+  React.useEffect(()=>{
+ //@ts-ignore
+ dispatch(GetECategory());
+  },[])
  
 
   const Update = (Id: number | undefined) => {
@@ -84,7 +91,7 @@ function App() {
         <div>
           <div className="d-flex align-items-center justify-content-between">
             <h5 className="hd-5">Products List</h5>
-            <Searchbar isBorder={true} />
+            <Searchbar setsearch={setsearch} isBorder={true} />
           </div>
           <Table responsive borderless className="table-custom">
             <thead>
@@ -194,17 +201,10 @@ function App() {
             </tbody>
           </Table>
         </div>
-        <div className="d-flex justify-content-end pagination-container">
-          <button className="btn cst-none">Previous</button>
-          <div className="d-flex pagination-number-container">
-            <button className="btn">1</button>
-            <button className="btn active">2</button>
-            <button className="btn">3</button>
-            <button className="btn">4</button>
-            <button className="btn mag-18">5</button>
-          </div>
-          <button className="btn cst-none">Next</button>
+        <div className="mt-4">
+        <Pagination setCurrentPage={setPage}/>
         </div>
+
       </div>
       <Modal title="Confirm" show={_show} setShow={_setshow}>
         <>

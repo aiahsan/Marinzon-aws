@@ -1,10 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { ICategory, IService } from '../../../interfaces/data/objects';
+import { IReduxStore } from '../../../interfaces/data/reduxStore';
 import Dropdown from '../../dropdown';
 import ImageUpload from '../forms/imageUpload';
 import Textbox from '../inputs/textbox';
 
 export default ({services,values,setFieldValue,categories,getFieldProps,setFieldTouched,_Image,touched,errors,getImageFileObject,runAfterImageDelete}:{services:IService[],categories:ICategory[],values:any,setFieldValue:any,getFieldProps:any,_Image:any,touched:any,errors:any,getImageFileObject:any,runAfterImageDelete:any,setFieldTouched:any})=>{
+  
+  
+  const user = useSelector((x: IReduxStore) => x.User);
   const [isRental,setisRental]=React.useState(false);
      React.useEffect(()=>{
     if(values&&values.categoryId==0)
@@ -116,19 +121,22 @@ export default ({services,values,setFieldValue,categories,getFieldProps,setField
     </div>
     <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
       <div className="mt-1 kjfas-ijdsare">
-        <Textbox
-          label="SVG Icon"
-          getFieldProps={getFieldProps}
-          feildName="displayIcon"
-          touched={touched.displayIcon}
-          error={errors.displayIcon}
-          placeholder="Input SVG String"
-          type="textarea"
-        />
+      {
+        user?.isAdmin&&user.isAdmin==true? <Textbox
+        label="SVG Icon"
+        getFieldProps={getFieldProps}
+        feildName="displayIcon"
+        touched={touched.displayIcon}
+        error={errors.displayIcon}
+        placeholder="Input SVG String"
+        type="textarea"
+      />:<></>
+      }
       </div>
     </div>
     <div className="cst-textbox kjfads-fasenr brd-none d-flex flex-column label-bar-1 w-100">
-      <div className="mt-1 kjfas-ijdsare hjasdasew-sad">
+      {
+         user?.isAdmin&&user.isAdmin==true ?<div className="mt-1 kjfas-ijdsare hjasdasew-sad">
         <Textbox
           label="SVG Icon"
           getFieldProps={getFieldProps}
@@ -140,7 +148,8 @@ export default ({services,values,setFieldValue,categories,getFieldProps,setField
           
           checked={values?.isFeatured||false}
         />
-      </div>
+      </div>:<></>
+      }
     </div>
   </div>
 </div>

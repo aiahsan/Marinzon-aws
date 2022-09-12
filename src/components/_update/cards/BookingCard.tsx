@@ -14,7 +14,7 @@ export default ({booking,onClick}:{booking:IBooking,onClick:any})=>{
     <div className="medal-bar-1">
       {/* <img src={ImageUrl+booking.serviceItem?.image} alt="" /> */}
       <div className="adobe-bar">
-        <h3>{booking.serviceItem?.title}</h3>
+        <h3>{booking.bookingNumber}</h3>
         <p>Booking By :<strong>{booking?.user?.fullName}</strong></p>
         <div className="accoms-ch">
           <p>Booking Date: <strong>{booking?.bookingDateTime}</strong> </p>

@@ -5,14 +5,15 @@ import { loadingAction } from "../../redux/actionMethodes/loader";
 import { messageAction } from "../../redux/actionMethodes/message";
 import { addEOrderAM, deleteEOrderAM, setEOrderAM, updateEOrderAM } from "../../redux/actionMethodes/EOrder";
 import { repository } from "../../utiles/repository";
+import { setCountAM } from "../../redux/actionMethodes/Count";
 
-export function GetEOrder() {
+export function GetEOrder(page?:any,search?:any,showApproved?:boolean) {
   return function (dispatch: any, getState: any): any {
     (async () => {
       try {
         dispatch(loadingAction(true));
          const { status, data }: any = await repository
-          .GetEOrder(getState().User?.token || "")
+          .GetEOrder(getState().User?.token || "",getState().User?.id,getState().User?.isAdmin,page,search,showApproved)
           .then((x) => x);
         if (status == 200 && data?.success == true) {
 
@@ -23,8 +24,8 @@ export function GetEOrder() {
               message: data?.message,
             })
           );
-          console.log(data,"ddddd")
-            dispatch(setEOrderAM(data?.data));
+          dispatch(setCountAM(data?.count));
+          dispatch(setEOrderAM(data?.data));
         } else {
           dispatch(loadingAction(false));
           dispatch(
